@@ -1,1 +1,1 @@
-console.log("js is the freaking best");
+console.log("js is the freaking worst");
