@@ -1,1 +1,0 @@
-print("Python is wayyyy easier!")
