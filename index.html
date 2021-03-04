@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+
+<head>
+  <meta charset="utf-8">
+  <title>Music</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+  <div id="content">
+    <!--input type="file" id="file" accept="audio/*"!-->
+    <div id="top-toolbar">
+      <div id="file">Select a file...</div>
+      <select id="mode">
+        <option value="waveform">Waveform</option>
+        <option value="bar-graph">Bar Graph</option>
+        <option value="rgb-bar-graph">RGB Bar Graph</option>
+        <option value="spectrogram">Spectogarm</option>
+      </select>
+    </div>
+    <canvas id="canvas"></canvas>
+    <audio id="audio" controls></audio>
+  </div>
+  <script type="text/javascript" src="script.js"></script>
+</body>
+
+</html>
