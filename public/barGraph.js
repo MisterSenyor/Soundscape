@@ -58,10 +58,10 @@ function visualize(source) {
         requestAnimationFrame(renderFrame);
         analyser.smoothingTimeConstant = smooth;
         listen.gain.setValueAtTime(1, context.currentTime);
-        ctx.fillStyle = "#fff";
+        ctx.fillStyle = "#000000";
         ctx.fillRect(0, 0, WIDTH, HEIGHT);
         ctx.lineWidth = 1;
-        ctx.strokeStyle = "#fff";
+        ctx.strokeStyle = "#000000";
         analyser.getByteFrequencyData(dataArray);
         allFreqs.push(dataArray);
         // vars
@@ -88,6 +88,10 @@ function visualize(source) {
         }
 
         // drawing each sector individually
+        ctx.fillStyle = "#000000";
+        ctx.fillRect(0, 0, WIDTH, HEIGHT);
+        ctx.lineWidth = 1;
+        ctx.strokeStyle = "#000000";
         for (var i = 0; i < sectorVols.length; i++) {
             // fill color
             ctx.fillStyle = "hsl(40,100%,50%)";
