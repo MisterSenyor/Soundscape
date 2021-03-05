@@ -17,7 +17,7 @@ fbtn.addEventListener("click", function () {
         audio.src = URL.createObjectURL(files[0]);
         audio.load();
         audio.play();
-        audio.volume = 0.01;
+        audio.volume = 0.2;
         visualize(audio);
     };
 });
@@ -30,7 +30,7 @@ var fourVols = [];
 var allFreqs = [];
 var animId;
 var animIda;
-var times = 4;
+var times = 2;
 // var j;
 function visualize(source) {
     var context = new AudioContext();
@@ -68,22 +68,20 @@ function visualize(source) {
         var allHeights = 0;
         for (var i = 0; i < bufferLength; i++) {
           barHeight = Math.abs(dataArray[i]);
-          allHeights+=dataArray[i];
+          allHeights+=barHeight;
           if(i%(dataArray.length/times) == 0){
-            fourVols.push(allHeights);
+            fourVols.push(allHeights/(dataArray.length/times));
             allHeights = 0;
           }
         }
         for(var i = 0; i < fourVols.length; i++){
           var barHeight = fourVols[i];
+          var x = i*(WIDTH/times);
           scale = WIDTH/times;
-          let x = i*WIDTH/times;
-          var h = 300 - barHeight * 300 / 255;
-          var s = 100 + "%";
-          var l = barHeight < 64 ? barHeight * 50 / 64 + "%" : "50%";
           ctx.fillStyle = "hsl(40,100%,50%)";
-          ctx.fillRect(x,HEIGHT,scale,-barHeight/5);
+          ctx.fillRect(x,HEIGHT,scale,-barHeight);
         }
+        console.log(fourVols);
         fourVols = [];
     }
 
