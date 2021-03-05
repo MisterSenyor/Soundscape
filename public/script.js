@@ -23,13 +23,14 @@ fbtn.addEventListener("click", function () {
 });
 var src;
 var analyser;
-var smooth = 0.8;
+var smooth = 0.9;
 var dataArray;
 var dataArraya;
 var fourVols = [];
 var allFreqs = [];
 var animId;
 var animIda;
+var times = 4;
 // var j;
 function visualize(source) {
     var context = new AudioContext();
@@ -68,21 +69,30 @@ function visualize(source) {
         allFreqs.push(dataArray);
         var allHeights = 0;
         // drawFreqs(dataArray)
-        console.log("");
         // dataArray = new Uint8Array(bufferLength);
         for (var i = 0; i < bufferLength; i++) {
           barHeight = Math.abs(dataArray[i]);
           allHeights+=dataArray[i];
-          if(i%(dataArray.length/4) == 0){
+          if(i%(dataArray.length/times) == 0){
             fourVols.push(allHeights);
             allHeights = 0;
           }
-          let x = i+scale;
+          // let x = i+scale;
+          // var h = 300 - barHeight * 300 / 255;
+          // var s = 100 + "%";
+          // var l = barHeight < 64 ? barHeight * 50 / 64 + "%" : "50%";
+          // ctx.fillStyle = "hsl("+h+",100%,50%)";
+          // ctx.fillRect(x,HEIGHT - barHeight * HEIGHT / 255,scale,HEIGHT);
+        }
+        for(var i = 0; i < fourVols.length; i++){
+          var barHeight = fourVols[i];
+          scale = WIDTH/times;
+          let x = i*WIDTH/times;
           var h = 300 - barHeight * 300 / 255;
           var s = 100 + "%";
           var l = barHeight < 64 ? barHeight * 50 / 64 + "%" : "50%";
-          ctx.fillStyle = "hsl("+h+",100%,50%)";
-          ctx.fillRect(x,HEIGHT - barHeight * HEIGHT / 255,scale,HEIGHT);
+          ctx.fillStyle = "hsl(40,100%,50%)";
+          ctx.fillRect(x,HEIGHT,scale,-barHeight/5);
         }
         fourVols = [];
     }
