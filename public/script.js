@@ -23,15 +23,20 @@ fbtn.addEventListener("click", function () {
 });
 var src;
 var analyser;
-var smooth = 0.5;
+var smooth = 0.8;
 var dataArray;
-var dataHistory;
+var dataArraya;
 var fourVols = [];
+var allFreqs = [];
+var animId;
+var animIda;
+// var j;
 function visualize(source) {
     var context = new AudioContext();
     src = context.createMediaElementSource(source);
     analyser = context.createAnalyser();
     var listen = context.createGain();
+    // audio.playbackRate = 10;
 
     src.connect(listen);
     listen.connect(analyser);
@@ -41,11 +46,10 @@ function visualize(source) {
 
     var bufferLength = analyser.frequencyBinCount;
     console.log(bufferLength);
+    // dataArray = new Float32Array(bufferLength);
     dataArray = new Uint8Array(bufferLength);
-    dataHistory = [];
-
+    var scale = bufferLength/WIDTH;
     renderFrame();
-
     function renderFrame() {
         requestAnimationFrame(renderFrame);
         analyser.smoothingTimeConstant = smooth;
@@ -61,11 +65,18 @@ function visualize(source) {
         ctx.lineWidth = 1;
         ctx.strokeStyle = "#fff";
         analyser.getByteFrequencyData(dataArray);
+        allFreqs.push(dataArray);
         var allHeights = 0;
+        // drawFreqs(dataArray)
+        console.log("");
+        // dataArray = new Uint8Array(bufferLength);
         for (var i = 0; i < bufferLength; i++) {
-          // barHeight = dataArray[i];
-          // allHeights+=barHeight;
-          // if()
+          barHeight = Math.abs(dataArray[i]);
+          allHeights+=dataArray[i];
+          if(i%(dataArray.length/4) == 0){
+            fourVols.push(allHeights);
+            allHeights = 0;
+          }
           let x = i+scale;
           var h = 300 - barHeight * 300 / 255;
           var s = 100 + "%";
@@ -73,5 +84,17 @@ function visualize(source) {
           ctx.fillStyle = "hsl("+h+",100%,50%)";
           ctx.fillRect(x,HEIGHT - barHeight * HEIGHT / 255,scale,HEIGHT);
         }
+        fourVols = [];
     }
+
 }
+// var g = 0;
+// function renderFramea(){
+//   animIda = requestAnimationFrame(renderFramea);
+//   console.log(g);
+//   drawFreqs(allFreqs[g])
+//   if(g == allFreqs.length-1){
+//     cancelAnimationFrame(animIda);
+//   }
+//   g++;
+// }
