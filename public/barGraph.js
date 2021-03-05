@@ -58,7 +58,7 @@ function visualize(source) {
         requestAnimationFrame(renderFrame);
         analyser.smoothingTimeConstant = smooth;
         listen.gain.setValueAtTime(1, context.currentTime);
-        ctx.fillStyle = "#000";
+        ctx.fillStyle = "#fff";
         ctx.fillRect(0, 0, WIDTH, HEIGHT);
         ctx.lineWidth = 1;
         ctx.strokeStyle = "#fff";
@@ -78,7 +78,7 @@ function visualize(source) {
                 allHeights += dataArray[i];
                 sectorLength++;
             }
-            
+
             if (i % (dataArray.length / times) == 0) {
                 // if i has reached the end of the sector, it pushes the average sector height into allHeights
                 sectorVols.push(allHeights / sectorLength);
@@ -93,7 +93,7 @@ function visualize(source) {
             ctx.fillStyle = "hsl(40,100%,50%)";
             // filling the rect in the specific location
             ctx.fillRect(i * (WIDTH / times), // x relative to i'th sector
-            HEIGHT - (sectorVols[i]), // total y minus the height 
+            HEIGHT - (sectorVols[i]), // total y minus the height
             WIDTH / times, // width according to sector scale
             sectorVols[i]); // height
         }
