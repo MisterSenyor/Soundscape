@@ -1,4 +1,4 @@
-// window.it = 0
+// BORING MANDATORY STUFF
 var audio = document.querySelector(".audio");
 var canvas = document.querySelector(".canvas");
 var WIDTH = (canvas.width = window.innerWidth);
@@ -21,17 +21,20 @@ fbtn.addEventListener("click", function () {
         visualize(audio);
     };
 });
+
+// BORING VARS
 var src;
 var analyser;
 var smooth = 0.9;
 var dataArray;
 var dataArraya;
-var fourVols = [];
+var sectorVols = [];
 var allFreqs = [];
 var animId;
 var animIda;
+// change this to decide how many sectors there are
 var times = 4;
-// var j;
+
 function visualize(source) {
     var context = new AudioContext();
     src = context.createMediaElementSource(source);
@@ -45,46 +48,56 @@ function visualize(source) {
     analyser.fftSize = 2 ** 12;
     var frequencyBins = analyser.fftSize / 2;
 
+    // length of data inside array
     var bufferLength = analyser.frequencyBinCount;
     console.log(bufferLength);
     dataArray = new Uint8Array(bufferLength);
-    var scale = bufferLength/WIDTH;
     renderFrame();
     function renderFrame() {
+        // mandatory shit to set everything up
         requestAnimationFrame(renderFrame);
         analyser.smoothingTimeConstant = smooth;
         listen.gain.setValueAtTime(1, context.currentTime);
-        var WIDTH = (canvas.width = window.innerWidth);
-        var HEIGHT = (canvas.height = window.innerHeight);
-        var sliceWidth = WIDTH * 1.0 / bufferLength;
-        var x = 0;
-        var scale = bufferLength/WIDTH;
         ctx.fillStyle = "#000";
         ctx.fillRect(0, 0, WIDTH, HEIGHT);
         ctx.lineWidth = 1;
         ctx.strokeStyle = "#fff";
         analyser.getByteFrequencyData(dataArray);
         allFreqs.push(dataArray);
+        // vars
+        var WIDTH = (canvas.width = window.innerWidth);
+        var HEIGHT = (canvas.height = window.innerHeight);
+        var sliceWidth = WIDTH * 1.0 / bufferLength;
+        var scale = bufferLength/WIDTH;
         var allHeights = 0;
+        var sectorLength = 0;
+        // getting all the values into sectorVols so it contains the avg height for each sector
         for (var i = 0; i < bufferLength; i++) {
-          barHeight = Math.abs(dataArray[i]);
-          allHeights+=dataArray[i];
-          if(i%(dataArray.length/times) == 0){
-            fourVols.push(allHeights);
-            allHeights = 0;
-          }
+            // incrementing allHeights to count the sum of all heights in each sector
+            if (dataArray[i] != 0) {
+                allHeights += dataArray[i];
+                sectorLength++;
+            }
+            
+            if (i % (dataArray.length / times) == 0) {
+                // if i has reached the end of the sector, it pushes the average sector height into allHeights
+                sectorVols.push(allHeights / sectorLength);
+                // resetting allHeights
+                allHeights = 0, sectorLength = 0;
+            }
         }
-        for(var i = 0; i < fourVols.length; i++){
-          var barHeight = fourVols[i];
-          scale = WIDTH/times;
-          let x = i*WIDTH/times;
-          var h = 300 - barHeight * 300 / 255;
-          var s = 100 + "%";
-          var l = barHeight < 64 ? barHeight * 50 / 64 + "%" : "50%";
-          ctx.fillStyle = "hsl(40,100%,50%)";
-          ctx.fillRect(x,HEIGHT,scale,-barHeight/5);
-        }
-        fourVols = [];
-    }
 
+        // drawing each sector individually
+        for (var i = 0; i < sectorVols.length; i++) {
+            // fill color
+            ctx.fillStyle = "hsl(40,100%,50%)";
+            // filling the rect in the specific location
+            ctx.fillRect(i * (WIDTH / times), // x relative to i'th sector
+            HEIGHT - (sectorVols[i]), // total y minus the height 
+            WIDTH / times, // width according to sector scale
+            sectorVols[i]); // height
+        }
+        sectorVols = [];
+
+    }
 }
