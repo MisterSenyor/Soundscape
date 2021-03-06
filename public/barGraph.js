@@ -35,7 +35,7 @@ var animIda;
 // change this to decide how many sectors there are
 var times = 128;
 // beat recognition vars
-var avg = 0, sum = 0, cmprsScale = 1, gsectorLength = 0;
+var avg = 0, sum = 0, cmprsScale = 1, gsectorLength = 0, avgCounter = 0;
 
 function visualize(source) {
     var context = new AudioContext();
@@ -113,8 +113,13 @@ function visualize(source) {
                 }
             }
             avg = sum / gsectorLength;
-            // sectorLength = 0;
-            // sum = 0;
+            avgCounter++;
+            if (avgCounter > 128) {
+                gsectorLength = 0;
+                sum = 0;
+                avgCounter = 0;
+                console.log("reset");
+            }
             var sectorSum = 0
             for (var i = 0; i < sectorVols.length; i++) {
                 sectorSum += sectorVols[i];
