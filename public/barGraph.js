@@ -17,7 +17,7 @@ fbtn.addEventListener("click", function () {
         audio.src = URL.createObjectURL(files[0]);
         audio.load();
         audio.play();
-        audio.volume = 0.01;
+        audio.volume = 1;
         visualize(audio);
     };
 });
@@ -33,7 +33,8 @@ var allFreqs = [];
 var animId;
 var animIda;
 // change this to decide how many sectors there are
-var times = 128;
+var times = 32;
+var realTimes = times-times/4;
 // beat recognition vars
 var avg = 0, sum = 0, cmprsScale = 1, gsectorLength = 0;
 
@@ -94,17 +95,36 @@ function visualize(source) {
         ctx.fillRect(0, 0, WIDTH, HEIGHT);
         ctx.lineWidth = 1;
         ctx.strokeStyle = "#000000";
+        // console.log(sectorVols[2]/5);
         for (var i = 0; i < sectorVols.length; i++) {
             // fill color
-            ctx.fillStyle = "hsl(40,100%,50%)";
+            // for(var i = 0)
+            // console.log(sectorVols[i]);
+            var heightOfBar = 0;
+            for(var j = 0; j < sectorVols[i]; j++){
+              heightOfBar++;
+              if(j%5 == 0 || j == sectorVols[i]){
+                var fillColor = j*2 > 255 ? 255 : j*2;
+                ctx.fillStyle = "rgba("+(fillColor)+", "+(255-(fillColor))+", 0, 1)";
+                // filling the rect in the specific location
+                // console.log(j);
+                ctx.fillRect(i * (WIDTH / realTimes), // x relative to i'th sector
+                HEIGHT - j - j*2, // total y minus the height
+                WIDTH / realTimes, // width according to sector scale
+                -heightOfBar); // height
+                heightOfBar = 0;
+              }
+            }
+            /*
             // filling the rect in the specific location
-            ctx.fillRect(i * (WIDTH / times), // x relative to i'th sector
+            ctx.fillRect(i * (WIDTH / realTimes), // x relative to i'th sector
             HEIGHT - (sectorVols[i]), // total y minus the height
-            WIDTH / times, // width according to sector scale
+            WIDTH / realTimes, // width according to sector scale
             sectorVols[i]); // height
+            */
         }
         // global avg and su vals
-        getSpikeReference();
+        // getSpikeReference();
         function getSpikeReference() {
             for (var i = 0; i < dataArray.length; i++) {
                 if (dataArray[i] != 0) {
@@ -127,5 +147,5 @@ function visualize(source) {
         sectorVols = [];
 
     }
-    
+
 }
