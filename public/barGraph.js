@@ -34,6 +34,8 @@ var animId;
 var animIda;
 // change this to decide how many sectors there are
 var times = 128;
+// beat recognition vars
+var avg = 0, sum = 0, cmprsScale = 1, gsectorLength = 0;
 
 function visualize(source) {
     var context = new AudioContext();
@@ -102,23 +104,20 @@ function visualize(source) {
             sectorVols[i]); // height
         }
         // global avg and su vals
-        var avg = 0, sum = 0, cmprsScale = 1;
-        sectorLength = 0;
         getSpikeReference();
         function getSpikeReference() {
             for (var i = 0; i < dataArray.length; i++) {
                 if (dataArray[i] != 0) {
                     sum += dataArray[i] / cmprsScale;
-                    sectorLength++;
+                    gsectorLength++;
                 }
             }
-            avg = sum / sectorLength;
+            avg = sum / gsectorLength;
             // sectorLength = 0;
             // sum = 0;
             var sectorSum = 0
             for (var i = 0; i < sectorVols.length; i++) {
                 sectorSum += sectorVols[i];
-
             }
             if (sectorSum / sectorVols.length > avg) {
                 console.log("beat");
