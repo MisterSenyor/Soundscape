@@ -61,10 +61,6 @@ function visualize(source) {
         requestAnimationFrame(renderFrame);
         analyser.smoothingTimeConstant = smooth;
         listen.gain.setValueAtTime(1, context.currentTime);
-        ctx.fillStyle = "#000000";
-        ctx.fillRect(0, 0, WIDTH, HEIGHT);
-        ctx.lineWidth = 1;
-        ctx.strokeStyle = "#000000";
         analyser.getByteFrequencyData(dataArray);
         allFreqs.push(dataArray);
         // vars
@@ -95,6 +91,7 @@ function visualize(source) {
         ctx.fillRect(0, 0, WIDTH, HEIGHT);
         ctx.lineWidth = 1;
         ctx.strokeStyle = "#000000";
+        generateBackground()
         // console.log(sectorVols[2]/5);
         for (var i = 0; i < sectorVols.length; i++) {
             // fill color
@@ -105,7 +102,8 @@ function visualize(source) {
               heightOfBar++;
               if(j%5 == 0 || j == sectorVols[i]){
                 var fillColor = j*2 > 255 ? 255 : j*2;
-                ctx.fillStyle = "rgba("+(fillColor)+", "+(255-(fillColor))+", 0, 1)";
+                ctx.shadowColor = "rgba("+(fillColor)+", "+(255-(fillColor))+", 0,1)";
+                ctx.fillStyle = "rgba("+(fillColor)+", "+(255-(fillColor))+", 0,1)";
                 // filling the rect in the specific location
                 // console.log(j);
                 ctx.fillRect(i * (WIDTH / realTimes), // x relative to i'th sector
@@ -115,15 +113,9 @@ function visualize(source) {
                 heightOfBar = 0;
               }
             }
-            /*
-            // filling the rect in the specific location
-            ctx.fillRect(i * (WIDTH / realTimes), // x relative to i'th sector
-            HEIGHT - (sectorVols[i]), // total y minus the height
-            WIDTH / realTimes, // width according to sector scale
-            sectorVols[i]); // height
-            */
         }
         // global avg and su vals
+
         // getSpikeReference();
         function getSpikeReference() {
             for (var i = 0; i < dataArray.length; i++) {
@@ -148,4 +140,16 @@ function visualize(source) {
 
     }
 
+}
+function generateBackground(){
+  ctx.beginPath();
+  ctx.shadowBlur = 10;
+  ctx.shadowColor = "rgb(255,0,0,1)";
+  // ctx.fillStyle = "rgb(255,0,0,1)"
+  ctx.strokeStyle = "orange";
+  ctx.lineWidth = 3;
+  ctx.fillStyle = "orange"
+  ctx.arc(100, 75, 100, 0, 2 * Math.PI);
+  ctx.stroke();
+  ctx.closePath();
 }
