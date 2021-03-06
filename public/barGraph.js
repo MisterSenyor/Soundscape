@@ -120,7 +120,7 @@ function visualize(source) {
                 sectorSum += sectorVols[i];
 
             }
-            if (sectorSum / sectorVols.length <= avg) {
+            if (sectorSum / sectorVols.length > avg) {
                 console.log("beat");
             }
             sectorSum = 0;
