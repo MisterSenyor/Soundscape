@@ -116,7 +116,7 @@ function visualize(source) {
         }
         // global avg and su vals
 
-        // getSpikeReference();
+        getSpikeReference();
         function getSpikeReference() {
             for (var i = 0; i < dataArray.length; i++) {
                 if (dataArray[i] != 0) {
