@@ -33,7 +33,7 @@ var allFreqs = [];
 var animId;
 var animIda;
 // change this to decide how many sectors there are
-var times = 4;
+var times = 128;
 
 function visualize(source) {
     var context = new AudioContext();
@@ -81,7 +81,7 @@ function visualize(source) {
 
             if (i % (dataArray.length / times) == 0) {
                 // if i has reached the end of the sector, it pushes the average sector height into allHeights
-                sectorVols.push(allHeights / sectorLength);
+                sectorVols.push(sectorLength == 0 ? 0 : allHeights / sectorLength);
                 // resetting allHeights
                 allHeights = 0, sectorLength = 0;
             }
@@ -101,7 +101,32 @@ function visualize(source) {
             WIDTH / times, // width according to sector scale
             sectorVols[i]); // height
         }
+        // global avg and su vals
+        var avg = 0, sum = 0, cmprsScale = 1;
+        sectorLength = 0;
+        getSpikeReference();
+        function getSpikeReference() {
+            for (var i = 0; i < dataArray.length; i++) {
+                if (dataArray[i] != 0) {
+                    sum += dataArray[i] / cmprsScale;
+                    sectorLength++;
+                }
+            }
+            avg = sum / sectorLength;
+            // sectorLength = 0;
+            // sum = 0;
+            var sectorSum = 0
+            for (var i = 0; i < sectorVols.length; i++) {
+                sectorSum += sectorVols[i];
+
+            }
+            if (sectorSum / sectorVols.length <= avg) {
+                console.log("beat");
+            }
+            sectorSum = 0;
+        }
         sectorVols = [];
 
     }
+    
 }
