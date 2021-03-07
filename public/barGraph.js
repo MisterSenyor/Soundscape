@@ -114,6 +114,7 @@ function visualize(source) {
         for (var i = 0; i < sectorVols.length; i++) {
             // fill color
             // for(var i = 0)
+            var floorY = player.begY+40;
             var heightOfBar = 0;
             for(var j = 0; j < sectorVols[i]; j++){
               heightOfBar++;
@@ -123,14 +124,13 @@ function visualize(source) {
                 ctx.fillStyle = "rgba("+(fillColor)+", "+(255-(fillColor))+", 0,.5)";
                 // filling the rect in the specific location
                 ctx.fillRect(i * (WIDTH / realTimes), // x relative to i'th sector
-                HEIGHT - j - j*2, // total y minus the height
+                floorY - j - j*2, // total y minus the height
                 WIDTH / realTimes, // width according to sector scale
                 -heightOfBar); // height
                 heightOfBar = 0;
               }
             }
         }
-        generatePlayArea();
         refreshPlayer();
         //if(toDrawParticles){
           spreadParticles();
@@ -138,6 +138,7 @@ function visualize(source) {
 
         // global avg and su vals
         getSpikeReference();
+        generatePlayArea();
         function getSpikeReference() {
             for (var i = 0; i < dataArray.length; i++) {
                 if (dataArray[i] != 0) {
@@ -297,9 +298,6 @@ function Rock(x,y,number,size){
 }
 var generateRockFrqs = Math.floor(randomBetween(150,300));
 function generatePlayArea(){
-  ctx.fillStyle = "white";
-  ctx.shadowColor = "white";
-  ctx.fillRect(0, HEIGHT-200, WIDTH,10)
   toGenerateRock++;
   if(toGenerateRock%generateRockFrqs == 0){
     rocks.push(new Rock(WIDTH,HEIGHT-200,Math.floor(randomBetween(1,3)),10))
@@ -309,6 +307,12 @@ function generatePlayArea(){
     rocks[i].updateRockPos();
     rocks[i].drawRock();
   }
+  ctx.fillStyle = "white";
+  ctx.shadowColor = "white";
+  ctx.fillRect(0, HEIGHT-200, WIDTH,10)
+  ctx.fillStyle = "black";
+  ctx.shadowColor = "black";
+  ctx.fillRect(0, HEIGHT-190, WIDTH,200)
 }
 function Particle(size,colora,x,y,angle,speed,index,cycle,visible){
   this.size = size,
