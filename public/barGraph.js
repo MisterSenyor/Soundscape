@@ -35,16 +35,8 @@ var animationX = WIDTH, circleWidth = 200, animationSpeed = 2,animationIttrCount
 var times = 32;
 var realTimes = times-times/4;
 // beat recognition vars
-<<<<<<< HEAD
-var avg = 0, sum = 0, cmprsScale = 1, gsectorLength = 0, avgCounter = 0, sensitivity = 0.9;
-=======
 var avg = 0, sum = 0, cmprsScale = 1, gsectorLength = 0, avgCounter = 0, currentAverage = 0,sensitivity = 0.8;
-
-// setInterval(function(){
-
-// },10)
->>>>>>> e37567f904eb95120676bfdac76fe19f32c1b651
-
+ 
 function visualize(source) {
     var context = new AudioContext();
     src = context.createMediaElementSource(source);
@@ -146,7 +138,7 @@ function visualize(source) {
             }
             avg = sum / gsectorLength;
             avgCounter++;
-            if (avgCounter > 100) {
+            if (avgCounter > 200) {
                 gsectorLength = 0;
                 sum = 0;
                 avgCounter = 0;
