@@ -157,14 +157,14 @@ function visualize(source) {
                 sectorSum += sectorVols[i];
             }
             if ((sectorSum * sensitivity) / (sectorVols.length / 2) > avg) {
-                // console.log("beat");
+                console.log("beat");
             }
             sectorSum = 0;
             for (var i = sectorVols.length / 2; i < sectorVols.length; i++) {
                 sectorSum += sectorVols[i];
             }
             if ((sectorSum * sensitivity) / (sectorVols.length / 2) > avg) {
-                // console.log("beat");
+                console.log("beat");
             }
             sectorSum = 0;
         }
