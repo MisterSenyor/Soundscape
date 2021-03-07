@@ -218,13 +218,15 @@ function refreshPlayer(){
   ctx.fill();
   ctx.closePath();
 }
-function Particle(size,colora,x,y,angle,speed){
+function Particle(size,colora,x,y,angle,speed,index,cycle){
   this.size = size,
   this.colora = colora,
   this.x = x,
   this.y = y,
   this.angle = angle,
   this.speed = speed,
+  this.index = index,
+  this.cycle = cycle,
   this.draw = function(){
     ctx.fillStyle = this.colora;
     ctx.shadowColor = this.colora;
@@ -234,29 +236,37 @@ function Particle(size,colora,x,y,angle,speed){
     ctx.closePath();
   },
   this.updatePos = function(){
-    this.x-= speed*Math.sin(angle);
-    this.y-= speed*Math.cos(angle);
-    this.angle+=0.01;
+    this.x-= this.speed*Math.sin(this.angle * Math.PI / 180);
+    this.y-= this.speed*Math.cos(this.angle * Math.PI / 180);
+    // this.angle+=0.01;
     ctx.fillStyle = this.colora;
     ctx.shadowColor = this.colora;
     ctx.beginPath();
     ctx.arc(this.x,this.y,this.size,0,2*Math.PI);
     ctx.fill();
     ctx.closePath();
+    this.cycle++;
+    if(this.cycle == 500){
+      // particles.splice(this.index,1);
+      particles[this.index] = "";
+    }
   }
 }
 var frst = false;
 var particle;
 function spreadParticles(){
   //for(var i = 0; i < amount/lifetime; i++){
-    if(particles.length < amount){
-      particle = new Particle(randomBetween(2,5),"hsl(20,100%,"+Math.floor(randomBetween(30,71))+"%)",100,100,Math.floor(randomBetween(10,70)),1)
+    if(particles.length < 150){
+      particle = new Particle(randomBetween(2,5),"hsl(20,100%,"+Math.floor(randomBetween(30,71))+"%)",100,100,Math.floor(randomBetween(10,70)),0.1,particles.length,0)
       particle.draw();
       particles.push(particle);
     }
   //}
   for(var i = 0; i < particles.length; i++){
-    particles[i].updatePos();
+    if(particles[i] != ""){
+      particles[i].updatePos();
+    }
+
     // particles[i].draw();
   }
 }
