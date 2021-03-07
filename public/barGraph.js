@@ -40,7 +40,7 @@ var avg = 0, sum = 0, cmprsScale = 1, gsectorLength = 0, avgCounter = 0, current
 // setInterval(function(){
 
 // },10)
-
+var temp = 1;
 function visualize(source) {
     var context = new AudioContext();
     src = context.createMediaElementSource(source);
@@ -63,7 +63,8 @@ function visualize(source) {
         // mandatory shit to set everything up
         requestAnimationFrame(renderFrame);
         analyser.smoothingTimeConstant = smooth;
-        listen.gain.setValueAtTime(1, context.currentTime);
+        // TODO - recognize the volume before pplaying. DUCK YOU FUTURE US!
+        listen.gain.setValueAtTime(temp, context.currentTime);
         analyser.getByteFrequencyData(dataArray);
         allFreqs.push(dataArray);
         // vars
