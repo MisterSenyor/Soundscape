@@ -32,7 +32,7 @@ var sectorVols = [];
 var allFreqs = [];
 var animationX = WIDTH, circleWidth = 200, animationSpeed = 2,animationIttrCount = 0;
 // Particle vars
-var amount = 150, lifetime = 15, particles = [];
+var amount = 150, lifetime = 300, particles = [],particle, spawnParticle = 0, toDrawParticles = true;
 // change this to decide how many sectors there are
 var times = 32;
 var realTimes = times-times/4;
@@ -238,7 +238,7 @@ function Particle(size,colora,x,y,angle,speed,index,cycle){
   this.updatePos = function(){
     this.x-= this.speed*Math.sin(this.angle * Math.PI / 180);
     this.y-= this.speed*Math.cos(this.angle * Math.PI / 180);
-    // this.angle+=0.01;
+    this.angle+=0.1;
     ctx.fillStyle = this.colora;
     ctx.shadowColor = this.colora;
     ctx.beginPath();
@@ -246,28 +246,37 @@ function Particle(size,colora,x,y,angle,speed,index,cycle){
     ctx.fill();
     ctx.closePath();
     this.cycle++;
-    if(this.cycle == 500){
+    if(this.cycle == lifetime){
       // particles.splice(this.index,1);
       particles[this.index] = "";
     }
   }
 }
-var frst = false;
-var particle;
 function spreadParticles(){
-  //for(var i = 0; i < amount/lifetime; i++){
-    if(particles.length < 150){
-      particle = new Particle(randomBetween(2,5),"hsl(20,100%,"+Math.floor(randomBetween(30,71))+"%)",100,100,Math.floor(randomBetween(10,70)),0.1,particles.length,0)
-      particle.draw();
-      particles.push(particle);
+  var partX = WIDTH/7-10;
+  var partY = HEIGHT-200;
+  if(toDrawParticles){
+    if(particles.length < 50){
+      if(spawnParticle == 10){
+        particle = new Particle(randomBetween(2,5),"hsl(20,100%,"+Math.floor(randomBetween(30,71))+"%)",partX,partY,Math.floor(randomBetween(40,80)),1.2,particles.length,0)
+        particle.draw();
+        particles.push(particle);
+        spawnParticle = 0;
+      }else{
+        spawnParticle++;
+      }
+    }else{
+
     }
-  //}
+  }
   for(var i = 0; i < particles.length; i++){
     if(particles[i] != ""){
       particles[i].updatePos();
+    }else{
+      particle = new Particle(randomBetween(2,5),"hsl(20,100%,"+Math.floor(randomBetween(30,71))+"%)",partX,partY,Math.floor(randomBetween(40,80)),1.2,i,0)
+      particle.draw();
+      particles[i] = particle;
     }
-
-    // particles[i].draw();
   }
 }
 function randomBetween(min,max){
