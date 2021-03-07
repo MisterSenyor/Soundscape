@@ -30,13 +30,22 @@ var dataArray;
 var dataArraya;
 var sectorVols = [];
 var allFreqs = [];
-var animId;
-var animIda;
+var animationX = WIDTH, circleWidth = 200, animationSpeed = 2,animationIttrCount = 0;
 // change this to decide how many sectors there are
 var times = 32;
 var realTimes = times-times/4;
 // beat recognition vars
 var avg = 0, sum = 0, cmprsScale = 1, gsectorLength = 0, avgCounter = 0;
+
+setInterval(function(){
+  animationIttrCount++;
+  if(animationIttrCount%animationSpeed == 0){
+    animationX--;
+    if(animationX <= WIDTH - circleWidth-circleWidth/2){
+      animationX = WIDTH+circleWidth/2;
+    }
+  }
+},10)
 
 function visualize(source) {
     var context = new AudioContext();
@@ -102,8 +111,8 @@ function visualize(source) {
               heightOfBar++;
               if(j%5 == 0 || j == sectorVols[i]){
                 var fillColor = j*2 > 255 ? 255 : j*2;
-                ctx.shadowColor = "rgba("+(fillColor)+", "+(255-(fillColor))+", 0,1)";
-                ctx.fillStyle = "rgba("+(fillColor)+", "+(255-(fillColor))+", 0,1)";
+                ctx.shadowColor = "rgba("+(fillColor)+", "+(255-(fillColor))+", 0,.2)";
+                ctx.fillStyle = "rgba("+(fillColor)+", "+(255-(fillColor))+", 0,.2)";
                 // filling the rect in the specific location
                 // console.log(j);
                 ctx.fillRect(i * (WIDTH / realTimes), // x relative to i'th sector
@@ -126,24 +135,17 @@ function visualize(source) {
             }
             avg = sum / gsectorLength;
             avgCounter++;
-            if (avgCounter > 100) {
+            if (avgCounter > 128) {
                 gsectorLength = 0;
                 sum = 0;
                 avgCounter = 0;
                 console.log("reset");
             }
             var sectorSum = 0
-            for (var i = 0; i < sectorVols.length / 2; i++) {
+            for (var i = 0; i < sectorVols.length; i++) {
                 sectorSum += sectorVols[i];
             }
-            if (sectorSum / (sectorVols.length / 2) > avg) {
-                console.log("beat");
-            }
-            sectorSum = 0;
-            for (var i = sectorVols.length / 2; i < sectorVols.length; i++) {
-                sectorSum += sectorVols[i];
-            }
-            if (sectorSum / (sectorVols.length / 2) > avg) {
+            if (sectorSum / sectorVols.length > avg) {
                 console.log("beat");
             }
             sectorSum = 0;
@@ -154,14 +156,18 @@ function visualize(source) {
 
 }
 function generateBackground(){
-  ctx.beginPath();
-  ctx.shadowBlur = 10;
-  ctx.shadowColor = "rgb(255,0,0,1)";
-  // ctx.fillStyle = "rgb(255,0,0,1)"
-  ctx.strokeStyle = "orange";
-  ctx.lineWidth = 3;
-  ctx.fillStyle = "orange"
-  ctx.arc(100, 75, 100, 0, 2 * Math.PI);
-  ctx.stroke();
-  ctx.closePath();
+  for(var i = 0; i < (WIDTH/circleWidth)+10; i++){
+    for(var j = 0; j < HEIGHT/circleWidth; j++){
+      ctx.beginPath();
+      ctx.shadowBlur = 10;
+      ctx.shadowColor = "rgba(255,0,0,1)";
+      // ctx.fillStyle = "rgb(255,0,0,1)"
+      ctx.strokeStyle = "rgba(255,165,0,1)";
+      ctx.lineWidth = 10;
+      ctx.arc(animationX - i*circleWidth+20+circleWidth/3+circleWidth, j*circleWidth+20+circleWidth/3, circleWidth/2-10, 0, 2 * Math.PI);
+      ctx.stroke();
+      ctx.closePath();
+    }
+  }
+
 }
