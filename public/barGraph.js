@@ -177,9 +177,9 @@ function generateBackground(){
       ctx.beginPath();
       ctx.shadowBlur = 10;
       ctx.shadowColor = "rgba(255,0,0,1)";
-      var avgClr = Math.pow(currentAverage/14,2);
+      var avgClr = Math.pow(currentAverage/30,3);
       var color = ((165-avgClr < 0) ? 0 : 165-avgClr);
-      ctx.strokeStyle = "rgba(200,"+color+",0,1)";
+      ctx.strokeStyle = "rgba(200,"+color+","+color/2+",1)";
       ctx.lineWidth = 10;
       ctx.arc(coors.x,coors.y , circleWidth/2-10, 0, 2 * Math.PI);
       ctx.stroke();
