@@ -30,13 +30,20 @@ var dataArray;
 var dataArraya;
 var sectorVols = [];
 var allFreqs = [];
-var animId;
-var animIda;
+var animationX = WIDTH, circleWidth = 200, animationSpeed = 2,animationIttrCount = 0;
 // change this to decide how many sectors there are
 var times = 32;
 var realTimes = times-times/4;
 // beat recognition vars
+<<<<<<< HEAD
 var avg = 0, sum = 0, cmprsScale = 1, gsectorLength = 0, avgCounter = 0, sensitivity = 0.9;
+=======
+var avg = 0, sum = 0, cmprsScale = 1, gsectorLength = 0, avgCounter = 0, currentAverage = 0,sensitivity = 0.8;
+
+// setInterval(function(){
+
+// },10)
+>>>>>>> e37567f904eb95120676bfdac76fe19f32c1b651
 
 function visualize(source) {
     var context = new AudioContext();
@@ -70,12 +77,16 @@ function visualize(source) {
         var scale = bufferLength/WIDTH;
         var allHeights = 0;
         var sectorLength = 0;
+        var avgTimes = 0;
+        currentAverage = 0;
         // getting all the values into sectorVols so it contains the avg height for each sector
         for (var i = 0; i < bufferLength; i++) {
             // incrementing allHeights to count the sum of all heights in each sector
             if (dataArray[i] != 0) {
                 allHeights += dataArray[i];
                 sectorLength++;
+                currentAverage+=dataArray[i]
+                avgTimes++;
             }
 
             if (i % (dataArray.length / times) == 0) {
@@ -85,12 +96,19 @@ function visualize(source) {
                 allHeights = 0, sectorLength = 0;
             }
         }
-
+        currentAverage/=avgTimes;
         // drawing each sector individually
         ctx.fillStyle = "#000000";
         ctx.fillRect(0, 0, WIDTH, HEIGHT);
         ctx.lineWidth = 1;
         ctx.strokeStyle = "#000000";
+        animationIttrCount++;
+        if(animationIttrCount%animationSpeed == 0){
+          animationX--;
+          if(animationX <= WIDTH - circleWidth-circleWidth/2){
+            animationX = WIDTH+circleWidth/2;
+          }
+        }
         generateBackground()
         // console.log(sectorVols[2]/5);
         for (var i = 0; i < sectorVols.length; i++) {
@@ -102,8 +120,8 @@ function visualize(source) {
               heightOfBar++;
               if(j%5 == 0 || j == sectorVols[i]){
                 var fillColor = j*2 > 255 ? 255 : j*2;
-                ctx.shadowColor = "rgba("+(fillColor)+", "+(255-(fillColor))+", 0,1)";
-                ctx.fillStyle = "rgba("+(fillColor)+", "+(255-(fillColor))+", 0,1)";
+                ctx.shadowColor = "rgba("+(fillColor)+", "+(255-(fillColor))+", 0,.5)";
+                ctx.fillStyle = "rgba("+(fillColor)+", "+(255-(fillColor))+", 0,.5)";
                 // filling the rect in the specific location
                 // console.log(j);
                 ctx.fillRect(i * (WIDTH / realTimes), // x relative to i'th sector
@@ -114,6 +132,8 @@ function visualize(source) {
               }
             }
         }
+        generatePlayArea();
+        refreshPlayer();
         // global avg and su vals
 
         getSpikeReference();
@@ -154,14 +174,47 @@ function visualize(source) {
 
 }
 function generateBackground(){
+  for(var i = 0; i < (WIDTH/circleWidth)+10; i++){
+    for(var j = 0; j < HEIGHT/circleWidth; j++){
+      var coors = {x:animationX - i*circleWidth+20+circleWidth/3+circleWidth,y:j*circleWidth+20+circleWidth/3};
+      var cHeight = circleWidth;
+      ctx.beginPath();
+      ctx.shadowBlur = 10;
+      ctx.shadowColor = "rgba(255,0,0,1)";
+      var avgClr = Math.pow(currentAverage/14,2);
+      var color = ((165-avgClr < 0) ? 0 : 165-avgClr);
+      ctx.strokeStyle = "rgba(200,"+color+",0,1)";
+      ctx.lineWidth = 10;
+      ctx.arc(coors.x,coors.y , circleWidth/2-10, 0, 2 * Math.PI);
+      ctx.stroke();
+      ctx.closePath();
+
+      ctx.lineWidth = currentAverage/10;
+      ctx.strokeStyle = "rgba(0,255,255,1)";
+      ctx.shadowColor = "rgba(0,255,255,1)";
+      var size = currentAverage + currentAverage/2;
+      ctx.beginPath();
+      ctx.moveTo(coors.x,coors.y-size/4-10);
+      ctx.lineTo(coors.x-size/4,coors.y+size/4-10);
+      ctx.lineTo(coors.x+size/4,coors.y+size/4-10);
+      ctx.lineTo(coors.x,coors.y-size/4-10)
+      ctx.lineTo(coors.x-size/4,coors.y+size/4-10);
+      ctx.stroke();
+      ctx.closePath();
+    }
+  }
+
+}
+function generatePlayArea(){
+  ctx.fillStyle = "white";
+  ctx.shadowColor = "white";
+  ctx.fillRect(0, HEIGHT-200, WIDTH,10)
+}
+function refreshPlayer(){
+  ctx.shadowColor = "#39ff14";
+  ctx.fillStyle = "#39ff14"
   ctx.beginPath();
-  ctx.shadowBlur = 10;
-  ctx.shadowColor = "rgb(255,0,0,1)";
-  // ctx.fillStyle = "rgb(255,0,0,1)"
-  ctx.strokeStyle = "orange";
-  ctx.lineWidth = 3;
-  ctx.fillStyle = "orange"
-  ctx.arc(100, 75, 100, 0, 2 * Math.PI);
-  ctx.stroke();
+  ctx.arc(WIDTH/7,HEIGHT-200-30,30,0,2*Math.PI);
+  ctx.fill();
   ctx.closePath();
 }
