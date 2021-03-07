@@ -17,7 +17,7 @@ fbtn.addEventListener("click", function () {
         audio.src = URL.createObjectURL(files[0]);
         audio.load();
         audio.play();
-        audio.volume = 1;
+        audio.volume = 0.3;
         visualize(audio);
     };
 });
@@ -31,6 +31,8 @@ var dataArraya;
 var sectorVols = [];
 var allFreqs = [];
 var animationX = WIDTH, circleWidth = 200, animationSpeed = 2,animationIttrCount = 0;
+// Particle vars
+var amount = 150, lifetime = 15, particles = [];
 // change this to decide how many sectors there are
 var times = 32;
 var realTimes = times-times/4;
@@ -131,8 +133,9 @@ function visualize(source) {
         }
         generatePlayArea();
         refreshPlayer();
-        // global avg and su vals
+        spreadParticles();
 
+        // global avg and su vals
         getSpikeReference();
         function getSpikeReference() {
             for (var i = 0; i < dataArray.length; i++) {
@@ -154,14 +157,14 @@ function visualize(source) {
                 sectorSum += sectorVols[i];
             }
             if ((sectorSum * sensitivity) / (sectorVols.length / 2) > avg) {
-                console.log("beat");
+                // console.log("beat");
             }
             sectorSum = 0;
             for (var i = sectorVols.length / 2; i < sectorVols.length; i++) {
                 sectorSum += sectorVols[i];
             }
             if ((sectorSum * sensitivity) / (sectorVols.length / 2) > avg) {
-                console.log("beat");
+                // console.log("beat");
             }
             sectorSum = 0;
         }
@@ -209,9 +212,54 @@ function generatePlayArea(){
 }
 function refreshPlayer(){
   ctx.shadowColor = "#39ff14";
-  ctx.fillStyle = "#39ff14"
+  ctx.fillStyle = "#39ff14";
   ctx.beginPath();
   ctx.arc(WIDTH/7,HEIGHT-200-30,30,0,2*Math.PI);
   ctx.fill();
   ctx.closePath();
+}
+function Particle(size,colora,x,y,angle,speed){
+  this.size = size,
+  this.colora = colora,
+  this.x = x,
+  this.y = y,
+  this.angle = angle,
+  this.speed = speed,
+  this.draw = function(){
+    ctx.fillStyle = this.colora;
+    ctx.shadowColor = this.colora;
+    ctx.beginPath();
+    ctx.arc(this.x,this.y,this.size,0,2*Math.PI);
+    ctx.fill();
+    ctx.closePath();
+  },
+  this.updatePos = function(){
+    this.x-= speed*Math.sin(angle);
+    this.y-= speed*Math.cos(angle);
+    this.angle+=0.01;
+    ctx.fillStyle = this.colora;
+    ctx.shadowColor = this.colora;
+    ctx.beginPath();
+    ctx.arc(this.x,this.y,this.size,0,2*Math.PI);
+    ctx.fill();
+    ctx.closePath();
+  }
+}
+var frst = false;
+var particle;
+function spreadParticles(){
+  //for(var i = 0; i < amount/lifetime; i++){
+    if(particles.length < amount){
+      particle = new Particle(randomBetween(2,5),"hsl(20,100%,"+Math.floor(randomBetween(30,71))+"%)",100,100,Math.floor(randomBetween(10,70)),1)
+      particle.draw();
+      particles.push(particle);
+    }
+  //}
+  for(var i = 0; i < particles.length; i++){
+    particles[i].updatePos();
+    // particles[i].draw();
+  }
+}
+function randomBetween(min,max){
+  return Math.random() * (max - min) + min;
 }
