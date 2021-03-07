@@ -37,7 +37,7 @@ var amount = 150, lifetime = 200, particles = [],particle, spawnParticle = 0, to
 var times = 32;
 var realTimes = times-times/4;
 // beat recognition vars
-var avg = 0, sum = 0, cmprsScale = 1, gsectorLength = 0, avgCounter = 0, currentAverage = 0,sensitivity = 0.8;
+var avg = 0, sum = 0, cmprsScale = 1, gsectorLength = 0, avgCounter = 0, currentAverage = 0,sensitivity = 0.8, beat = false, frameCounter = 0, frameCountMax = 4;
 // rocks on route vars
 var rocks = [], toGenerateRock = 0;
 // Physics vars
@@ -130,16 +130,16 @@ function visualize(source) {
               }
             }
         }
-        generateBackground()
+        generateBackground();
         generatePlayArea();
         refreshPlayer();
-        //if(toDrawParticles){
         spreadParticles();
-        //}
 
         // global avg and su vals
         getSpikeReference();
         function getSpikeReference() {
+            beat = false;
+            frameCounter++;
             for (var i = 0; i < dataArray.length; i++) {
                 if (dataArray[i] != 0) {
                     sum += dataArray[i] / cmprsScale;
@@ -148,7 +148,7 @@ function visualize(source) {
             }
             avg = sum / gsectorLength;
             avgCounter++;
-            if (avgCounter > 200) {
+            if (avgCounter > 150) {
                 gsectorLength = 0;
                 sum = 0;
                 avgCounter = 0;
@@ -158,15 +158,19 @@ function visualize(source) {
             for (var i = 0; i < sectorVols.length / 2; i++) {
                 sectorSum += sectorVols[i];
             }
-            if ((sectorSum * sensitivity) / (sectorVols.length / 2) > avg) {
-                console.log("beat");
+            if ((sectorSum * sensitivity) / (sectorVols.length / 2) > avg && frameCounter > frameCountMax) {
+              beat = true;
+              frameCounter = 0
+              console.log(beat)
             }
             sectorSum = 0;
             for (var i = sectorVols.length / 2; i < sectorVols.length; i++) {
                 sectorSum += sectorVols[i];
             }
-            if ((sectorSum * sensitivity) / (sectorVols.length / 2) > avg) {
-                console.log("beat");
+            if ((sectorSum * sensitivity) / (sectorVols.length / 2) > avg && frameCounter > frameCountMax) {
+                beat = true;
+                frameCounter = 0;
+                console.log(beat)
             }
             sectorSum = 0;
         }
