@@ -134,6 +134,7 @@ function visualize(source) {
         generatePlayArea();
         refreshPlayer();
         spreadParticles();
+        generateDiamonds();
 
         // global avg and su vals
         getSpikeReference();
@@ -178,6 +179,56 @@ function visualize(source) {
 
     }
 
+}
+var diamonds = [];
+var diamondColors = ["#8b32a8","#28ad64","#c8de4e","#d61313","#54ffeb","#2b88c2"];
+var spawnDiamondsIn = 0;
+function generateDiamonds(){
+  spawnDiamondsIn++;
+  var currGem = Math.floor(randomBetween(1,7));
+  if(spawnDiamondsIn%100 == 0){
+    if(diamonds.includes("empty")){
+      var gem = new Gem(diamondColors[currGem-1],currGem,WIDTH,HEIGHT-randomBetween(30,170),diamonds.indexOf("empty"))
+      diamonds[diamonds.indexOf("empty")]=gem;
+    }else{
+      var gem = new Gem(diamondColors[currGem-1],currGem,WIDTH,HEIGHT-randomBetween(30,170),diamonds.length)
+      diamonds.push(gem);
+    }
+  }
+  for(var j = 0; j < diamonds.length; j++){
+    if(diamonds[j] != "empty"){
+      diamonds[j].updatePos();
+    }
+  }
+}
+document.querySelector(".canvas").onmousemove = function(e){
+  console.log(e.x + "," + e.y);
+  for(var i = 0; i < diamonds.length; i++){//e.x > diamonds[i].x  && e.x < diamonds[i].x + 25
+    if(e.y > diamonds[i].y-25  && e.y < diamonds[i].y + 50 && e.x-25 > diamonds[i].x  && e.x < diamonds[i].x + 50){// &&
+      diamonds[i] = "empty";
+    }
+  }
+}
+function Gem(color,image,x,y,index){
+  this.color = color,
+  this.image = image,
+  this.x = x,
+  this.y = y,
+  this.index = index,
+  this.drawGem = function(){
+    ctx.shadowColor = diamondColors[this.color];
+    ctx.drawImage(getImage("gem" + this.image),this.x,this.y,25,25);
+  },
+  this.updatePos = function(){
+    this.x-=2;
+    this.drawGem();
+    if(this.x < 0){
+      diamonds[this.index] = "empty";
+    }
+  }
+}
+function getImage(img){
+  return document.getElementById(img);
 }
 function generateBackground(){
   for(var i = 0; i < (WIDTH/circleWidth)+10; i++){

@@ -15,3 +15,6 @@ html, body {
 .audio{
   width: 100%;
 }
+.canvas{
+  /* cursor: url("./cursor.png"),auto; */
+}
