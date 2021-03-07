@@ -126,17 +126,24 @@ function visualize(source) {
             }
             avg = sum / gsectorLength;
             avgCounter++;
-            if (avgCounter > 128) {
+            if (avgCounter > 100) {
                 gsectorLength = 0;
                 sum = 0;
                 avgCounter = 0;
                 console.log("reset");
             }
             var sectorSum = 0
-            for (var i = 0; i < sectorVols.length; i++) {
+            for (var i = 0; i < sectorVols.length / 2; i++) {
                 sectorSum += sectorVols[i];
             }
-            if (sectorSum / sectorVols.length > avg) {
+            if (sectorSum / (sectorVols.length / 2) > avg) {
+                console.log("beat");
+            }
+            sectorSum = 0;
+            for (var i = sectorVols.length / 2; i < sectorVols.length; i++) {
+                sectorSum += sectorVols[i];
+            }
+            if (sectorSum / (sectorVols.length / 2) > avg) {
                 console.log("beat");
             }
             sectorSum = 0;
