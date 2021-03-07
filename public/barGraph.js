@@ -32,13 +32,16 @@ var sectorVols = [];
 var allFreqs = [];
 var animationX = WIDTH, circleWidth = 200, animationSpeed = 2,animationIttrCount = 0;
 // Particle vars
-var amount = 150, lifetime = 300, particles = [],particle, spawnParticle = 0, toDrawParticles = true;
+var amount = 150, lifetime = 200, particles = [],particle, spawnParticle = 0, toDrawParticles = true;
 // change this to decide how many sectors there are
 var times = 32;
 var realTimes = times-times/4;
 // beat recognition vars
 var avg = 0, sum = 0, cmprsScale = 1, gsectorLength = 0, avgCounter = 0, currentAverage = 0,sensitivity = 0.8;
-
+// rocks on route vars
+var rocks = [], toGenerateRock = 0;
+// Physics vars
+var gravity = -9.8;
 // setInterval(function(){
 
 // },10)
@@ -58,7 +61,6 @@ function visualize(source) {
 
     // length of data inside array
     var bufferLength = analyser.frequencyBinCount;
-    console.log(bufferLength);
     dataArray = new Uint8Array(bufferLength);
     renderFrame();
     function renderFrame() {
@@ -109,11 +111,9 @@ function visualize(source) {
           }
         }
         generateBackground()
-        // console.log(sectorVols[2]/5);
         for (var i = 0; i < sectorVols.length; i++) {
             // fill color
             // for(var i = 0)
-            // console.log(sectorVols[i]);
             var heightOfBar = 0;
             for(var j = 0; j < sectorVols[i]; j++){
               heightOfBar++;
@@ -122,7 +122,6 @@ function visualize(source) {
                 ctx.shadowColor = "rgba("+(fillColor)+", "+(255-(fillColor))+", 0,.5)";
                 ctx.fillStyle = "rgba("+(fillColor)+", "+(255-(fillColor))+", 0,.5)";
                 // filling the rect in the specific location
-                // console.log(j);
                 ctx.fillRect(i * (WIDTH / realTimes), // x relative to i'th sector
                 HEIGHT - j - j*2, // total y minus the height
                 WIDTH / realTimes, // width according to sector scale
@@ -133,7 +132,9 @@ function visualize(source) {
         }
         generatePlayArea();
         refreshPlayer();
-        spreadParticles();
+        //if(toDrawParticles){
+          spreadParticles();
+        //}
 
         // global avg and su vals
         getSpikeReference();
@@ -150,21 +151,21 @@ function visualize(source) {
                 gsectorLength = 0;
                 sum = 0;
                 avgCounter = 0;
-                console.log("reset");
+                //console.log("reset");
             }
             var sectorSum = 0
             for (var i = 0; i < sectorVols.length / 2; i++) {
                 sectorSum += sectorVols[i];
             }
             if ((sectorSum * sensitivity) / (sectorVols.length / 2) > avg) {
-                console.log("beat");
+                //console.log("beat");
             }
             sectorSum = 0;
             for (var i = sectorVols.length / 2; i < sectorVols.length; i++) {
                 sectorSum += sectorVols[i];
             }
             if ((sectorSum * sensitivity) / (sectorVols.length / 2) > avg) {
-                console.log("beat");
+                //console.log("beat");
             }
             sectorSum = 0;
         }
@@ -205,20 +206,111 @@ function generateBackground(){
   }
 
 }
+function Player(x,y,acceleration,color,size){
+  this.x = x,
+  this.y = y,
+  this.begY = y,
+  this.acceleration = acceleration,
+  this.color = color,
+  this.size = size,
+  this.speedY = 0,
+  this.gravity = 0.05;
+  this.gravitySpeed = 0,
+  this.airtime = 0,
+  this.draw = function(){
+    ctx.shadowColor = this.color;
+    ctx.fillStyle = this.color;
+    ctx.beginPath();
+    ctx.arc(this.x,this.y,this.size,0,2*Math.PI);
+    ctx.fill();
+    ctx.closePath();
+  },
+  this.updatePos = function(){
+    // this.y = this.begY + .5*gravity*Math.pow(this.airtime,2);
+    this.gravitySpeed += this.gravity;
+    this.y -= (this.speedY + this.gravitySpeed);
+    this.hitBottom();
+  },
+  this.hitBottom = function(){
+    if(this.y >= this.begY){
+      this.y = this.begY;
+      this.gravitySpeed = 0;
+      toDrawParticles = true;
+      // console.log(toDrawParticles);
+    }else{
+      toDrawParticles = false;
+    }
+  }
+}
+var isJumping = false;
+var player = new Player(WIDTH/7,HEIGHT-200-30,0,"#39ff14",30);
+function refreshPlayer(){
+  if(!isJumping){
+    player.gravity = -0.1;
+  }
+  player.updatePos()
+  player.draw();
+}
+function jump(){
+  player.gravity = 0.5
+  isJumping = true;
+  setTimeout(function(){
+    isJumping = false;
+  },70);
+}
+document.body.onkeypress = function(e){
+    if(e.keyCode == 32 && player.y >= player.begY){
+      jump()
+    }
+}
+function Rock(x,y,number,size){
+  this.size = size,
+  this.x = x,
+  this.y = y,
+  this.number = number,
+  this.size = size,
+  this.drawRock = function(){
+    ctx.fillStyle = "white";
+    ctx.shadowColor = "white";
+    ctx.beginPath();
+    if(this.number == 1){
+      ctx.arc(this.x,this.y,this.size,0,2*Math.PI)
+    }else if(this.number == 2){
+      ctx.arc(this.x-this.size/2,this.y,this.size,0,2*Math.PI)
+      ctx.arc(this.x+this.size/2,this.y,this.size,0,2*Math.PI)
+    }else{
+      ctx.beginPath();
+      ctx.arc(this.x,this.y-this.size/2,this.size,0,2*Math.PI)
+      ctx.arc(this.x-this.size/2,this.y,this.size,0,2*Math.PI)
+      ctx.fill();
+      ctx.closePath();
+      ctx.beginPath();
+      ctx.arc(this.x+this.size/2,this.y,this.size,0,2*Math.PI)
+      // ctx.arc(this.x+this.size/2,this.y,this.size,0,2*Math.PI)
+    }
+    ctx.fill();
+    ctx.closePath();
+  },
+  this.updateRockPos = function(){
+    this.x-=3;
+  }
+}
+var generateRockFrqs = Math.floor(randomBetween(150,300));
 function generatePlayArea(){
   ctx.fillStyle = "white";
   ctx.shadowColor = "white";
   ctx.fillRect(0, HEIGHT-200, WIDTH,10)
+  toGenerateRock++;
+  if(toGenerateRock%generateRockFrqs == 0){
+    rocks.push(new Rock(WIDTH,HEIGHT-200,Math.floor(randomBetween(1,3)),10))
+    generateRockFrqs = Math.floor(randomBetween(150,300));
+  }
+  for(var i = 0; i < rocks.length; i++){
+    rocks[i].updateRockPos();
+    rocks[i].drawRock();
+  }
 }
-function refreshPlayer(){
-  ctx.shadowColor = "#39ff14";
-  ctx.fillStyle = "#39ff14";
-  ctx.beginPath();
-  ctx.arc(WIDTH/7,HEIGHT-200-30,30,0,2*Math.PI);
-  ctx.fill();
-  ctx.closePath();
-}
-function Particle(size,colora,x,y,angle,speed,index,cycle){
+function Particle(size,colora,x,y,angle,speed,index,cycle,visible){
   this.size = size,
   this.colora = colora,
   this.x = x,
@@ -226,10 +318,16 @@ function Particle(size,colora,x,y,angle,speed,index,cycle){
   this.angle = angle,
   this.speed = speed,
   this.index = index,
+  this.visible = visible,
   this.cycle = cycle,
   this.draw = function(){
-    ctx.fillStyle = this.colora;
-    ctx.shadowColor = this.colora;
+    if(visible){
+      ctx.fillStyle = this.colora;
+      ctx.shadowColor = this.colora;
+    }else{
+      ctx.fillStyle = "rgba(0,0,0,0)";
+      ctx.shadowColor = "rgba(0,0,0,0)";
+    }
     ctx.beginPath();
     ctx.arc(this.x,this.y,this.size,0,2*Math.PI);
     ctx.fill();
@@ -238,9 +336,14 @@ function Particle(size,colora,x,y,angle,speed,index,cycle){
   this.updatePos = function(){
     this.x-= this.speed*Math.sin(this.angle * Math.PI / 180);
     this.y-= this.speed*Math.cos(this.angle * Math.PI / 180);
-    this.angle+=0.1;
-    ctx.fillStyle = this.colora;
-    ctx.shadowColor = this.colora;
+    this.angle+=0.4;
+    if(visible){
+      ctx.fillStyle = this.colora;
+      ctx.shadowColor = this.colora;
+    }else{
+      ctx.fillStyle = "rgba(0,0,0,0)";
+      ctx.shadowColor = "rgba(0,0,0,0)";
+    }
     ctx.beginPath();
     ctx.arc(this.x,this.y,this.size,0,2*Math.PI);
     ctx.fill();
@@ -255,10 +358,10 @@ function Particle(size,colora,x,y,angle,speed,index,cycle){
 function spreadParticles(){
   var partX = WIDTH/7-10;
   var partY = HEIGHT-200;
-  if(toDrawParticles){
-    if(particles.length < 50){
+  //if(toDrawParticles){
+    if(particles.length < 150){
       if(spawnParticle == 10){
-        particle = new Particle(randomBetween(2,5),"hsl(20,100%,"+Math.floor(randomBetween(30,71))+"%)",partX,partY,Math.floor(randomBetween(40,80)),1.2,particles.length,0)
+        particle = new Particle(randomBetween(2,5),"hsl(20,100%,"+Math.floor(randomBetween(30,71))+"%)",partX,partY,Math.floor(randomBetween(40,80)),1.2,particles.length,0,toDrawParticles)
         particle.draw();
         particles.push(particle);
         spawnParticle = 0;
@@ -268,14 +371,19 @@ function spreadParticles(){
     }else{
 
     }
-  }
+  //}
   for(var i = 0; i < particles.length; i++){
     if(particles[i] != ""){
       particles[i].updatePos();
     }else{
-      particle = new Particle(randomBetween(2,5),"hsl(20,100%,"+Math.floor(randomBetween(30,71))+"%)",partX,partY,Math.floor(randomBetween(40,80)),1.2,i,0)
-      particle.draw();
-      particles[i] = particle;
+      if(spawnParticle == 10){
+        particle = new Particle(randomBetween(2,5),"hsl(20,100%,"+Math.floor(randomBetween(30,71))+"%)",partX,partY,Math.floor(randomBetween(40,80)),1.2,i,0,toDrawParticles)
+        particle.draw();
+        particles[i] = particle;
+        spawnParticle = 0;
+      }else{
+      // spawnParticle++;
+      }
     }
   }
 }
