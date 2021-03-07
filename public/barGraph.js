@@ -36,7 +36,7 @@ var animIda;
 var times = 32;
 var realTimes = times-times/4;
 // beat recognition vars
-var avg = 0, sum = 0, cmprsScale = 1, gsectorLength = 0, avgCounter = 0;
+var avg = 0, sum = 0, cmprsScale = 1, gsectorLength = 0, avgCounter = 0, sensitivity = 0.9;
 
 function visualize(source) {
     var context = new AudioContext();
@@ -136,14 +136,14 @@ function visualize(source) {
             for (var i = 0; i < sectorVols.length / 2; i++) {
                 sectorSum += sectorVols[i];
             }
-            if (sectorSum / (sectorVols.length / 2) > avg) {
+            if ((sectorSum * sensitivity) / (sectorVols.length / 2) > avg) {
                 console.log("beat");
             }
             sectorSum = 0;
             for (var i = sectorVols.length / 2; i < sectorVols.length; i++) {
                 sectorSum += sectorVols[i];
             }
-            if (sectorSum / (sectorVols.length / 2) > avg) {
+            if ((sectorSum * sensitivity) / (sectorVols.length / 2) > avg) {
                 console.log("beat");
             }
             sectorSum = 0;
