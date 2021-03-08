@@ -39,7 +39,7 @@ var amount = 150, lifetime = 200, particles = [],particle, spawnParticle = 0, to
 var times = 32;
 var realTimes = times-times/4;
 // beat recognition vars
-var avg = 0, sum = 0, cmprsScale = 1, gsectorLength = 0, avgCounter = 0, currentAverage = 0,sensitivity = 0.8, beat = false, frameCounter = 0, frameCountMax = 4;
+var avg = 0, sum = 0, cmprsScale = 1, gsectorLength = 0, avgCounter = 0, currentAverage = 0,sensitivity = 0.95, beat = false, frameCounter = 0, frameCountMax = 4;
 // rocks on route vars
 var rocks = [], toGenerateRock = 0;
 // Physics vars
@@ -50,6 +50,8 @@ var globalMouseX = 0, globalMouseY = 0;
 var score = 0;
 // Explosions
 var explosions = [];
+//Global particle system
+var allParticleSystems = [];
 // setInterval(function(){
 
 // },10)
@@ -151,10 +153,10 @@ function visualize(source) {
         generateBackground();
         generatePlayArea();
         refreshPlayer();
-        spreadParticles();
+        // spreadParticles();
         generateDiamonds();
         updateScore();
-        explode();
+        updateAllParticles();
 
         // global avg and su vals
         getSpikeReference();
@@ -182,7 +184,10 @@ function visualize(source) {
             if ((sectorSum * sensitivity) / (sectorVols.length / 2) > avg && frameCounter > frameCountMax) {
               beat = true;
               frameCounter = 0
-              // console.log(beat)
+              console.log(beat)
+              var randomX = randomBetween(0+WIDTH/8, WIDTH-WIDTH/8);
+              var randomY = randomBetween(0+HEIGHT/8, HEIGHT-200-HEIGHT/10);
+              createExplosion(randomX,randomY)
             }
             sectorSum = 0;
             for (var i = sectorVols.length / 2; i < sectorVols.length; i++) {
@@ -192,6 +197,9 @@ function visualize(source) {
                 beat = true;
                 frameCounter = 0;
                 console.log(beat)
+                var randomX = randomBetween(0+WIDTH/8, WIDTH-WIDTH/8);
+                var randomY = randomBetween(0+HEIGHT/8, HEIGHT-200-HEIGHT/10);
+                createExplosion(randomX,randomY)
             }
             sectorSum = 0;
         }
@@ -221,7 +229,11 @@ function generateDiamonds(){
     }
   }
 }
-function ParticleSystem(x,y,numberOfParticles,lifetime,beginAngle,finAngle,size,sizeRandomness,speed,gravity,frequency,stopAfter){
+function createExplosion(x,y){
+  var explosionSystem = new ParticleSystem(x,y,7,100,0,360,5,2,3,false,-7,10,true);
+  allParticleSystems.push(explosionSystem)
+}
+function ParticleSystem(x,y,numberOfParticles,lifetime,beginAngle,finAngle,size,sizeRandomness,speed,gravity,frequency,stopAfter,fade,enabled){
   this.x = x,
   this.y = y,
   this.numberOfParticles = numberOfParticles,
@@ -236,50 +248,38 @@ function ParticleSystem(x,y,numberOfParticles,lifetime,beginAngle,finAngle,size,
   this.particles = [],
   this.frequency = frequency,
   this.stopAfter = stopAfter,
+  this.opacity = 100,
   this.finished = false,
+  this.enabled = true,
   this.gravity = gravity,
+  this.fade = fade,
   this.addParticle = function(){
-    if(!this.finished){
-      if(this.frequency > 0){
-        if(this.spawnParticle == this.frequency){
-          var newParticle = new Particle(randomBetween(size-sizeRandomness,size+sizeRandomness),
-          "hsl(20,100%,"+Math.floor(randomBetween(30,71))+"%)",
-          this.x,
-          this.y,
-          Math.floor(randomBetween(this.beginAngle,this.finAngle)),
-          this.speed,
-          this.particles.length,
-          0,
-          true,
-          this.gravity)
-          if(this.particles.length < numberOfParticles){
-            this.particles.push(newParticle)
-          }else{
-            this.particles[this.particles.indexOf("empty")] = newParticle;
+    if(this.enabled){
+      if(!this.finished){
+        for(var j = 0; j < (this.frequency > 0 ? 1 : Math.abs(this.frequency)); j++){
+          if(this.spawnParticle == this.frequency || this.frequency < 0){
+            var newParticle = new Particle(randomBetween(size-sizeRandomness,size+sizeRandomness),
+            "hsla(20,100%,"+Math.floor(randomBetween(30,71))+"%,grogu)",
+            this.x,
+            this.y,
+            Math.floor(randomBetween(this.beginAngle,this.finAngle)),
+            this.speed,
+            this.particles.length < this.numberOfParticles ? this.particles.length : this.particles.indexOf("empty"),
+            0,
+            true,
+            this.gravity,
+            this.lifetime,
+            this)
+            if(this.particles.length < numberOfParticles){
+              this.particles.push(newParticle)
+            }else{
+              this.particles[this.particles.indexOf("empty")] = newParticle;
+            }
+            this.spawnParticle = 0;
           }
-          this.spawnParticle = 0;
         }
-      }else{
-        for(var j = 0; j < Math.abs(this.frequency); j++){
-          var newParticle = new Particle(randomBetween(size-sizeRandomness,size+sizeRandomness),
-          "hsl(20,100%,"+Math.floor(randomBetween(30,71))+"%)",
-          this.x,
-          this.y,
-          Math.floor(randomBetween(this.beginAngle,this.finAngle)),
-          this.speed,
-          this.particles.length,
-          0,
-          true,
-          this.gravity)
-          if(this.particles.length < numberOfParticles){
-            this.particles.push(newParticle)
-          }else{
-            this.particles[this.particles.indexOf("empty")] = newParticle;
-          }
-          this.spawnParticle = 0;
-        }
+        this.spawnParticle++;
       }
-      this.spawnParticle++;
     }
   },
   this.drawParticles = function(){
@@ -288,32 +288,38 @@ function ParticleSystem(x,y,numberOfParticles,lifetime,beginAngle,finAngle,size,
       this.finished = true;
     }
     for(var i = 0; i < this.particles.length; i++){
-      if(this.particles != "empty"){
+      if(this.particles[i] != "empty"){
         this.particles[i].updatePos();
       }
     }
   }
 }
-var particleSystem = new ParticleSystem(100,100,150,200,0,360,5,2,3,false,-10,100);
-function explode(){
-  particleSystem.addParticle();
-  particleSystem.drawParticles();
+//Create player particles
+var partX = WIDTH/7-10;
+var partY = HEIGHT-200;
+var playerParticles = new ParticleSystem(partX,partY,250,200,50,80,4,1,2,true,2,-1,false);
+allParticleSystems.push(playerParticles)
+function updateAllParticles(){
+  for(var i = 0; i < allParticleSystems.length; i++){
+    if(allParticleSystems[i] != "empty"){
+      allParticleSystems[i].addParticle();
+      allParticleSystems[i].drawParticles();
+      for(var j = 0; j < allParticleSystems[i].particles.length; j++){
+        if(allParticleSystems[i].particles[0] != "empty"){
+          if(allParticleSystems[i].particles[0].opacity < 0.001){
+            allParticleSystems[i] = "empty";
+          }
+          break;
+        }
+      }
+    }
+  }
 }
 document.querySelector(".canvas").onmousemove = function(e){
   var mouseX = parseInt(e.clientX), mouseY = parseInt(e.clientY);
-  // var mouseX = parseInt(e.clientX-offsetX), mouseY = parseInt(e.clientY-offsetY);
   var rect = canvas.getBoundingClientRect();
   globalMouseX = mouseX - rect.left;
   globalMouseY = mouseY - rect.top;
-  // for(var i = 0; i < diamonds.length; i++){//e.x > diamonds[i].x  && e.x < diamonds[i].x + 25
-  //   if(diamonds[i] != "empty"){
-  //     // console.log(globalMouseY > diamonds[i].y-25  && globalMouseY < diamonds[i].y + 50 && globalMouseX-25 > diamonds[i].x  && globalMouseX < diamonds[i].x + 50);
-  //     if(globalMouseX > diamonds[i].x-25  && globalMouseX < diamonds[i].x + 50 && globalMouseY < diamonds[i].y + 50){// &&
-  //       console.log("hover");
-  //       diamonds[i] = "empty";
-  //     }
-  //   }
-  // }
 }
 function Gem(color,image,x,y,index,width,height){
   this.color = color,
@@ -418,9 +424,11 @@ function Player(x,y,acceleration,color,size){
       this.y = this.begY;
       this.gravitySpeed = 0;
       toDrawParticles = true;
+      playerParticles.enabled = true;
       // console.log(toDrawParticles);
     }else{
       toDrawParticles = false;
+      playerParticles.enabled = false;
     }
   }
 }
@@ -483,7 +491,7 @@ function generatePlayArea(){
     rocks[i].drawRock();
   }
 }
-function Particle(size,colora,x,y,angle,speed,index,cycle,visible,gravity){
+function Particle(size,colora,x,y,angle,speed,index,cycle,visible,gravity,fade,system){
   this.size = size,
   this.colora = colora,
   this.x = x,
@@ -494,32 +502,26 @@ function Particle(size,colora,x,y,angle,speed,index,cycle,visible,gravity){
   this.visible = visible,
   this.gravity = gravity,
   this.cycle = cycle,
-  this.draw = function(){
-    if(visible){
-      ctx.fillStyle = this.colora;
-      ctx.shadowColor = this.colora;
-    }else{
-      ctx.fillStyle = "rgba(0,0,0,0)";
-      ctx.shadowColor = "rgba(0,0,0,0)";
-    }
-    ctx.beginPath();
-    ctx.arc(this.x,this.y,this.size,0,2*Math.PI);
-    ctx.fill();
-    ctx.closePath();
-  },
+  this.fade = fade,
+  this.system = system,
+  this.opacity = 100,
   this.updatePos = function(){
+    if(this.fade > 0){
+      this.opacity = 1-this.cycle/this.fade;
+    }
     this.x-= this.speed*Math.sin(this.angle * Math.PI / 180);
     this.y-= this.speed*Math.cos(this.angle * Math.PI / 180);
     if(this.gravity){
       this.angle+=0.4;
     }
     if(visible){
-      ctx.fillStyle = this.colora;
-      ctx.shadowColor = this.colora;
+      ctx.fillStyle = this.colora.replace("grogu",this.opacity);
+      ctx.shadowColor = this.colora.replace("grogu",this.opacity);
     }else{
       ctx.fillStyle = "rgba(0,0,0,0)";
       ctx.shadowColor = "rgba(0,0,0,0)";
     }
+    // console.log(this.colora.replace("grogu",this.opacity));
     ctx.beginPath();
     ctx.arc(this.x,this.y,this.size,0,2*Math.PI);
     ctx.fill();
@@ -527,42 +529,11 @@ function Particle(size,colora,x,y,angle,speed,index,cycle,visible,gravity){
     this.cycle++;
     if(this.cycle == lifetime){
       // particles.splice(this.index,1);
-      particles[this.index] = "";
+      (this.system).particles[this.index] = "empty";
     }
   }
 }
-function spreadParticles(){
-  var partX = WIDTH/7-10;
-  var partY = HEIGHT-200;
-  //if(toDrawParticles){
-    if(particles.length < 150){
-      if(spawnParticle == 10){
-        particle = new Particle(randomBetween(2,5),"hsl(20,100%,"+Math.floor(randomBetween(30,71))+"%)",partX,partY,Math.floor(randomBetween(40,80)),1.2,particles.length,0,toDrawParticles,true)
-        particle.draw();
-        particles.push(particle);
-        spawnParticle = 0;
-      }else{
-        spawnParticle++;
-      }
-    }else{
 
-    }
-  //}
-  for(var i = 0; i < particles.length; i++){
-    if(particles[i] != ""){
-      particles[i].updatePos();
-    }else{
-      if(spawnParticle == 10){
-        particle = new Particle(randomBetween(2,5),"hsl(20,100%,"+Math.floor(randomBetween(30,71))+"%)",partX,partY,Math.floor(randomBetween(40,80)),1.2,i,0,toDrawParticles,true)
-        particle.draw();
-        particles[i] = particle;
-        spawnParticle = 0;
-      }else{
-      // spawnParticle++;
-      }
-    }
-  }
-}
 function randomBetween(min,max){
   return Math.random() * (max - min) + min;
 }
