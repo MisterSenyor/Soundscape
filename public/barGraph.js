@@ -161,48 +161,40 @@ function visualize(source) {
         // global avg and su vals
         getSpikeReference();
         function getSpikeReference() {
-            beat = false;
-            frameCounter++;
-            for (var i = 0; i < dataArray.length; i++) {
-                if (dataArray[i] != 0) {
-                    sum += dataArray[i] / cmprsScale;
-                    gsectorLength++;
-                }
-            }
-            avg = sum / gsectorLength;
-            avgCounter++;
-            if (avgCounter > 150) {
-                gsectorLength = 0;
-                sum = 0;
-                avgCounter = 0;
-                //console.log("reset");
-            }
-            var sectorSum = 0
-            for (var i = 0; i < sectorVols.length / 2; i++) {
-                sectorSum += sectorVols[i];
-            }
-            if ((sectorSum * sensitivity) / (sectorVols.length / 2) > avg && frameCounter > frameCountMax) {
+          beat = false;
+          frameCounter++;
+          sum = 0, gsectorLength = 0;
+          for (var i = 0; i < dataArray.length; i++) {
+              if (dataArray[i] != 0) {
+                  sum += dataArray[i] / cmprsScale;
+                  gsectorLength++;
+              }
+          }
+          frameAvgs.push(sum / gsectorLength);
+          if (frameAvgs.length > 100) {
+              frameAvgs.shift();
+          }
+
+          var sectorSum = 0;
+          for (var i = 0; i < sectorVols.length / 2; i++) {
+              sectorSum += sectorVols[i];
+          }
+          if ((sectorSum * sensitivity) / (sectorVols.length / 2) > median(frameAvgs) && frameCounter > frameCountMax) {
+            beat = true;
+            frameCounter = 0;
+            console.log(beat);
+          }
+          sectorSum = 0;
+          for (var i = sectorVols.length / 2; i < sectorVols.length; i++) {
+              sectorSum += sectorVols[i];
+          }
+          if ((sectorSum * sensitivity) / (sectorVols.length / 2) > median(frameAvgs) && frameCounter > frameCountMax) {
               beat = true;
-              frameCounter = 0
-              console.log(beat)
-              var randomX = randomBetween(0+WIDTH/8, WIDTH-WIDTH/8);
-              var randomY = randomBetween(0+HEIGHT/8, HEIGHT-200-HEIGHT/10);
-              createExplosion(randomX,randomY)
-            }
-            sectorSum = 0;
-            for (var i = sectorVols.length / 2; i < sectorVols.length; i++) {
-                sectorSum += sectorVols[i];
-            }
-            if ((sectorSum * sensitivity) / (sectorVols.length / 2) > avg && frameCounter > frameCountMax) {
-                beat = true;
-                frameCounter = 0;
-                console.log(beat)
-                var randomX = randomBetween(0+WIDTH/8, WIDTH-WIDTH/8);
-                var randomY = randomBetween(0+HEIGHT/8, HEIGHT-200-HEIGHT/10);
-                createExplosion(randomX,randomY)
-            }
-            sectorSum = 0;
-        }
+              frameCounter = 0;
+              console.log(beat);
+          }
+          sectorSum = 0;
+      }
         sectorVols = [];
 
     }
@@ -536,4 +528,24 @@ function Particle(size,colora,x,y,angle,speed,index,cycle,visible,gravity,fade,s
 
 function randomBetween(min,max){
   return Math.random() * (max - min) + min;
+}
+function average(arr) {
+    var sum = 0;
+    for (var i = 0; i < arr.length; i++){
+        sum += arr[i];
+    }
+    return arr.length == 0 ? 0 : sum / arr.length;
+}
+function median(arr) {
+    arr = arr.sort(function(a, b){return a - b});
+
+    if (arr.length == 0) {
+        return 0;
+    }
+    else if (arr.length % 2 != 0) {
+        return arr[Math.floor(arr.length / 2)];
+    }
+    else {
+        return (arr[Math.floor(arr.length / 2)] + arr[Math.floor(arr.length / 2) + 1]) / 2;
+    }
 }
