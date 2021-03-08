@@ -39,7 +39,7 @@ var amount = 150, lifetime = 200, particles = [],particle, spawnParticle = 0, to
 var times = 32;
 var realTimes = times-times/4;
 // beat recognition vars
-var avg = 0, sum = 0, cmprsScale = 1, gsectorLength = 0, avgCounter = 0, currentAverage = 0,sensitivity = 0.75, beat = false, frameCounter = 0, frameCountMax = 4;
+var avg = 0, sum = 0, cmprsScale = 1, gsectorLength = 0, avgCounter = 0, currentAverage = 0,sensitivity = 0.3, beat = false, frameCounter = 0, frameCountMax = 4;
 var frameAvgs = [];
 // beat recognition (delta) vars
 var prevSectorVols = [], avgDelta = [], spikeDistance = 0;
@@ -181,6 +181,7 @@ function visualize(source) {
 
               for (var i = 0; i < sectorVols.length; i++){
                   if ((sectorVols[i] - prevSectorVols[i]) * sensitivity > median(avgDelta) && spikeDistance > frameCountMax) {
+                    createExplosion(WIDTH / 2, HEIGHT / 2);
                     console.log("beat")
                     spikeDistance = 0;
                   }
