@@ -39,7 +39,7 @@ var amount = 150, lifetime = 200, particles = [],particle, spawnParticle = 0, to
 var times = 32;
 var realTimes = times-times/4;
 // beat recognition vars
-var avg = 0, sum = 0, cmprsScale = 1, gsectorLength = 0, avgCounter = 0, currentAverage = 0,sensitivity = 0.3, beat = false, frameCounter = 0, frameCountMax = 4;
+var avg = 0, sum = 0, cmprsScale = 1, gsectorLength = 0, avgCounter = 0, currentAverage = 0,sensitivity = 0.45, beat = false, frameCounter = 0, frameCountMax = 4;
 var frameAvgs = [];
 // beat recognition (delta) vars
 var prevSectorVols = [], avgDelta = [], spikeDistance = 0;
@@ -181,7 +181,10 @@ function visualize(source) {
 
               for (var i = 0; i < sectorVols.length; i++){
                   if ((sectorVols[i] - prevSectorVols[i]) * sensitivity > median(avgDelta) && spikeDistance > frameCountMax) {
-                    createExplosion(WIDTH / 2, HEIGHT / 2);
+                    var randomX = randomBetween(0+WIDTH/8,WIDTH-WIDTH/8)
+                    var randomY = randomBetween(0+HEIGHT/8,HEIGHT-HEIGHT/8-200)
+                    // createExplosion(WIDTH / 2, HEIGHT / 2);
+                    createExplosion(randomX,randomY);
                     console.log("beat")
                     spikeDistance = 0;
                   }
@@ -217,7 +220,7 @@ function generateDiamonds(){
   }
 }
 function createExplosion(x,y){
-  var explosionSystem = new ParticleSystem(x,y,7,100,0,360,5,2,3,false,-7,10,true);
+  var explosionSystem = new ParticleSystem(x,y,11,100,0,360,5,2,3,false,-11,10,true);
   allParticleSystems.push(explosionSystem)
 }
 function ParticleSystem(x,y,numberOfParticles,lifetime,beginAngle,finAngle,size,sizeRandomness,speed,gravity,frequency,stopAfter,fade,enabled){
