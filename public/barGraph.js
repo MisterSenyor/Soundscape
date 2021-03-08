@@ -39,7 +39,10 @@ var amount = 150, lifetime = 200, particles = [],particle, spawnParticle = 0, to
 var times = 32;
 var realTimes = times-times/4;
 // beat recognition vars
-var avg = 0, sum = 0, cmprsScale = 1, gsectorLength = 0, avgCounter = 0, currentAverage = 0,sensitivity = 0.95, beat = false, frameCounter = 0, frameCountMax = 4;
+var avg = 0, sum = 0, cmprsScale = 1, gsectorLength = 0, avgCounter = 0, currentAverage = 0,sensitivity = 0.75, beat = false, frameCounter = 0, frameCountMax = 4;
+var frameAvgs = [];
+// beat recognition (delta) vars
+var prevSectorVols = [], avgDelta = [], spikeDistance = 0;
 // rocks on route vars
 var rocks = [], toGenerateRock = 0;
 // Physics vars
@@ -161,41 +164,32 @@ function visualize(source) {
         // global avg and su vals
         getSpikeReference();
         function getSpikeReference() {
-          beat = false;
-          frameCounter++;
-          sum = 0, gsectorLength = 0;
-          for (var i = 0; i < dataArray.length; i++) {
-              if (dataArray[i] != 0) {
-                  sum += dataArray[i] / cmprsScale;
-                  gsectorLength++;
+          // TODO - make the sensitivity alter itself dynamically by the amount of beats recognized per TimeFrame
+          sectorSum = 0;
+          if (prevSectorVols.length > 0) {
+              for (var i = 0; i < sectorVols.length; i++) {
+                  sectorSum += sectorVols[i] - prevSectorVols[i];
+              }
+
+              avgDelta.push(sectorSum / sectorVols.length);
+
+              if (avgDelta.length > 100) {
+                  avgDelta.shift();
+              }
+
+              spikeDistance++;
+
+              for (var i = 0; i < sectorVols.length; i++){
+                  if ((sectorVols[i] - prevSectorVols[i]) * sensitivity > median(avgDelta) && spikeDistance > frameCountMax) {
+                    console.log("beat")
+                    spikeDistance = 0;
+                  }
               }
           }
-          frameAvgs.push(sum / gsectorLength);
-          if (frameAvgs.length > 100) {
-              frameAvgs.shift();
-          }
 
-          var sectorSum = 0;
-          for (var i = 0; i < sectorVols.length / 2; i++) {
-              sectorSum += sectorVols[i];
-          }
-          if ((sectorSum * sensitivity) / (sectorVols.length / 2) > median(frameAvgs) && frameCounter > frameCountMax) {
-            beat = true;
-            frameCounter = 0;
-            console.log(beat);
-          }
-          sectorSum = 0;
-          for (var i = sectorVols.length / 2; i < sectorVols.length; i++) {
-              sectorSum += sectorVols[i];
-          }
-          if ((sectorSum * sensitivity) / (sectorVols.length / 2) > median(frameAvgs) && frameCounter > frameCountMax) {
-              beat = true;
-              frameCounter = 0;
-              console.log(beat);
-          }
-          sectorSum = 0;
       }
-        sectorVols = [];
+      prevSectorVols = sectorVols;
+      sectorVols = [];
 
     }
 
