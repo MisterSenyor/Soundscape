@@ -16,5 +16,9 @@ html, body {
   width: 100%;
 }
 .canvas{
-  /* cursor: url("./cursor.png"),auto; */
+  cursor: url("./cursor.png"),auto;
+}
+@font-face {
+    font-family: 'numerals';
+    src: url('./Font/digital-7.ttf');
 }

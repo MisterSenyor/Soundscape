@@ -3,6 +3,8 @@ var audio = document.querySelector(".audio");
 var canvas = document.querySelector(".canvas");
 var WIDTH = (canvas.width = window.innerWidth);
 var HEIGHT = (canvas.height = window.innerHeight);
+var offsetX=canvas.offsetLeft;
+var offsetY=canvas.offsetTop;
 
 var ctx = canvas.getContext("2d");
 
@@ -42,6 +44,12 @@ var avg = 0, sum = 0, cmprsScale = 1, gsectorLength = 0, avgCounter = 0, current
 var rocks = [], toGenerateRock = 0;
 // Physics vars
 var gravity = -9.8;
+// Mouse move vars
+var globalMouseX = 0, globalMouseY = 0;
+// Score
+var score = 0;
+// Explosions
+var explosions = [];
 // setInterval(function(){
 
 // },10)
@@ -130,11 +138,23 @@ function visualize(source) {
               }
             }
         }
+        for(var i = 0; i < diamonds.length; i++){//e.x > diamonds[i].x  && e.x < diamonds[i].x + 25
+          if(diamonds[i] != "empty"){
+            // console.log(globalMouseY > diamonds[i].y-25  && globalMouseY < diamonds[i].y + 50 && globalMouseX-25 > diamonds[i].x  && globalMouseX < diamonds[i].x + 50);
+            if(globalMouseX > diamonds[i].x-25  && globalMouseX < diamonds[i].x + 50 && globalMouseY < diamonds[i].y-60+diamonds[i].height && globalMouseY > diamonds[i].y-70 - diamonds[i].height){// && globalMouseY > diamonds[i].y-70
+              console.log("hover");
+              score++;
+              diamonds[i] = "empty";
+            }
+          }
+        }
         generateBackground();
         generatePlayArea();
         refreshPlayer();
         spreadParticles();
         generateDiamonds();
+        updateScore();
+        explode();
 
         // global avg and su vals
         getSpikeReference();
@@ -162,7 +182,7 @@ function visualize(source) {
             if ((sectorSum * sensitivity) / (sectorVols.length / 2) > avg && frameCounter > frameCountMax) {
               beat = true;
               frameCounter = 0
-              console.log(beat)
+              // console.log(beat)
             }
             sectorSum = 0;
             for (var i = sectorVols.length / 2; i < sectorVols.length; i++) {
@@ -188,10 +208,10 @@ function generateDiamonds(){
   var currGem = Math.floor(randomBetween(1,7));
   if(spawnDiamondsIn%100 == 0){
     if(diamonds.includes("empty")){
-      var gem = new Gem(diamondColors[currGem-1],currGem,WIDTH,HEIGHT-randomBetween(30,170),diamonds.indexOf("empty"))
+      var gem = new Gem(diamondColors[currGem-1],currGem,WIDTH,HEIGHT-randomBetween(30,170),diamonds.indexOf("empty"),25,25)
       diamonds[diamonds.indexOf("empty")]=gem;
     }else{
-      var gem = new Gem(diamondColors[currGem-1],currGem,WIDTH,HEIGHT-randomBetween(30,170),diamonds.length)
+      var gem = new Gem(diamondColors[currGem-1],currGem,WIDTH,HEIGHT-randomBetween(30,170),diamonds.length,25,25)
       diamonds.push(gem);
     }
   }
@@ -201,31 +221,137 @@ function generateDiamonds(){
     }
   }
 }
-document.querySelector(".canvas").onmousemove = function(e){
-  console.log(e.x + "," + e.y);
-  for(var i = 0; i < diamonds.length; i++){//e.x > diamonds[i].x  && e.x < diamonds[i].x + 25
-    if(e.y > diamonds[i].y-25  && e.y < diamonds[i].y + 50 && e.x-25 > diamonds[i].x  && e.x < diamonds[i].x + 50){// &&
-      diamonds[i] = "empty";
+function ParticleSystem(x,y,numberOfParticles,lifetime,beginAngle,finAngle,size,sizeRandomness,speed,gravity,frequency,stopAfter){
+  this.x = x,
+  this.y = y,
+  this.numberOfParticles = numberOfParticles,
+  this.lifetime = lifetime,
+  this.beginAngle = beginAngle,
+  this.finAngle = finAngle,
+  this.size = size,
+  this.sizeRandomness = sizeRandomness,
+  this.speed = speed,
+  this.spawnParticle = 0,
+  this.framesRan = 0,
+  this.particles = [],
+  this.frequency = frequency,
+  this.stopAfter = stopAfter,
+  this.finished = false,
+  this.gravity = gravity,
+  this.addParticle = function(){
+    if(!this.finished){
+      if(this.frequency > 0){
+        if(this.spawnParticle == this.frequency){
+          var newParticle = new Particle(randomBetween(size-sizeRandomness,size+sizeRandomness),
+          "hsl(20,100%,"+Math.floor(randomBetween(30,71))+"%)",
+          this.x,
+          this.y,
+          Math.floor(randomBetween(this.beginAngle,this.finAngle)),
+          this.speed,
+          this.particles.length,
+          0,
+          true,
+          this.gravity)
+          if(this.particles.length < numberOfParticles){
+            this.particles.push(newParticle)
+          }else{
+            this.particles[this.particles.indexOf("empty")] = newParticle;
+          }
+          this.spawnParticle = 0;
+        }
+      }else{
+        for(var j = 0; j < Math.abs(this.frequency); j++){
+          var newParticle = new Particle(randomBetween(size-sizeRandomness,size+sizeRandomness),
+          "hsl(20,100%,"+Math.floor(randomBetween(30,71))+"%)",
+          this.x,
+          this.y,
+          Math.floor(randomBetween(this.beginAngle,this.finAngle)),
+          this.speed,
+          this.particles.length,
+          0,
+          true,
+          this.gravity)
+          if(this.particles.length < numberOfParticles){
+            this.particles.push(newParticle)
+          }else{
+            this.particles[this.particles.indexOf("empty")] = newParticle;
+          }
+          this.spawnParticle = 0;
+        }
+      }
+      this.spawnParticle++;
+    }
+  },
+  this.drawParticles = function(){
+    this.framesRan++;
+    if(this.stopAfter == this.framesRan){
+      this.finished = true;
+    }
+    for(var i = 0; i < this.particles.length; i++){
+      if(this.particles != "empty"){
+        this.particles[i].updatePos();
+      }
     }
   }
 }
-function Gem(color,image,x,y,index){
+var particleSystem = new ParticleSystem(100,100,150,200,0,360,5,2,3,false,-10,100);
+function explode(){
+  particleSystem.addParticle();
+  particleSystem.drawParticles();
+}
+document.querySelector(".canvas").onmousemove = function(e){
+  var mouseX = parseInt(e.clientX), mouseY = parseInt(e.clientY);
+  // var mouseX = parseInt(e.clientX-offsetX), mouseY = parseInt(e.clientY-offsetY);
+  var rect = canvas.getBoundingClientRect();
+  globalMouseX = mouseX - rect.left;
+  globalMouseY = mouseY - rect.top;
+  // for(var i = 0; i < diamonds.length; i++){//e.x > diamonds[i].x  && e.x < diamonds[i].x + 25
+  //   if(diamonds[i] != "empty"){
+  //     // console.log(globalMouseY > diamonds[i].y-25  && globalMouseY < diamonds[i].y + 50 && globalMouseX-25 > diamonds[i].x  && globalMouseX < diamonds[i].x + 50);
+  //     if(globalMouseX > diamonds[i].x-25  && globalMouseX < diamonds[i].x + 50 && globalMouseY < diamonds[i].y + 50){// &&
+  //       console.log("hover");
+  //       diamonds[i] = "empty";
+  //     }
+  //   }
+  // }
+}
+function Gem(color,image,x,y,index,width,height){
   this.color = color,
   this.image = image,
   this.x = x,
   this.y = y,
   this.index = index,
+  this.width = width,
+  this.height = height,
   this.drawGem = function(){
     ctx.shadowColor = diamondColors[this.color];
-    ctx.drawImage(getImage("gem" + this.image),this.x,this.y,25,25);
+    // ctx.fillRect(this.x-50,this.y,100,2);
+    ctx.drawImage(getImage("gem" + this.image),this.x,this.y,this.width,this.height);
+    // e.y > diamonds[i].y-25  && e.y < diamonds[i].y + 50 && e.x-25 > diamonds[i].x  && e.x < diamonds[i].x + 50
   },
   this.updatePos = function(){
     this.x-=2;
     this.drawGem();
-    if(this.x < 0){
+    if(this.x+2*this.width < 0){
       diamonds[this.index] = "empty";
     }
+  },
+  this.kill = function(){
+    diamonds[this.index] = "empty";
   }
+}
+var txtWidth;
+function updateScore(){
+  ctx.font = "30px numerals";
+  var txt = "Score: " + score;
+  var minus = 50;
+  txtWidth = ctx.measureText(txt).width
+  ctx.drawImage(getImage("tChest"),WIDTH-txtWidth-60-minus,20,50,50);
+  ctx.fillStyle = "black";
+  ctx.fillRect(WIDTH-txtWidth-minus,20,txtWidth+20,50)
+  ctx.fillStyle = "green";
+  ctx.shadowColor = "#00ff1a";
+  ctx.fillText(txt,WIDTH-txtWidth-minus+10,55);
 }
 function getImage(img){
   return document.getElementById(img);
@@ -357,7 +483,7 @@ function generatePlayArea(){
     rocks[i].drawRock();
   }
 }
-function Particle(size,colora,x,y,angle,speed,index,cycle,visible){
+function Particle(size,colora,x,y,angle,speed,index,cycle,visible,gravity){
   this.size = size,
   this.colora = colora,
   this.x = x,
@@ -366,6 +492,7 @@ function Particle(size,colora,x,y,angle,speed,index,cycle,visible){
   this.speed = speed,
   this.index = index,
   this.visible = visible,
+  this.gravity = gravity,
   this.cycle = cycle,
   this.draw = function(){
     if(visible){
@@ -383,7 +510,9 @@ function Particle(size,colora,x,y,angle,speed,index,cycle,visible){
   this.updatePos = function(){
     this.x-= this.speed*Math.sin(this.angle * Math.PI / 180);
     this.y-= this.speed*Math.cos(this.angle * Math.PI / 180);
-    this.angle+=0.4;
+    if(this.gravity){
+      this.angle+=0.4;
+    }
     if(visible){
       ctx.fillStyle = this.colora;
       ctx.shadowColor = this.colora;
@@ -408,7 +537,7 @@ function spreadParticles(){
   //if(toDrawParticles){
     if(particles.length < 150){
       if(spawnParticle == 10){
-        particle = new Particle(randomBetween(2,5),"hsl(20,100%,"+Math.floor(randomBetween(30,71))+"%)",partX,partY,Math.floor(randomBetween(40,80)),1.2,particles.length,0,toDrawParticles)
+        particle = new Particle(randomBetween(2,5),"hsl(20,100%,"+Math.floor(randomBetween(30,71))+"%)",partX,partY,Math.floor(randomBetween(40,80)),1.2,particles.length,0,toDrawParticles,true)
         particle.draw();
         particles.push(particle);
         spawnParticle = 0;
@@ -424,7 +553,7 @@ function spreadParticles(){
       particles[i].updatePos();
     }else{
       if(spawnParticle == 10){
-        particle = new Particle(randomBetween(2,5),"hsl(20,100%,"+Math.floor(randomBetween(30,71))+"%)",partX,partY,Math.floor(randomBetween(40,80)),1.2,i,0,toDrawParticles)
+        particle = new Particle(randomBetween(2,5),"hsl(20,100%,"+Math.floor(randomBetween(30,71))+"%)",partX,partY,Math.floor(randomBetween(40,80)),1.2,i,0,toDrawParticles,true)
         particle.draw();
         particles[i] = particle;
         spawnParticle = 0;
