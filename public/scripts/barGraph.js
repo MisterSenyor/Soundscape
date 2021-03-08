@@ -24,25 +24,15 @@ fbtn.addEventListener("click", function () {
     };
 });
 
-// BORING VARS
-var src;
-var analyser;
-var smooth = 0.9;
-var dataArray;
-var dataArraya;
-var sectorVols = [];
-var allFreqs = [];
+// BORING VARS (basic setup)
+var src, analyser, smooth = 0.9, dataArray, dataArraya, sectorVols = [], allFreqs = [];
 var animationX = WIDTH, circleWidth = 200, animationSpeed = 2,animationIttrCount = 0;
 // Particle vars
-var amount = 150, lifetime = 200, particles = [],particle, spawnParticle = 0, toDrawParticles = true;
+var amount = 150, lifetime = 200, particles = [],particle, spawnParticle = 0, toDrawParticles = true, allParticleSystems = [];
 // change this to decide how many sectors there are
 var times = 32;
-var realTimes = times-times/4;
 // beat recognition vars
-var avg = 0, sum = 0, cmprsScale = 1, gsectorLength = 0, avgCounter = 0, currentAverage = 0,sensitivity = 0.45, beat = false, frameCounter = 0, frameCountMax = 4;
-var frameAvgs = [];
-// beat recognition (delta) vars
-var prevSectorVols = [], avgDelta = [], spikeDistance = 0, beatCounter = 0;
+var sensitivity = 0.45, frameCountMax = 4, frameAvgs = [], prevSectorVols = [], avgDelta = [], spikeDistance = 0, beatCounter = 0;
 // rocks on route vars
 var rocks = [], toGenerateRock = 0;
 // Physics vars
@@ -53,17 +43,13 @@ var globalMouseX = 0, globalMouseY = 0;
 var score = 0;
 // Explosions
 var explosions = [];
-//Global particle system
-var allParticleSystems = [];
-var diamonds = [];
-var diamondColors = ["#8b32a8","#28ad64","#c8de4e","#d61313","#54ffeb","#2b88c2"];
-var spawnDiamondsIn = 0;
+// Diamonds
+var diamonds = [], diamondColors = ["#8b32a8","#28ad64","#c8de4e","#d61313","#54ffeb","#2b88c2"], spawnDiamondsIn = 0;
 //Create player particles
-var partX = WIDTH/7-10;
-var partY = HEIGHT-200;
-var playerParticles = new ParticleSystem(partX,partY,250,200,50,80,4,1,2,true,2,-1,false);
+var partX = WIDTH/7-10, partY = HEIGHT-200;
+var playerParticles = new ParticleSystem(partX,partY,250,200,50,80,4,1,2,true,2,-1,false), player = new Player(WIDTH/7,HEIGHT-200-30,0,"#39ff14",30);
 allParticleSystems.push(playerParticles)
-var player = new Player(WIDTH/7,HEIGHT-200-30,0,"#39ff14",30);
+
 
 
 function visualize(source) {
@@ -142,9 +128,9 @@ function visualize(source) {
                 ctx.shadowColor = "rgba("+(fillColor)+", "+(255-(fillColor))+", 0,.5)";
                 ctx.fillStyle = "rgba("+(fillColor)+", "+(255-(fillColor))+", 0,.5)";
                 // filling the rect in the specific location
-                ctx.fillRect(i * (WIDTH / realTimes), // x relative to i'th sector
+                ctx.fillRect(i * (WIDTH / (times - times / 4)), // x relative to i'th sector
                 floorY - j - j*2, // total y minus the height
-                WIDTH / realTimes, // width according to sector scale
+                WIDTH / (times - times / 4), // width according to sector scale
                 -heightOfBar); // height
                 heightOfBar = 0;
               }
