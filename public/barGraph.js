@@ -42,7 +42,7 @@ var realTimes = times-times/4;
 var avg = 0, sum = 0, cmprsScale = 1, gsectorLength = 0, avgCounter = 0, currentAverage = 0,sensitivity = 0.45, beat = false, frameCounter = 0, frameCountMax = 4;
 var frameAvgs = [];
 // beat recognition (delta) vars
-var prevSectorVols = [], avgDelta = [], spikeDistance = 0;
+var prevSectorVols = [], avgDelta = [], spikeDistance = 0, beatCounter = 0;
 // rocks on route vars
 var rocks = [], toGenerateRock = 0;
 // Physics vars
@@ -183,12 +183,14 @@ function visualize(source) {
                   if ((sectorVols[i] - prevSectorVols[i]) * sensitivity > median(avgDelta) && spikeDistance > frameCountMax) {
                     var randomX = randomBetween(0+WIDTH/8,WIDTH-WIDTH/8)
                     var randomY = randomBetween(0+HEIGHT/8,HEIGHT-HEIGHT/8-200)
-                    // createExplosion(WIDTH / 2, HEIGHT / 2);
-                    createExplosion(randomX,randomY);
+                    createExplosion(WIDTH / 2, HEIGHT / 2);
+                    // createExplosion(randomX,randomY);
                     console.log("beat")
                     spikeDistance = 0;
+                    beatCounter++;
                   }
               }
+
           }
 
       }
