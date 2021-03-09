@@ -76,7 +76,7 @@ function updateAllParticles(){
   }
 }
 function createExplosion(x,y){
-  var explosionSystem = new ParticleSystem(x,y,11,100,0,360,5,2,3,false,-11,10,true);
+  var explosionSystem = new ParticleSystem(x,y,15,50,0,360,8,3,4,false,-11,10,true);
   allParticleSystems.push(explosionSystem)
 }
 function Particle(size,colora,x,y,angle,speed,index,cycle,visible,gravity,fade,system){
@@ -92,6 +92,7 @@ function Particle(size,colora,x,y,angle,speed,index,cycle,visible,gravity,fade,s
   this.cycle = cycle,
   this.fade = fade,
   this.system = system,
+  this.lifetime = this.fade,
   this.opacity = 100,
   this.updatePos = function(){
     if(this.fade > 0){
@@ -115,7 +116,7 @@ function Particle(size,colora,x,y,angle,speed,index,cycle,visible,gravity,fade,s
     ctx.fill();
     ctx.closePath();
     this.cycle++;
-    if(this.cycle == lifetime){
+    if(this.cycle == this.lifetime){
       // particles.splice(this.index,1);
       (this.system).particles[this.index] = "empty";
     }

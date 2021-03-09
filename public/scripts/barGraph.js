@@ -1,6 +1,5 @@
 // BORING MANDATORY STUFF
 var audio = document.querySelector(".audio");
-var canvas = document.querySelector(".canvas");
 var WIDTH = (canvas.width = window.innerWidth);
 var HEIGHT = (canvas.height = window.innerHeight);
 var offsetX=canvas.offsetLeft;
@@ -32,7 +31,7 @@ var amount = 150, lifetime = 200, particles = [],particle, spawnParticle = 0, to
 // change this to decide how many sectors there are
 var times = 32;
 // beat recognition vars
-var sensitivity = 0.45, frameCountMax = 4, frameAvgs = [], prevSectorVols = [], avgDelta = [], spikeDistance = 0, beatCounter = 0;
+var sensitivity = 0.35, frameCountMax = 4, frameAvgs = [], prevSectorVols = [], avgDelta = [], spikeDistance = 0, beatCounter = 0;
 // rocks on route vars
 var rocks = [], toGenerateRock = 0;
 // Physics vars
@@ -47,7 +46,7 @@ var explosions = [];
 var diamonds = [], diamondColors = ["#8b32a8","#28ad64","#c8de4e","#d61313","#54ffeb","#2b88c2"], spawnDiamondsIn = 0;
 //Create player particles
 var partX = WIDTH/7-10, partY = HEIGHT-200;
-var playerParticles = new ParticleSystem(partX,partY,250,200,50,80,4,1,2,true,2,-1,false), player = new Player(WIDTH/7,HEIGHT-200-30,0,"#39ff14",30);
+var playerParticles = new ParticleSystem(partX,partY,20,100,50,80,5,1,2,true,5,-1,false,true), player = new Player(WIDTH/7,HEIGHT-200-30,0,"#39ff14",30);
 allParticleSystems.push(playerParticles)
 
 
@@ -149,10 +148,10 @@ function visualize(source) {
         generateBackground();
         generatePlayArea();
         refreshPlayer();
-        // spreadParticles();
         generateDiamonds();
         updateScore();
         updateAllParticles();
+        updateAllObstacles();
 
         // global avg and su vals
         getSpikeReference();

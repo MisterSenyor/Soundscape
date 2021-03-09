@@ -38,10 +38,9 @@ function Gem(color,image,x,y,index,width,height){
   this.width = width,
   this.height = height,
   this.drawGem = function(){
+    ctx.shadowBlur = 10;
     ctx.shadowColor = diamondColors[this.color];
-    // ctx.fillRect(this.x-50,this.y,100,2);
     ctx.drawImage(getImage("gem" + this.image),this.x,this.y,this.width,this.height);
-    // e.y > diamonds[i].y-25  && e.y < diamonds[i].y + 50 && e.x-25 > diamonds[i].x  && e.x < diamonds[i].x + 50
   },
   this.updatePos = function(){
     this.x-=2;

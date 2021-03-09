@@ -22,6 +22,7 @@ function Rock(x,y,size){
   }
 }
 function generatePlayArea(){
+  ctx.shadowBlur = 0;
   ctx.fillStyle = "white";
   ctx.shadowColor = "white";
   ctx.fillRect(0, HEIGHT-200, WIDTH,20)
@@ -67,5 +68,8 @@ function generateBackground(){
       ctx.closePath();
     }
   }
+}
+
+function makeJump(){
 
 }

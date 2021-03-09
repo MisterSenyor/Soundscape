@@ -10,6 +10,7 @@ function Player(x,y,acceleration,color,size){
   this.gravitySpeed = 0,
   this.airtime = 0,
   this.draw = function(){
+    ctx.shadowBlur = 10;
     ctx.shadowColor = this.color;
     ctx.fillStyle = this.color;
     ctx.beginPath();
@@ -19,6 +20,11 @@ function Player(x,y,acceleration,color,size){
   },
   this.updatePos = function(){
     // this.y = this.begY + .5*gravity*Math.pow(this.airtime,2);
+    if(isJumping){
+      if(this.Y <= this.begY-200){
+        isJumping = false;
+      }
+    }
     this.gravitySpeed += this.gravity;
     this.y -= (this.speedY + this.gravitySpeed);
     this.hitBottom();
