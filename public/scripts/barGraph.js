@@ -1,11 +1,9 @@
 // BORING MANDATORY STUFF
 var audio = document.querySelector(".audio");
-var WIDTH = (canvas.width = window.innerWidth);
-var HEIGHT = (canvas.height = window.innerHeight);
 var offsetX=canvas.offsetLeft;
 var offsetY=canvas.offsetTop;
-
-var ctx = canvas.getContext("2d");
+var WIDTH = (canvas.width = window.innerWidth);
+var HEIGHT = (canvas.height = window.innerHeight);
 
 var fbtn = document.querySelector(".file");
 fbtn.addEventListener("click", function () {
@@ -48,6 +46,8 @@ var diamonds = [], diamondColors = ["#8b32a8","#28ad64","#c8de4e","#d61313","#54
 var partX = WIDTH/7-10, partY = HEIGHT-200;
 var playerParticles = new ParticleSystem(partX,partY,20,100,50,80,5,1,2,true,5,-1,false,true), player = new Player(WIDTH/7,HEIGHT-200-30,"#39ff14",30);
 allParticleSystems.push(playerParticles)
+//Hearts
+var hearts = 3;
 
 
 
@@ -70,7 +70,7 @@ function visualize(source) {
     renderFrame();
     function renderFrame() {
         // mandatory shit to set everything up
-        requestAnimationFrame(renderFrame);
+        mainGameLoop = requestAnimationFrame(renderFrame);
         analyser.smoothingTimeConstant = smooth;
         // TODO - recognize the volume before pplaying. DUCK YOU FUTURE US!
         listen.gain.setValueAtTime(1, context.currentTime);
@@ -122,10 +122,16 @@ function visualize(source) {
             var heightOfBar = 0;
             for(var j = 0; j < sectorVols[i]; j++){
               heightOfBar++;
+              //171-300
               if(j%5 == 0 || j == sectorVols[i]){
-                var fillColor = j*2 > 255 ? 255 : j*2;
-                ctx.shadowColor = "rgba("+(fillColor)+", "+(255-(fillColor))+", 0,.5)";
-                ctx.fillStyle = "rgba("+(fillColor)+", "+(255-(fillColor))+", 0,.5)";
+                var fillColor = j > 131 ? 131 : j;
+                var fills = "hsla("+(171+fillColor)+",69%, 65%,1)";
+                ctx.shadowColor = fills;
+                ctx.fillStyle = fills;
+                // ctx.shadowColor = "rgba("+(fillColor)+", "+(255-(fillColor))+", 0,.5)";
+                // ctx.fillStyle = "rgba("+(fillColor)+", "+(255-(fillColor))+", 0,.5)";
+                ctx.shadowColor = fills;
+                ctx.fillStyle = fills;
                 // filling the rect in the specific location
                 ctx.fillRect(i * (WIDTH / (times - times / 4)), // x relative to i'th sector
                 floorY - j - j*2, // total y minus the height

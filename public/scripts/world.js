@@ -66,36 +66,27 @@ function generateBackground(){
       var size = (currentAverage + currentAverage/2) * 0.5;
       ctx.save();
       ctx.translate(coors.x,coors.y);
+      // var triXY = {x:coors.x,y:-10}
       ctx.rotate(triGrees * Math.PI / 180);
+      // ctx.fillRect(-50,-50,100,100)
+      ctx.fillStyle = "red"
+      // ctx.fillRect(-1,-1,2,2)
       ctx.beginPath();
-      // ctx.moveTo(0,-(Math.sqrt(3) * size / 2));
-      ctx.moveTo(0, (Math.sqrt(3) * size / 2) - 16);
-      ctx.lineTo(-size, (Math.sqrt(3) * size / 2) - 16);
-      ctx.lineTo(0,-(Math.sqrt(3) * size / 2) - 16);
-      ctx.lineTo(size, (Math.sqrt(3) * size / 2) - 16);
-      ctx.lineTo(0, (Math.sqrt(3) * size / 2) - 16);
-
-      
-      // ctx.lineTo(size/4,size/4-10);
-      // ctx.lineTo(0,-size/4-10)
+      // ctx.moveTo(0,Math.sqrt(3/16)*size);
       // ctx.lineTo(-size/4,size/4-10);
+      // ctx.lineTo(size/4,size/4-10);
+      // ctx.lineTo(0,Math.sqrt(3/16)*size)
+      // ctx.lineTo(-size/4,size/4-10);
+      size/=1.5
+      ctx.moveTo(0, Math.sqrt(3) * size / 2);
+      ctx.lineTo(-size, Math.sqrt(3) * size / 2);
+      ctx.lineTo(0,-(Math.sqrt(3) * size / 2) - 16);
+      ctx.lineTo(size, Math.sqrt(3) * size / 2);
+      ctx.lineTo(0, Math.sqrt(3) * size / 2);
       ctx.stroke();
       ctx.closePath();
       ctx.restore();
       triGrees+=rSpeed;
-      // if(triGrees == 360)
-
-      /*
-      Backup
-      ctx.beginPath();
-      ctx.moveTo(coors.x,coors.y-size/4-10);
-      ctx.lineTo(coors.x-size/4,coors.y+size/4-10);
-      ctx.lineTo(coors.x+size/4,coors.y+size/4-10);
-      ctx.lineTo(coors.x,coors.y-size/4-10)
-      ctx.lineTo(coors.x-size/4,coors.y+size/4-10);
-      ctx.stroke();
-      ctx.closePath();
-      */
     }
   }
 }
