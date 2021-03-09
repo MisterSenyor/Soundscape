@@ -1,4 +1,4 @@
-var avvg;
+var avvg, triGrees = 0, rSpeed = 0.01;
 
 function Rock(x,y,size){
   this.size = size,
@@ -38,6 +38,8 @@ function generatePlayArea(){
     rocks[i].drawRock();
   }
 }
+var color;
+var avgClr;
 function generateBackground(){
   for(var i = 0; i < (WIDTH/circleWidth)+10; i++){
     for(var j = 0; j < HEIGHT/circleWidth; j++){
@@ -45,19 +47,40 @@ function generateBackground(){
       var cHeight = circleWidth;
       ctx.beginPath();
       ctx.shadowBlur = 10;
-      ctx.shadowColor = "rgba(255,0,0,1)";
-      var avgClr = Math.pow(currentAverage/30,3);
-      var color = ((165-avgClr < 0) ? 0 : 165-avgClr);
-      ctx.strokeStyle = "rgba(200,"+color+","+color/2+",1)";
+      avgClr = Math.pow(currentAverage/30,3);
+      // color = ((165-avgClr < 0) ? 0 : 165-avgClr);
+      color = avgClr;
+      var valueOfClr = (color/5)**3 < 30 ? 30 : (color/5)**3;
+      var rgbs = "rgba(0,"+valueOfClr+","+valueOfClr+",0.9)";
+      ctx.shadowColor = rgbs;
+      ctx.strokeStyle = rgbs;
       ctx.lineWidth = 10;
       ctx.arc(coors.x,coors.y , circleWidth/2-10, 0, 2 * Math.PI);
       ctx.stroke();
       ctx.closePath();
 
       ctx.lineWidth = currentAverage/10;
-      ctx.strokeStyle = "rgba(0,255,255,1)";
-      ctx.shadowColor = "rgba(0,255,255,1)";
+
+      ctx.strokeStyle = "#8D13F8";
+      ctx.shadowColor = "#8D13F8";
       var size = currentAverage + currentAverage/2;
+      ctx.save();
+      ctx.translate(coors.x,coors.y);
+      ctx.rotate(triGrees * Math.PI / 180);
+      ctx.beginPath();
+      ctx.moveTo(0,-size/4-10);
+      ctx.lineTo(-size/4,size/4-10);
+      ctx.lineTo(size/4,size/4-10);
+      ctx.lineTo(0,-size/4-10)
+      ctx.lineTo(-size/4,size/4-10);
+      ctx.stroke();
+      ctx.closePath();
+      ctx.restore();
+      triGrees+=rSpeed;
+      // if(triGrees == 360)
+
+      /*
+      Backup
       ctx.beginPath();
       ctx.moveTo(coors.x,coors.y-size/4-10);
       ctx.lineTo(coors.x-size/4,coors.y+size/4-10);
@@ -66,6 +89,7 @@ function generateBackground(){
       ctx.lineTo(coors.x-size/4,coors.y+size/4-10);
       ctx.stroke();
       ctx.closePath();
+      */
     }
   }
 }
