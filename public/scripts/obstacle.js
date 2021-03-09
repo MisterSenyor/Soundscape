@@ -17,6 +17,7 @@ function Obstacle(x,y,width,height,color){
   this.arrowPos = 5,
   this.arrowUp = true,
   this.moveArrow = 0,
+  this.used = false,
   this.arrowWidth = 70,
   this.x = x+this.arrowWidth+this.arrowWidth/2,
   this.draw = function(){
@@ -64,6 +65,7 @@ function Obstacle(x,y,width,height,color){
 }
 
 function updateAllObstacles(){
+  updateHearts();
   for(var i = 0; i < obstacles.length; i++){
     if(obstacles[i] != "empty"){
       obstacles[i].updatePos();
@@ -71,5 +73,18 @@ function updateAllObstacles(){
         obstacles[i] = "empty";
       }
     }
+    if(player.y == player.begY && player.x > obstacles[i].x && !obstacles[i].used && player.x < obstacles[i].x + obstacles[i].width){
+      hearts--;
+      obstacles[i].used = true;
+    }
   }
+}
+function updateHearts(){
+  for(var i = 0; i < hearts; i++){
+    ctx.shadowColor = "red";
+    ctx.drawImage(getImage("heart"),WIDTH/30+30*i*1.5, 30, 30,30)
+  }
+}
+function checkCollision(){
+
 }
