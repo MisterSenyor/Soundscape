@@ -63,16 +63,22 @@ function generateBackground(){
 
       ctx.strokeStyle = "#8D13F8";
       ctx.shadowColor = "#8D13F8";
-      var size = currentAverage + currentAverage/2;
+      var size = (currentAverage + currentAverage/2) * 0.5;
       ctx.save();
       ctx.translate(coors.x,coors.y);
       ctx.rotate(triGrees * Math.PI / 180);
       ctx.beginPath();
-      ctx.moveTo(0,-size/4-10);
-      ctx.lineTo(-size/4,size/4-10);
-      ctx.lineTo(size/4,size/4-10);
-      ctx.lineTo(0,-size/4-10)
-      ctx.lineTo(-size/4,size/4-10);
+      // ctx.moveTo(0,-(Math.sqrt(3) * size / 2));
+      ctx.moveTo(0, (Math.sqrt(3) * size / 2) - 16);
+      ctx.lineTo(-size, (Math.sqrt(3) * size / 2) - 16);
+      ctx.lineTo(0,-(Math.sqrt(3) * size / 2) - 16);
+      ctx.lineTo(size, (Math.sqrt(3) * size / 2) - 16);
+      ctx.lineTo(0, (Math.sqrt(3) * size / 2) - 16);
+
+      
+      // ctx.lineTo(size/4,size/4-10);
+      // ctx.lineTo(0,-size/4-10)
+      // ctx.lineTo(-size/4,size/4-10);
       ctx.stroke();
       ctx.closePath();
       ctx.restore();

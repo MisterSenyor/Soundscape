@@ -8,9 +8,7 @@ function getImage(img){
 }
 // Keyboard and mouse stuff
 document.body.onkeypress = function(e){
-    if(e.keyCode == 32 && player.y >= player.begY){
-      jump()
-    }
+    player.getKeys(e.keyCode);
 }
 document.querySelector(".canvas").onmousemove = function(e){
   var mouseX = parseInt(e.clientX), mouseY = parseInt(e.clientY);

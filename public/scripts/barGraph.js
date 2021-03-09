@@ -46,7 +46,7 @@ var explosions = [];
 var diamonds = [], diamondColors = ["#8b32a8","#28ad64","#c8de4e","#d61313","#54ffeb","#2b88c2"], spawnDiamondsIn = 0;
 //Create player particles
 var partX = WIDTH/7-10, partY = HEIGHT-200;
-var playerParticles = new ParticleSystem(partX,partY,20,100,50,80,5,1,2,true,5,-1,false,true), player = new Player(WIDTH/7,HEIGHT-200-30,0,"#39ff14",30);
+var playerParticles = new ParticleSystem(partX,partY,20,100,50,80,5,1,2,true,5,-1,false,true), player = new Player(WIDTH/7,HEIGHT-200-30,"#39ff14",30);
 allParticleSystems.push(playerParticles)
 
 
