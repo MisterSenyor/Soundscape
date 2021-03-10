@@ -1,10 +1,18 @@
-var mainGameLoop;
 var ctx = canvas.getContext("2d");
 var started = false;
+var audioa = document.querySelector(".audioStart")
+var globalClick = {x:0,y:0};
+var menuMode = {width:300,height:HEIGHT/2.5};
 
 var gameName = "Name";
 
 //setBackground
+var menuTexts = [
+  new MenuText(0,0,"Start",goToStart,"center",40,true,true),
+  new MenuText(0,0,"About",goToAbout,"center",40,true,true),
+  new MenuText(0,0,"Instructions",goToInstruction,"center",40,true,true)
+]
+// var
 function mainScreen(){
   // ctx.fillStyle = "#0f0f0f";
   // ctx.fillRect(0,0,WIDTH,HEIGHT)
@@ -16,20 +24,39 @@ function mainScreen(){
   ctx.fillText(gameName,WIDTH/2-nameWidth.width/2,HEIGHT/20 + HEIGHT/6)
 
   //draw menu
-  makeMenu(300,HEIGHT/2.5, ["Start","About","instructions"],WIDTH/2-300/2,HEIGHT/3,20)
+  makeMenu(menuMode.width,menuMode.height, menuTexts,WIDTH/2-menuMode.width/2,HEIGHT/3,20)
 }
 mainScreen();
+var mainGameLoop;
 function makeMenu(width,height,words,x,y,padding){
   ctx.fillStyle = "rgba(0,0,0,0.8)"
   roundRect(ctx,x,y,width,height,25);
   ctx.font = "40px Roboto";
   // console.log(y);
   for(var i = 0; i < words.length; i++){
+    var currX = WIDTH/2;
+    var currY = y+padding*1.5+i*(height-padding)/words.length+30;
     ctx.fillStyle = "white";
-    ctx.fillText(words[i],WIDTH/2-ctx.measureText(words[i]).width/2,y+padding*1.5+i*(height-padding)/words.length+30)
+    words[i].x = currX;
+    words[i].y = currY;
+    words[i].draw();
   }
 }
-
+function grogu(){
+  alert("grogu")
+}
+function goToStart(){
+  menuMode.width = 700;
+}
+function goToAbout(){
+  menuMode.width = 700;
+}
+function goToInstruction(){
+  menuMode.width = 700;
+  for(var i = 0; i < menuTexts.length; i++){
+    menuTexts[i].active = false;
+  }
+}
 function roundRect(ctx, x, y, width, height, radius) {
   radius = {tl: radius, tr: radius, br: radius, bl: radius};
   ctx.beginPath();
@@ -47,25 +74,70 @@ function roundRect(ctx, x, y, width, height, radius) {
 }
 
 function startWholeGame(){
-  var audioa = document.querySelector(".audioStart")
-  if(!started){
-    audioa.src = "assets/music/startMusic.wav";
-    audioa.load();
-    audioa.play();
-    audioa.volume = 0.3;
-    visualizea(audioa);
-    started = true;
-  }
 
 }
+
+function MenuText(x,y,text,func,align,size,active,isFocusable){
+  this.x = x,
+  this.y = y,
+  this.text = text,
+  this.func = func,
+  this.align = align,
+  this.size = size,
+  this.active = active,
+  this.isFocused = false,
+  this.isFocusable = isFocusable,
+  this.draw = function(){
+    ctx.font = this.size + "px Roboto";
+    this.width = (ctx.measureText(this.text).width)
+    if(this.active){
+      if(!this.isFocused && this.isFocusable){
+        this.focus();
+      }else{
+        this.write();
+      }
+    }
+  },
+  this.write = function(){
+    ctx.fillStyle = this.size + "px Roboto"
+    ctx.shadowBlur = 0;
+    if(align == "center"){
+      ctx.textAlign = "center";
+      ctx.fillText(this.text,this.x,this.y);
+      ctx.textAlign = "start";
+    }
+  },
+  this.focus = function(){
+    ctx.fillStyle = this.size + "px Roboto"
+    ctx.shadowColor = "rgb(0,255,255)";
+    ctx.shadowBlur = 15;
+    if(align == "center"){
+      ctx.textAlign = "center";
+      ctx.fillText(this.text,this.x,this.y);
+      ctx.textAlign = "start";
+    }
+    ctx.shadowBlur = 0;
+  }
+}
+
 var smootha = 0.9;
 function visualizea(source) {
     var context = new AudioContext();
+    // var synthDelay = context.createDelay(5.0);
     var srca = context.createMediaElementSource(source);
+
+    var delay = context.createDelay(5.0);
+    delay.delayTime.value = 4.0;
+
     var analysera = context.createAnalyser();
     var listen = context.createGain();
 
-    srca.connect(listen);
+    delay.connect(listen)
+    // listen.connect(delay)
+
+    srca.connect(delay)
+    // srca.connect(listen);
+    // delay.connect(analysera)
     listen.connect(analysera);
     analysera.connect(context.destination);
     analysera.fftSize = 2 ** 12;
@@ -74,10 +146,10 @@ function visualizea(source) {
     // length of data inside array
     var bufferLength = analysera.frequencyBinCount;
     var dataArrayb = new Uint8Array(bufferLength);
-    renderFrame();
-    function renderFrame() {
+    renderFramea();
+    function renderFramea() {
         // mandatory shit to set everything up
-        mainGameLoop = requestAnimationFrame(renderFrame);
+        mainGameLoop = requestAnimationFrame(renderFramea);
         analysera.smoothingTimeConstant = smootha;
         // TODO - recognize the volume before pplaying. DUCK YOU FUTURE US!
         listen.gain.setValueAtTime(1, context.currentTime);
@@ -131,6 +203,13 @@ function visualizea(source) {
                 heightOfBar = 0;
               }
             }
+        }
+        for(var i = 0; i < menuTexts.length; i++){
+          if(globalMouseX > menuTexts[i].x-menuTexts[i].width/2 && globalMouseX < menuTexts[i].x+menuTexts[i].width/2 && globalMouseY < menuTexts[i].y && globalMouseY > menuTexts[i].y - menuTexts[i].size){
+            menuTexts[i].isFocused = false;
+          }else{
+            menuTexts[i].isFocused = true;
+          }
         }
         mainScreen();
       sectorVols = [];

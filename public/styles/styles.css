@@ -2,6 +2,8 @@ html, body {
   height: 100%;
   width: 100%;
   font-family: Arial;
+  margin: 0;
+  padding: 0;
 }
 * {
   overflow: hidden;
@@ -17,8 +19,18 @@ html, body {
 }
 .canvas{
   cursor: url("../assets/cursor.png"),auto;
+  position: absolute;
+  left: 0;
+  height: 0;
+  height: 100%;
+  width: 100%;
+}
+.audioStart{
+  position: absolute;
+  top:0;
+  left: 0;
 }
 @font-face {
-    font-family: 'numerals';
-    src: url('../assets/Font/digital-7.ttf');
+  font-family: 'numerals';
+  src: url('../assets/Font/digital-7.ttf');
 }
