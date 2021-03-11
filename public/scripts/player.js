@@ -33,12 +33,14 @@ function Player(x,y,acceleration,color,size){
     if(this.y >= this.begY){
       this.y = this.begY;
       this.gravitySpeed = 0;
-      toDrawParticles = true;
+      // toDrawParticles = true;
       playerParticles.enabled = true;
+      console.log("b" + playerParticles);
       // console.log(toDrawParticles);
     }else{
-      toDrawParticles = false;
+      // toDrawParticles = false;
       playerParticles.enabled = false;
+      console.log("a" + playerParticles);
     }
   }
 }

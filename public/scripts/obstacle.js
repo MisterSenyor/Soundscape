@@ -59,7 +59,7 @@ function Obstacle(x,y,width,height,color){
     }
   },
   this.updatePos = function(){
-    this.x-=2;
+    this.x-=globalGameSpeed;
     this.draw();
   }
 }

@@ -16,6 +16,9 @@ html, body {
 }
 .audio{
   width: 100%;
+  position: absolute;
+  top:0;
+  left: 0;
 }
 .canvas{
   cursor: url("../assets/cursor.png"),auto;
@@ -29,6 +32,13 @@ html, body {
   position: absolute;
   top:0;
   left: 0;
+}
+.fps{
+  color:green;
+  font-family: 'numerals';
+  position: absolute;
+  bottom: 30px;
+  left:30px;
 }
 @font-face {
   font-family: 'numerals';

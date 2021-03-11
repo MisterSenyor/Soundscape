@@ -22,12 +22,14 @@ function Player(x, y, color, size) {
         if (e == 32 && !this.isJumping) {
             this.vel[1] = this.jumpHeight;
             this.isJumping = true;
+            playerParticles.enabled = false;
         }
     }
     this.collide = function() {
         if (this.pos[1] >= HEIGHT - 200 - 20) {
             this.pos[1] = HEIGHT - 200 - 30;
             this.isJumping = false;
+            playerParticles.enabled = true;
         }
     }
     this.update = function() {

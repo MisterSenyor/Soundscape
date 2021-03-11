@@ -18,7 +18,7 @@ function Rock(x,y,size){
     avvg = Math.floor(currentAverage);
     // console.log(avvg + " | " + ((avvg/10)**4));
     this.color = "rgba(255,0,0,"+(1 - (50/currentAverage)**2 < 0.2 ? 0.2 : 1 - (50/currentAverage)**2)+")"
-    this.x-=2;
+    this.x-=globalGameSpeed;
   }
 }
 function generatePlayArea(){
@@ -30,8 +30,9 @@ function generatePlayArea(){
   ctx.shadowColor = "black";
   ctx.fillRect(0, HEIGHT-180, WIDTH,200)
   toGenerateRock++;
-  if(toGenerateRock%50 == 0){
+  if(toGenerateRock >= (fps/2)){
     rocks.push(new Rock(WIDTH,HEIGHT-200,7))
+    toGenerateRock = 0;
   }
   for(var i = 0; i < rocks.length; i++){
     rocks[i].updateRockPos();

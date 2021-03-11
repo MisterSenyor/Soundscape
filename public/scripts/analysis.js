@@ -1,6 +1,6 @@
-function getSpikeReference() {
+function getSpikeReference(sensitivity,prevSectorVols,sectorVols,frameCountMax) {
   // TODO - make the sensitivity alter itself dynamically by the amount of beats recognized per TimeFrame
-  sectorSum = 0;
+  var sectorSum = 0;
   if (prevSectorVols.length > 0) {
       for (var i = 0; i < sectorVols.length; i++) {
           sectorSum += sectorVols[i] - prevSectorVols[i];
@@ -16,6 +16,7 @@ function getSpikeReference() {
 
       for (var i = 0; i < sectorVols.length; i++){
           if ((sectorVols[i] - prevSectorVols[i]) * sensitivity > median(avgDelta) && spikeDistance > frameCountMax) {
+            createObstacles();
             var randomX = randomBetween(0+WIDTH/8,WIDTH-WIDTH/8)
             var randomY = randomBetween(0+HEIGHT/8,HEIGHT-HEIGHT/8-200)
             createExplosion(WIDTH / 2, HEIGHT / 2);

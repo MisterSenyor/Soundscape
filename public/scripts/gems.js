@@ -1,7 +1,7 @@
 function generateDiamonds(){
   spawnDiamondsIn++;
   var currGem = Math.floor(randomBetween(1,7));
-  if(spawnDiamondsIn%100 == 0){
+  if(spawnDiamondsIn >= fps){
     if(diamonds.includes("empty")){
       var gem = new Gem(diamondColors[currGem-1],currGem,WIDTH,HEIGHT-randomBetween(30,170),diamonds.indexOf("empty"),25,25)
       diamonds[diamonds.indexOf("empty")]=gem;
@@ -9,6 +9,7 @@ function generateDiamonds(){
       var gem = new Gem(diamondColors[currGem-1],currGem,WIDTH,HEIGHT-randomBetween(30,170),diamonds.length,25,25)
       diamonds.push(gem);
     }
+    spawnDiamondsIn = 0;
   }
   for(var j = 0; j < diamonds.length; j++){
     if(diamonds[j] != "empty"){
@@ -43,7 +44,7 @@ function Gem(color,image,x,y,index,width,height){
     ctx.drawImage(getImage("gem" + this.image),this.x,this.y,this.width,this.height);
   },
   this.updatePos = function(){
-    this.x-=2;
+    this.x-=globalGameSpeed;
     this.drawGem();
     if(this.x+2*this.width < 0){
       diamonds[this.index] = "empty";

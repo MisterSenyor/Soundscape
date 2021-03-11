@@ -103,7 +103,7 @@ function Particle(size,colora,x,y,angle,speed,index,cycle,visible,gravity,fade,s
     if(this.gravity){
       this.angle+=0.4;
     }
-    if(visible){
+    if(this.visible){
       ctx.fillStyle = this.colora.replace("grogu",this.opacity);
       ctx.shadowColor = this.colora.replace("grogu",this.opacity);
     }else{

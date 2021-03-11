@@ -5,7 +5,7 @@ var globalClick = {x:0,y:0};
 var menuMode = {width:300,height:HEIGHT/2.5};
 
 var gameName = "Name";
-
+var srca;
 //setBackground
 var menuTexts = [
   new MenuText(0,0,"Start",goToStart,"center",40,true,true),
@@ -47,6 +47,9 @@ function grogu(){
 }
 function goToStart(){
   menuMode.width = 700;
+  startGame();
+  cancelAnimationFrame(mainGameLoop)
+  audioa.pause();
 }
 function goToAbout(){
   menuMode.width = 700;
@@ -124,21 +127,27 @@ var smootha = 0.9;
 function visualizea(source) {
     var context = new AudioContext();
     // var synthDelay = context.createDelay(5.0);
-    var srca = context.createMediaElementSource(source);
+    srca = context.createMediaElementSource(source);
 
     var delay = context.createDelay(5.0);
-    delay.delayTime.value = 4.0;
+    delay.delayTime.value = 1.0;
 
     var analysera = context.createAnalyser();
     var listen = context.createGain();
 
-    delay.connect(listen)
+    // delay.connect(listen)
     // listen.connect(delay)
+    // srca.connect(delay)
+    // analysera.connect(delay);
+    srca.connect(listen);
+    console.log(context.destination);
+    // srca.connect(delay)
 
-    srca.connect(delay)
-    // srca.connect(listen);
-    // delay.connect(analysera)
+    // delay.connect(listen)
     listen.connect(analysera);
+
+    // delay.connect(listen)
+    // listen.connect(delay)
     analysera.connect(context.destination);
     analysera.fftSize = 2 ** 12;
     var frequencyBins = analysera.fftSize / 2;
