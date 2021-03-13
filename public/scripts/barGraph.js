@@ -6,26 +6,7 @@ var offsetY=canvas.offsetTop;
 var WIDTH = (canvas.width = window.innerWidth);
 var HEIGHT = (canvas.height = window.innerHeight);
 var context;
-function startGame(){
-  var file = document.createElement("input");
-  file.type = "file";
-  file.accept = "audio/*";
-  file.click();
-  file.onchange = function () {
-    var files = this.files;
-    audio.src = URL.createObjectURL(files[0]);
-    audio.load();
-    audio.volume = 0.3;
-    delayedAudio.src = URL.createObjectURL(files[0])
-    delayedAudio.load();
-    delayedAudio.volume = 0.3;
-    delayedAudio.play();
-    delayedAudio.currentTime = 2;
-    audio.play();
-    visualize(audio);
-    getBeats(delayedAudio)
-  };
-}
+
 
 // BORING VARS (basic setup)
 var src, analyser, smooth = 0.9, dataArray, dataArraya, sectorVols = [], allFreqs = [];
@@ -58,11 +39,30 @@ var globalGameSpeed = 2;
 //FPS calculate
 var dinamicFPS = 80;
 var fps = 0,lastTime = 0,showFps = 0, distanceToMove = WIDTH-WIDTH/7;
-var secondsToGetToUser = 2;
+var secondsToGetToUser = 1;
 //Hearts
 var hearts = 3;
 
-
+function startGame(){
+  var file = document.createElement("input");
+  file.type = "file";
+  file.accept = "audio/*";
+  file.click();
+  file.onchange = function () {
+    var files = this.files;
+    audio.src = URL.createObjectURL(files[0]);
+    audio.load();
+    audio.volume = 0.3;
+    delayedAudio.src = URL.createObjectURL(files[0])
+    delayedAudio.load();
+    delayedAudio.volume = 0.3;
+    delayedAudio.play();
+    delayedAudio.currentTime = secondsToGetToUser;
+    audio.play();
+    visualize(audio);
+    getBeats(delayedAudio)
+  };
+}
 function visualize(source) {
     context = new AudioContext();
     src = context.createMediaElementSource(source);

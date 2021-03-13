@@ -73,7 +73,7 @@ function updateAllObstacles(){
         obstacles[i] = "empty";
       }
     }
-    if(player.y == player.begY && player.x > obstacles[i].x && !obstacles[i].used && player.x < obstacles[i].x + obstacles[i].width){
+    if(player.pos[1] == HEIGHT-230 && player.pos[0] > obstacles[i].x && !obstacles[i].used && player.pos[0] < obstacles[i].x + obstacles[i].width){
       hearts--;
       obstacles[i].used = true;
     }

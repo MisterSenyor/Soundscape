@@ -14,10 +14,6 @@ var menuTexts = [
 ]
 // var
 function mainScreen(){
-  // ctx.fillStyle = "#0f0f0f";
-  // ctx.fillRect(0,0,WIDTH,HEIGHT)
-
-  //draw game name
   ctx.fillStyle = "white"
   ctx.font = HEIGHT/5+"px Roboto";
   var nameWidth = ctx.measureText(gameName);
@@ -26,7 +22,26 @@ function mainScreen(){
   //draw menu
   makeMenu(menuMode.width,menuMode.height, menuTexts,WIDTH/2-menuMode.width/2,HEIGHT/3,20)
 }
+
+function beforeStartScreen(){
+  ctx.fillStyle = "rgba(0,0,0,0.8)";
+  ctx.fillRect(0,0,WIDTH,HEIGHT);
+  ctx.fillStyle = "rgba(0,0,0,0.5)";
+  ctx.beginPath();
+  ctx.arc(WIDTH/2,HEIGHT/2,WIDTH/4,0,Math.PI * 2);
+  ctx.fill();
+  ctx.closePath();
+  ctx.shadowBlur = 15;
+  ctx.shadowColor = "#08e6ff";
+  ctx.fillStyle = "#08e6ff";
+  ctx.beginPath();
+  ctx.moveTo(WIDTH/2+150, HEIGHT/2);
+  ctx.lineTo(WIDTH/2-75, HEIGHT/2+100);
+  ctx.lineTo(WIDTH/2-75, HEIGHT/2-100);
+  ctx.fill();
+}
 mainScreen();
+beforeStartScreen();
 var mainGameLoop;
 function makeMenu(width,height,words,x,y,padding){
   ctx.fillStyle = "rgba(0,0,0,0.8)"

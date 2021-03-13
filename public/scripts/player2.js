@@ -6,7 +6,7 @@ function Player(x, y, color, size) {
     this.vel = [0, 0],
     this.acc = [0, 0],
     this.isJumping = false,
-    this.jumpHeight = -20,
+    this.jumpHeight = -13,
     this.draw = function() {
         ctx.shadowBlur = 10;
         ctx.shadowColor = this.color;
