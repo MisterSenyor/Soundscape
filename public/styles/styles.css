@@ -44,3 +44,7 @@ html, body {
   font-family: 'numerals';
   src: url('../assets/Font/digital-7.ttf');
 }
+@font-face {
+  font-family: 'pixelated';
+  src: url('../assets/Font/prstart.ttf')
+}

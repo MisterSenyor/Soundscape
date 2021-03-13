@@ -8,37 +8,38 @@ var gameName = "Name";
 var srca;
 //setBackground
 var menuTexts = [
-  new MenuText(0,0,"Start",goToStart,"center",40,true,true),
-  new MenuText(0,0,"About",goToAbout,"center",40,true,true),
-  new MenuText(0,0,"Instructions",goToInstruction,"center",40,true,true)
+  new MenuText(0,0,"START",goToStart,"center",30,true,true),
+  new MenuText(0,0,"ABOUT",goToAbout,"center",30,true,true),
+  new MenuText(0,0,"INSTRUCTIONS",goToInstruction,"center",20,true,true)
 ]
 // var
 function mainScreen(){
   ctx.fillStyle = "white"
-  ctx.font = HEIGHT/5+"px Roboto";
+  ctx.font = HEIGHT/5+"px pixelated";
+  ctx.textAlign = "center";
   var nameWidth = ctx.measureText(gameName);
-  ctx.fillText(gameName,WIDTH/2-nameWidth.width/2,HEIGHT/20 + HEIGHT/6)
+  ctx.fillText(gameName, WIDTH/2, HEIGHT/20 + HEIGHT/6)
 
   //draw menu
   makeMenu(menuMode.width,menuMode.height, menuTexts,WIDTH/2-menuMode.width/2,HEIGHT/3,20)
 }
-
+var textCounter = 0, textBool = true;
 function beforeStartScreen(){
-  ctx.fillStyle = "rgba(0,0,0,0.8)";
+  var frame = requestAnimationFrame(beforeStartScreen);
+
+  ctx.fillStyle = "rgb(0, 0, 0)";
   ctx.fillRect(0,0,WIDTH,HEIGHT);
-  ctx.fillStyle = "rgba(0,0,0,0.5)";
-  ctx.beginPath();
-  ctx.arc(WIDTH/2,HEIGHT/2,WIDTH/4,0,Math.PI * 2);
-  ctx.fill();
-  ctx.closePath();
-  ctx.shadowBlur = 15;
-  ctx.shadowColor = "#08e6ff";
-  ctx.fillStyle = "#08e6ff";
-  ctx.beginPath();
-  ctx.moveTo(WIDTH/2+150, HEIGHT/2);
-  ctx.lineTo(WIDTH/2-75, HEIGHT/2+100);
-  ctx.lineTo(WIDTH/2-75, HEIGHT/2-100);
-  ctx.fill();
+  ctx.fillStyle = "rgb(70, 70, 70)"
+  if (textCounter >= 40) {
+    textBool = !textBool;
+    textCounter = 0;
+  }
+  if (textBool) {
+    ctx.textAlign = "center";
+    ctx.font = "30px pixelated";
+    ctx.fillText("CLICK ANYWHERE TO START ", WIDTH / 2, HEIGHT / 2);
+  }
+  textCounter++;
 }
 mainScreen();
 beforeStartScreen();
@@ -51,7 +52,7 @@ function makeMenu(width,height,words,x,y,padding){
   for(var i = 0; i < words.length; i++){
     var currX = WIDTH/2;
     var currY = y+padding*1.5+i*(height-padding)/words.length+30;
-    ctx.fillStyle = "white";
+    ctx.fillStyle = "rgb(100, 100, 100)";
     words[i].x = currX;
     words[i].y = currY;
     words[i].draw();
@@ -106,7 +107,7 @@ function MenuText(x,y,text,func,align,size,active,isFocusable){
   this.isFocused = false,
   this.isFocusable = isFocusable,
   this.draw = function(){
-    ctx.font = this.size + "px Roboto";
+    ctx.font = this.size + "px pixelated";
     this.width = (ctx.measureText(this.text).width)
     if(this.active){
       if(!this.isFocused && this.isFocusable){
