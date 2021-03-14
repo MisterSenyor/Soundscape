@@ -76,6 +76,12 @@ function updateAllObstacles(){
     if(player.pos[1] == HEIGHT-230 && player.pos[0] > obstacles[i].x && !obstacles[i].used && player.pos[0] < obstacles[i].x + obstacles[i].width){
       hearts--;
       obstacles[i].used = true;
+      if(hearts == 0){
+        isGameOver = true;
+        updateHearts();
+        // cancelAnimationFrame(mainGameLoop)
+        // createEnd();
+      }
     }
   }
 }

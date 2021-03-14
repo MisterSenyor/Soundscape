@@ -30,7 +30,16 @@ document.querySelector(".canvas").onclick = function(e){
     for(var i = 0; i < menuTexts.length; i++){// && globalMouseX < menuTexts[i].x + menuTexts[i].width && globalMouseY > menuTexts[i].y && globalMouseY < menuTexts[i].y + menuTexts[i].size
       if(e.x > menuTexts[i].x-menuTexts[i].width/2 && e.x < menuTexts[i].x+menuTexts[i].width/2 && e.y < menuTexts[i].y && e.y > menuTexts[i].y - menuTexts[i].size){
         //menuTexts[i].isFocused = false;
-          menuTexts[i].func();
+        playSound("onclick.wav");
+        menuTexts[i].func();
+      }else{
+      }
+    }
+    for(var i = 0; i < activeTexts.length; i++){// && globalMouseX < menuTexts[i].x + menuTexts[i].width && globalMouseY > menuTexts[i].y && globalMouseY < menuTexts[i].y + menuTexts[i].size
+      if(e.x > activeTexts[i].x-activeTexts[i].width/2 && e.x < activeTexts[i].x+activeTexts[i].width/2 && e.y < activeTexts[i].y && e.y > activeTexts[i].y - activeTexts[i].size){
+        //menuTexts[i].isFocused = false;
+        playSound("onclick.wav");
+        activeTexts[i].func();
       }else{
       }
     }

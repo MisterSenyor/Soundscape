@@ -3,6 +3,7 @@ var started = false;
 var audioa = document.querySelector(".audioStart")
 var globalClick = {x:0,y:0};
 var menuMode = {width:300,height:HEIGHT/2.5};
+var instruct = false, about = false;
 
 var gameName = "Name";
 var srca;
@@ -25,7 +26,7 @@ function mainScreen(){
 }
 var textCounter = 0, textBool = true;
 function beforeStartScreen(){
-  var frame = requestAnimationFrame(beforeStartScreen);
+  var preStartScreen = requestAnimationFrame(beforeStartScreen);
 
   ctx.fillStyle = "rgb(0, 0, 0)";
   ctx.fillRect(0,0,WIDTH,HEIGHT);
@@ -40,9 +41,51 @@ function beforeStartScreen(){
     ctx.fillText("CLICK ANYWHERE TO START ", WIDTH / 2, HEIGHT / 2);
   }
   textCounter++;
+  if(started){
+    cancelAnimationFrame(preStartScreen);
+  }
 }
 mainScreen();
 beforeStartScreen();
+var lastY;
+var backFromInstructions = new MenuText(0,0,"BACK",goToMainFromInst,"center",30,true,true);
+var activeTexts = [];
+function instructions(){
+  var instY = HEIGHT/3+60;
+  var centerX = WIDTH/2;
+  ctx.font = "25px pixelated";
+  ctx.fillText("INSTRUCTIONS", centerX, instY);
+  var instructionsTxt = "Grogu is the best, Grogu is the best, Grogu will eat you up even with a bulletproof vest, Grogu eats you up, grogu throws you up, you are a simple blue cookie trying to make your way across the galaxy";
+  lastY = wrapTxt(instructionsTxt, 600,WIDTH/2,instY + 70);
+  backFromInstructions.x = WIDTH/2;
+  backFromInstructions.y = instY + 100 + lastY * 40;
+  backFromInstructions.draw();
+}
+function goToMainFromInst(){
+  alert("to menu")
+}
+function wrapTxt(txt, width, x, y){
+  var splitTxt = txt.split(" ");
+  var currString = "";
+  ctx.font = "25px Roboto";
+  ctx.fillStyle = "white";
+  var lines = 0;
+  for(var i = 0; i < splitTxt.length; i++){
+    currString+=splitTxt[i] + " ";
+    if(i < splitTxt.length-1){
+      if(ctx.measureText(currString+" " + splitTxt[i+1]).width > width){
+        ctx.fillText(currString,x,y+lines*40)
+        lines++;
+        currString = "";
+      }
+    }else{
+      ctx.fillText(currString,x,y+lines*40)
+      lines++;
+      currString = "";
+    }
+  }
+  return lines;
+}
 var mainGameLoop;
 function makeMenu(width,height,words,x,y,padding){
   ctx.fillStyle = "rgba(0,0,0,0.8)"
@@ -57,6 +100,14 @@ function makeMenu(width,height,words,x,y,padding){
     words[i].y = currY;
     words[i].draw();
   }
+  if(instruct){
+    instructions();
+  }else if(about){
+    about();
+  }
+}
+function about(){
+
 }
 function grogu(){
   alert("grogu")
@@ -71,6 +122,8 @@ function goToAbout(){
   menuMode.width = 700;
 }
 function goToInstruction(){
+  activeTexts.push(backFromInstructions);
+  instruct = true;
   menuMode.width = 700;
   for(var i = 0; i < menuTexts.length; i++){
     menuTexts[i].active = false;
@@ -94,49 +147,6 @@ function roundRect(ctx, x, y, width, height, radius) {
 
 function startWholeGame(){
 
-}
-
-function MenuText(x,y,text,func,align,size,active,isFocusable){
-  this.x = x,
-  this.y = y,
-  this.text = text,
-  this.func = func,
-  this.align = align,
-  this.size = size,
-  this.active = active,
-  this.isFocused = false,
-  this.isFocusable = isFocusable,
-  this.draw = function(){
-    ctx.font = this.size + "px pixelated";
-    this.width = (ctx.measureText(this.text).width)
-    if(this.active){
-      if(!this.isFocused && this.isFocusable){
-        this.focus();
-      }else{
-        this.write();
-      }
-    }
-  },
-  this.write = function(){
-    ctx.fillStyle = this.size + "px Roboto"
-    ctx.shadowBlur = 0;
-    if(align == "center"){
-      ctx.textAlign = "center";
-      ctx.fillText(this.text,this.x,this.y);
-      ctx.textAlign = "start";
-    }
-  },
-  this.focus = function(){
-    ctx.fillStyle = this.size + "px Roboto"
-    ctx.shadowColor = "rgb(0,255,255)";
-    ctx.shadowBlur = 15;
-    if(align == "center"){
-      ctx.textAlign = "center";
-      ctx.fillText(this.text,this.x,this.y);
-      ctx.textAlign = "start";
-    }
-    ctx.shadowBlur = 0;
-  }
 }
 
 var smootha = 0.9;

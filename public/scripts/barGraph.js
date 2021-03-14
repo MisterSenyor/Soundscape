@@ -39,9 +39,10 @@ var globalGameSpeed = 2;
 //FPS calculate
 var dinamicFPS = 80;
 var fps = 0,lastTime = 0,showFps = 0, distanceToMove = WIDTH-WIDTH/7;
-var secondsToGetToUser = 1;
+var secondsToGetToUser = 2;
 //Hearts
 var hearts = 3;
+var yoda = true;
 
 function startGame(){
   var file = document.createElement("input");
@@ -82,7 +83,9 @@ function visualize(source) {
     renderFrame();
     function renderFrame() {
         // mandatory shit to set everything up
-        mainGameLoop = requestAnimationFrame(renderFrame);
+        if(!isGameOver){
+          mainGameLoop = requestAnimationFrame(renderFrame);
+        }
         analyser.smoothingTimeConstant = smooth;
         // TODO - recognize the volume before pplaying. DUCK YOU FUTURE US!
         listen.gain.setValueAtTime(1, context.currentTime);
@@ -166,10 +169,18 @@ function visualize(source) {
         generatePlayArea();
         refreshPlayer();
         generateDiamonds();
+        updateHearts();
         updateScore();
         updateAllParticles();
         updateAllObstacles();
 
+        if(isGameOver && yoda){
+          cancelAnimationFrame(mainGameLoop);
+          playSound("gameOver.mp3");
+          audio.pause();
+          delayedAudio.pause();
+          yaddle();
+        }
         // global avg and su vals
       prevSectorVols = sectorVols;
       sectorVols = [];
@@ -186,8 +197,13 @@ function visualize(source) {
       globalGameSpeed = distanceToMove/(fps*secondsToGetToUser)
       lastTime = nowPerf;
     }
-
+    function yaddle() {
+      yoda = false;
+      renderFrame();
+      createEnd();
+    }
 }
+
 var beatLoop;
 var sensitivitya = 0.35, frameCountMaxa = 4, prevSectorVolsa = [], avgDeltaa = [], spikeDistancea = 0, beatCountera = 0,sectorVolsa = [];
 function getBeats(source) {
