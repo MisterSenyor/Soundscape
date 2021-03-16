@@ -65,8 +65,10 @@ function startGame(){
   };
 }
 function visualize(source) {
-    context = new AudioContext();
-    src = context.createMediaElementSource(source);
+    if(!context){
+      context = new AudioContext();
+      src = context.createMediaElementSource(source);
+    }
     analyser = context.createAnalyser();
     var listen = context.createGain();
     // audio.playbackRate = 10;
@@ -176,7 +178,7 @@ function visualize(source) {
 
         if(isGameOver && yoda){
           cancelAnimationFrame(mainGameLoop);
-          playSound("gameOver.mp3");
+          playSound("gameOver.mp3",0.4);
           audio.pause();
           delayedAudio.pause();
           yaddle();
@@ -206,8 +208,11 @@ function visualize(source) {
 
 var beatLoop;
 var sensitivitya = 0.35, frameCountMaxa = 4, prevSectorVolsa = [], avgDeltaa = [], spikeDistancea = 0, beatCountera = 0,sectorVolsa = [];
+var srcb;
 function getBeats(source) {
-    var srcb = context.createMediaElementSource(source);
+    if(!srcb){
+      srcb = context.createMediaElementSource(source);
+    }
     // var srcb = src;
     var analysera = context.createAnalyser();
     var listen = context.createGain();

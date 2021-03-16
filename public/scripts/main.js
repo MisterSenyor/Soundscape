@@ -48,7 +48,6 @@ beforeStartScreen();
 var lastY;
 var backFromInstructions = new MenuText(0,0,"BACK",goToMain,"center",30,true,true);
 var backFromAbout = new MenuText(0,0,"BACK",goToMain,"center",30,true,true);
-var activeTexts = [];
 function instructions(){
   var instY = HEIGHT/3+60;
   var centerX = WIDTH/2;
@@ -143,8 +142,10 @@ function grogu(){
   alert("grogu")
 }
 function goToStart(){
-  menuMode.width = 700;
   startGame();
+  isGameOver = false;
+  hearts = 3;
+  yoda = true;
   cancelAnimationFrame(mainGameLoop)
   audioa.pause();
 }
@@ -182,19 +183,22 @@ function startWholeGame(){
 }
 
 var smootha = 0.9;
+var contextMenu;
 function visualizea(source) {
-    var context = new AudioContext();
-    srca = context.createMediaElementSource(source);
+    console.log(!context);
+    if(!contextMenu){
+      contextMenu = new AudioContext();
+      srca = contextMenu.createMediaElementSource(source);
+    }
 
-    var delay = context.createDelay(5.0);
+    var delay = contextMenu.createDelay(5.0);
     delay.delayTime.value = 1.0;
 
-    var analysera = context.createAnalyser();
-    var listen = context.createGain();
+    var analysera = contextMenu.createAnalyser();
+    var listen = contextMenu.createGain();
     srca.connect(listen);
-    console.log(context.destination);
     listen.connect(analysera);
-    analysera.connect(context.destination);
+    analysera.connect(contextMenu.destination);
     analysera.fftSize = 2 ** 12;
     var frequencyBins = analysera.fftSize / 2;
 
@@ -207,7 +211,7 @@ function visualizea(source) {
         mainGameLoop = requestAnimationFrame(renderFramea);
         analysera.smoothingTimeConstant = .9;
         // TODO - recognize the volume before pplaying. DUCK YOU FUTURE US!
-        listen.gain.setValueAtTime(1, context.currentTime);
+        listen.gain.setValueAtTime(1, contextMenu.currentTime);
         analysera.getByteFrequencyData(dataArrayb);
         allFreqs.push(dataArray);
         // vars

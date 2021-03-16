@@ -3,6 +3,7 @@ function hoverSound() {
   myAudioa.src = "./assets/music/hover.wav";
   myAudioa.play();
 }
+var activeTexts = [];
 function MenuText(x,y,text,func,align,size,active,isFocusable){
   this.x = x,
   this.y = y,
