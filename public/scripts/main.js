@@ -2,10 +2,8 @@ var ctx = canvas.getContext("2d");
 var started = false;
 var audioa = document.querySelector(".audioStart")
 var globalClick = {x:0,y:0};
-var menuMode = {width:300,height:HEIGHT/2.5};
-var instruct = false, about = false;
-
-var gameName = "Name";
+var menuMode = {width:300,height:HEIGHT/2.5,mode:"main"};
+var gameName = "GROGU";
 var srca;
 //setBackground
 var menuTexts = [
@@ -22,7 +20,7 @@ function mainScreen(){
   ctx.fillText(gameName, WIDTH/2, HEIGHT/20 + HEIGHT/6)
 
   //draw menu
-  makeMenu(menuMode.width,menuMode.height, menuTexts,WIDTH/2-menuMode.width/2,HEIGHT/3,20)
+  makeMenu()
 }
 var textCounter = 0, textBool = true;
 function beforeStartScreen(){
@@ -48,11 +46,13 @@ function beforeStartScreen(){
 mainScreen();
 beforeStartScreen();
 var lastY;
-var backFromInstructions = new MenuText(0,0,"BACK",goToMainFromInst,"center",30,true,true);
+var backFromInstructions = new MenuText(0,0,"BACK",goToMain,"center",30,true,true);
+var backFromAbout = new MenuText(0,0,"BACK",goToMain,"center",30,true,true);
 var activeTexts = [];
 function instructions(){
   var instY = HEIGHT/3+60;
   var centerX = WIDTH/2;
+  ctx.fillStyle = "white";
   ctx.font = "25px pixelated";
   ctx.fillText("INSTRUCTIONS", centerX, instY);
   var instructionsTxt = "Grogu is the best, Grogu is the best, Grogu will eat you up even with a bulletproof vest, Grogu eats you up, grogu throws you up, you are a simple blue cookie trying to make your way across the galaxy";
@@ -61,8 +61,14 @@ function instructions(){
   backFromInstructions.y = instY + 100 + lastY * 40;
   backFromInstructions.draw();
 }
-function goToMainFromInst(){
-  alert("to menu")
+function goToMain(){
+  menuMode.mode = "main"
+  menuMode.width = 300;
+  activeTexts = [];
+  console.log(activeTexts.length + ", " + activeTexts);
+  for(var i = 0; i < menuTexts.length; i++){
+    menuTexts[i].active = true;
+  }
 }
 function wrapTxt(txt, width, x, y){
   var splitTxt = txt.split(" ");
@@ -87,9 +93,29 @@ function wrapTxt(txt, width, x, y){
   return lines;
 }
 var mainGameLoop;
-function makeMenu(width,height,words,x,y,padding){
-  ctx.fillStyle = "rgba(0,0,0,0.8)"
+function makeMenu(){
+  var y = HEIGHT/3;
+  var x = WIDTH/2-menuMode.width/2;
+  var height = menuMode.height;
+  var width = menuMode.width;
+  ctx.fillStyle = "rgba(0,0,0,0.8)";
   roundRect(ctx,x,y,width,height,25);
+  if(menuMode.mode == "main"){
+    mainMenu();
+  }else if(menuMode.mode == "instructions"){
+    instructions();
+  }else if(menuMode.mode == "about"){
+    about();
+  }
+}
+function mainMenu() {
+  ctx.fillStyle = "rgba(0,0,0,0.8)"
+  var words = menuTexts;
+  var padding = 20;
+  var y = HEIGHT/3;
+  var x = WIDTH/2-menuMode.width/2;
+  var height = menuMode.height;
+  var width = menuMode.width
   ctx.font = "40px Roboto";
   // console.log(y);
   for(var i = 0; i < words.length; i++){
@@ -100,14 +126,18 @@ function makeMenu(width,height,words,x,y,padding){
     words[i].y = currY;
     words[i].draw();
   }
-  if(instruct){
-    instructions();
-  }else if(about){
-    about();
-  }
 }
 function about(){
-
+  var instY = HEIGHT/3+60;
+  var centerX = WIDTH/2;
+  ctx.fillStyle = "white";
+  ctx.font = "25px pixelated";
+  ctx.fillText("ABOUT", centerX, instY);
+  var instructionsTxt = "My name is Grogu, I eat frogs, I like the forest and hiding and logs. Mando took me in, saved me from IG11, and all that when I was only 57.";
+  lastY = wrapTxt(instructionsTxt, 600,WIDTH/2,instY + 70);
+  backFromAbout.x = WIDTH/2;
+  backFromAbout.y = instY + 100 + lastY * 40;
+  backFromAbout.draw();
 }
 function grogu(){
   alert("grogu")
@@ -120,10 +150,12 @@ function goToStart(){
 }
 function goToAbout(){
   menuMode.width = 700;
+  menuMode.mode = "about";
+  activeTexts.push(backFromAbout);
 }
 function goToInstruction(){
+  menuMode.mode = "instructions";
   activeTexts.push(backFromInstructions);
-  instruct = true;
   menuMode.width = 700;
   for(var i = 0; i < menuTexts.length; i++){
     menuTexts[i].active = false;
@@ -152,7 +184,6 @@ function startWholeGame(){
 var smootha = 0.9;
 function visualizea(source) {
     var context = new AudioContext();
-    // var synthDelay = context.createDelay(5.0);
     srca = context.createMediaElementSource(source);
 
     var delay = context.createDelay(5.0);
@@ -160,20 +191,9 @@ function visualizea(source) {
 
     var analysera = context.createAnalyser();
     var listen = context.createGain();
-
-    // delay.connect(listen)
-    // listen.connect(delay)
-    // srca.connect(delay)
-    // analysera.connect(delay);
     srca.connect(listen);
     console.log(context.destination);
-    // srca.connect(delay)
-
-    // delay.connect(listen)
     listen.connect(analysera);
-
-    // delay.connect(listen)
-    // listen.connect(delay)
     analysera.connect(context.destination);
     analysera.fftSize = 2 ** 12;
     var frequencyBins = analysera.fftSize / 2;
@@ -185,7 +205,7 @@ function visualizea(source) {
     function renderFramea() {
         // mandatory shit to set everything up
         mainGameLoop = requestAnimationFrame(renderFramea);
-        analysera.smoothingTimeConstant = smootha;
+        analysera.smoothingTimeConstant = .9;
         // TODO - recognize the volume before pplaying. DUCK YOU FUTURE US!
         listen.gain.setValueAtTime(1, context.currentTime);
         analysera.getByteFrequencyData(dataArrayb);
