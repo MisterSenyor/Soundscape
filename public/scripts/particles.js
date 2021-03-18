@@ -76,7 +76,7 @@ function updateAllParticles(){
   }
 }
 function createExplosion(x,y){
-  var explosionSystem = new ParticleSystem(x,y,15,50,0,360,8,3,4,false,-11,10,true);
+  var explosionSystem = new ParticleSystem(x,y,10,30,0,360,8,3,5,false,-11,10,true);
   allParticleSystems.push(explosionSystem)
 }
 function Particle(size,colora,x,y,angle,speed,index,cycle,visible,gravity,fade,system){

@@ -38,7 +38,7 @@ function MenuText(x,y,text,func,align,size,active,isFocusable){
   },
   this.focus = function(){
     if(this.soundPlay){
-      hoverSound();
+      playClick();
       this.soundPlay = false;
     }
     ctx.fillStyle = this.size + "px Roboto"
@@ -51,9 +51,4 @@ function MenuText(x,y,text,func,align,size,active,isFocusable){
     }
     ctx.shadowBlur = 0;
   }
-}
-function hoverSound() {
-  var myAudioa = document.createElement("audio");
-  myAudioa.src = "./assets/music/hover.wav";
-  myAudioa.play();
 }

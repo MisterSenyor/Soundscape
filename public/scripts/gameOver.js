@@ -1,5 +1,6 @@
 var isGameOver = false;
 
+lowLag.init();
 function playSounda() {
   var myAudioa = document.createElement("audio");
   myAudioa.src = "./assets/music/gameOver.mp3";
@@ -11,6 +12,11 @@ function playSound(sound,volume) {
   myAudioa.volume = volume;
   myAudioa.src = "./assets/music/"+sound;
   myAudioa.play();
+}
+// var onclickSound = new Audio("./assets/music/hover.wav");
+lowLag.load("./assets/music/hover.wav","hover");
+function playClick() {
+  lowLag.play("hover");
 }
 var retryTexts = [
   new MenuText(0,0,"Restart",restart,"center",30,true,true),
