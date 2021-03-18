@@ -7,6 +7,7 @@ function Player(x, y, color, size) {
     this.acc = [0, 0],
     this.isJumping = false,
     this.jumpHeight = -13,
+    this.floor = HEIGHT - 200 - 30,
     this.draw = function() {
         ctx.shadowBlur = 10;
         ctx.shadowColor = this.color;
@@ -26,8 +27,8 @@ function Player(x, y, color, size) {
         }
     }
     this.collide = function() {
-        if (this.pos[1] >= HEIGHT - 200 - 20) {
-            this.pos[1] = HEIGHT - 200 - 30;
+        if (this.pos[1] >= this.floor) {
+            this.pos[1] = this.floor;
             this.isJumping = false;
             playerParticles.enabled = true;
         }

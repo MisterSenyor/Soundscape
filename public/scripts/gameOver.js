@@ -31,11 +31,30 @@ function backToMain(){
 function createEnd(){
   // requestAnimationFrame(createEnd);
   ctx.shadowBlur = 0;
-  ctx.fillStyle = "rgba(0,0,0,0.8)";
-  ctx.fillRect(0,0,WIDTH,HEIGHT)
-  updateOverText();
+  // ctx.fillStyle = "rgba(0,0,0,0.8)";
+  // ctx.fillRect(0,0,WIDTH,HEIGHT)
+  // updateOverText();
   activeTexts.push(retryTexts[0])
   activeTexts.push(retryTexts[1])
+  screenBlackAnimation();
+}
+var colWidth = 80, deathSpeed = 1, frameCount = 0, drawX = 0,drawY = 0,drawDir = 1;
+function screenBlackAnimation() {
+  var ded = requestAnimationFrame(screenBlackAnimation);
+  frameCount++;
+  if(frameCount % deathSpeed == 0){
+    ctx.fillStyle = "black";
+    ctx.fillRect(drawX*colWidth,drawY*colWidth,colWidth,colWidth)
+    drawX+=drawDir;
+    if(drawX >= WIDTH/colWidth || drawX < 0){
+      drawDir = drawDir == 1 ? -1 : 1;
+      drawY++;
+      if(drawY >= HEIGHT/colWidth){
+        cancelAnimationFrame(ded)
+        updateOverText();
+      }
+    }
+  }
 }
 function updateOverText(){
   // requestAnimationFrame(updateOverText);

@@ -50,6 +50,11 @@ function startGame(){
   file.accept = "audio/*";
   file.click();
   file.onchange = function () {
+    isGameOver = false;
+    hearts = 3;
+    yoda = true;
+    cancelAnimationFrame(mainGameLoop)
+    audioa.pause();
     var files = this.files;
     audio.src = URL.createObjectURL(files[0]);
     audio.load();

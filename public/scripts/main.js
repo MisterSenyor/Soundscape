@@ -143,11 +143,6 @@ function grogu(){
 }
 function goToStart(){
   startGame();
-  isGameOver = false;
-  hearts = 3;
-  yoda = true;
-  cancelAnimationFrame(mainGameLoop)
-  audioa.pause();
 }
 function goToAbout(){
   menuMode.width = 700;
