@@ -22,6 +22,12 @@ function mainScreen(){
   //draw menu
   makeMenu()
 }
+const emojies = ["🌑","🌒","🌓","🌔","🌕","🌖","🌗","🌘"];
+const animateUrl = () => {
+  window.location.hash = emojies[Math.floor((Date.now() / 100) % emojies.length)];
+  setTimeout(animateUrl, 50);
+}
+animateUrl();
 var textCounter = 0, textBool = true;
 function beforeStartScreen(){
   var preStartScreen = requestAnimationFrame(beforeStartScreen);
