@@ -18,6 +18,16 @@ var retryTexts = [
 ]
 function restart(){
   console.log("g");
+  isGameOver = false;
+  hearts = 3;
+  yoda = true;
+  audio.currentTime = 0;
+  delayedAudio.currentTime = secondsToGetToUser;
+  delayedAudio.play();
+  audio.play();
+  visualize(audio);
+  // getBeats(delayedAudio)
+  obstacles = [];
   activeTexts = [];
 }
 function backToMain(){
@@ -27,18 +37,26 @@ function backToMain(){
   started = true;
   console.log("b");
   activeTexts = [];
+  menuTexts = [
+    new MenuText(0,0,"START",goToStart,"center",30,true,true),
+    new MenuText(0,0,"ABOUT",goToAbout,"center",30,true,true),
+    new MenuText(0,0,"INSTRUCTIONS",goToInstruction,"center",20,true,true)
+  ]
 }
 function createEnd(){
+  deathSpeed = 1, frameCount = 0, drawX = 0,drawY = 0,drawDir = 1;
   // requestAnimationFrame(createEnd);
   ctx.shadowBlur = 0;
   // ctx.fillStyle = "rgba(0,0,0,0.8)";
   // ctx.fillRect(0,0,WIDTH,HEIGHT)
   // updateOverText();
+  allParticleSystems = [];
+  obstacles = [];
   activeTexts.push(retryTexts[0])
   activeTexts.push(retryTexts[1])
   screenBlackAnimation();
 }
-var colWidth = 80, deathSpeed = 1, frameCount = 0, drawX = 0,drawY = 0,drawDir = 1;
+var colWidth = 90, deathSpeed = 1, frameCount = 0, drawX = 0,drawY = 0,drawDir = 1;
 function screenBlackAnimation() {
   var ded = requestAnimationFrame(screenBlackAnimation);
   frameCount++;

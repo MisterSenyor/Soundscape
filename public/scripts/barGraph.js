@@ -67,6 +67,7 @@ function startGame(){
     audio.play();
     visualize(audio);
     getBeats(delayedAudio)
+    menuTexts = []
   };
 }
 function visualize(source) {

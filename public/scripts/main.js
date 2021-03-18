@@ -150,6 +150,7 @@ function goToAbout(){
   activeTexts.push(backFromAbout);
 }
 function goToInstruction(){
+  console.log("ggg");
   menuMode.mode = "instructions";
   activeTexts.push(backFromInstructions);
   menuMode.width = 700;
