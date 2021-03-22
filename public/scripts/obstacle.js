@@ -1,7 +1,9 @@
 var obstacles = [];
 
 function createObstacles(){
-  var obstacle = new Obstacle(WIDTH,HEIGHT-200,100,30,"black");
+  var rand =Math.floor(randomBetween(1,3))
+  var obstacle = new Obstacle(WIDTH,HEIGHT-200,100,30,"black",2);
+  console.log(rand);
   if(obstacles.includes("empty")){
     obstacles[obstacles.indexOf("empty")] = obstacle;
   }else{
@@ -9,7 +11,7 @@ function createObstacles(){
   }
 }
 
-function Obstacle(x,y,width,height,color){
+function Obstacle(x,y,width,height,color,type){
   this.y = y,
   this.width = width,
   this.height = height,
@@ -19,8 +21,29 @@ function Obstacle(x,y,width,height,color){
   this.moveArrow = 0,
   this.used = false,
   this.arrowWidth = 70,
+  this.type = type,
   this.x = x+this.arrowWidth+this.arrowWidth/2,
   this.draw = function(){
+    if(this.type == 1){
+      this.firstType();
+    }else if(this.type == 2){
+      this.secondType();
+      this.drawJumpArrow();
+    }
+  },
+  this.secondType = function(){
+    ctx.fillStyle = "red";
+    ctx.shadowBlur = 0;
+    ctx.beginPath();
+    ctx.moveTo(this.x,this.y);
+    for(var i = 1; i <= 4; i++){
+      ctx.lineTo(this.x + i*10,this.y-20);
+      ctx.lineTo(this.x + i*10+10,this.y);
+    }
+    ctx.closePath();
+    ctx.fill();
+  },
+  this.firstType = function(){
     ctx.fillStyle = color;
     ctx.shadowBlur = 0;
     ctx.fillRect(this.x,this.y,this.width,this.height);
