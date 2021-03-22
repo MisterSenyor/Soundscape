@@ -51,11 +51,7 @@ function startGame(){
   file.click();
   file.onchange = function () {
     isGameOver = false;
-<<<<<<< HEAD
-    hearts = 50;
-=======
-    hearts = 1000;
->>>>>>> da58920937fd506b9cc19af0d4cc2ef844a4524f
+    hearts = 100;
     yoda = true;
     cancelAnimationFrame(mainGameLoop)
     audioa.pause();
@@ -199,7 +195,7 @@ function visualize(source) {
       if(showFps >= dinamicFPS){
         if (beatCounter > 20) {
           sensitivity = Math.abs(sensitivity - 0.3)
-        } 
+        }
         else if (beatCounter > 10) {
             sensitivity = Math.abs(sensitivity - 0.2)
         }
@@ -218,7 +214,7 @@ function visualize(source) {
         }
         document.querySelector(".fps").innerHTML = Math.floor(fps);
         showFps = 0;
-        
+
       }else{
         showFps++;
       }
