@@ -138,7 +138,7 @@ function about(){
   ctx.fillStyle = "white";
   ctx.font = "25px pixelated";
   ctx.fillText("ABOUT", centerX, instY);
-  var instructionsTxt = "My name is Grogu, I eat frogs, I like the forest and hiding and logs. Mando took me in, saved me from IG11, and all that when I was only 57.";
+  var instructionsTxt = "My name is Grogu, I eat frogs, I like the forest and hiding and logs. Mando took me in, saved me from IG11, and all that when I was only 57. Met a guy named Quiil, and Moff Gideon too. Got captured twice and had nothing to do. I studied for years under old Luke Skywalker, and left before Ben Solo put the whole place on fire.";
   lastY = wrapTxt(instructionsTxt, 600,WIDTH/2,instY + 70);
   backFromAbout.x = WIDTH/2;
   backFromAbout.y = instY + 100 + lastY * 40;

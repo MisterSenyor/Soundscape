@@ -51,11 +51,7 @@ function startGame(){
   file.click();
   file.onchange = function () {
     isGameOver = false;
-<<<<<<< HEAD
-    hearts = 50;
-=======
     hearts = 1000;
->>>>>>> da58920937fd506b9cc19af0d4cc2ef844a4524f
     yoda = true;
     cancelAnimationFrame(mainGameLoop)
     audioa.pause();
