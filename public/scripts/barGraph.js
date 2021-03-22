@@ -193,6 +193,7 @@ function visualize(source) {
       prevSectorVols = sectorVols;
       sectorVols = [];
       if(showFps >= dinamicFPS){
+        beatCounter = 0;
         document.querySelector(".fps").innerHTML = Math.floor(fps);
         showFps = 0;
       }else{
