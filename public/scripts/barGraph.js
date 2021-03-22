@@ -39,7 +39,7 @@ var globalGameSpeed = 2;
 //FPS calculate
 var dinamicFPS = 80;
 var fps = 0,lastTime = 0,showFps = 0, distanceToMove = WIDTH-WIDTH/7;
-var secondsToGetToUser = 2;
+var secondsToGetToUser = 2, distanceTraveledFromBeat = 0;
 //Hearts
 var hearts = 3;
 var yoda = true;
@@ -51,7 +51,7 @@ function startGame(){
   file.click();
   file.onchange = function () {
     isGameOver = false;
-    hearts = 1000;
+    hearts = 3;
     yoda = true;
     cancelAnimationFrame(mainGameLoop)
     audioa.pause();
@@ -108,6 +108,7 @@ function visualize(source) {
         var sectorLength = 0;
         var avgTimes = 0;
         currentAverage = 0;
+        distanceTraveledFromBeat+=globalGameSpeed;
         // getting all the values into sectorVols so it contains the avg height for each sector
         for (var i = 0; i < bufferLength; i++) {
             // incrementing allHeights to count the sum of all heights in each sector
@@ -195,7 +196,7 @@ function visualize(source) {
       if(showFps >= dinamicFPS){
         if (beatCounter > 20) {
           sensitivity = Math.abs(sensitivity - 0.3)
-        } 
+        }
         else if (beatCounter > 10) {
             sensitivity = Math.abs(sensitivity - 0.2)
         }
@@ -212,9 +213,10 @@ function visualize(source) {
         if (secondCounter % 3 == 0) {
           beatCounter = 0;
         }
+        // distanceTraveledFromBeat = 0;
         document.querySelector(".fps").innerHTML = Math.floor(fps);
         showFps = 0;
-        
+
       }else{
         showFps++;
       }

@@ -15,10 +15,11 @@ function getSpikeReference(prevSectorVols,sectorVols,frameCountMax) {
       spikeDistance++;
 
       for (var i = 0; i < sectorVols.length; i++){
-          if ((sectorVols[i] - prevSectorVols[i]) * sensitivity > median(avgDelta) && spikeDistance > fps / 4) {
+          if ((sectorVols[i] - prevSectorVols[i]) * sensitivity > median(avgDelta) && distanceTraveledFromBeat > 250) {
             createObstacles();
             var randomX = randomBetween(0+WIDTH/8,WIDTH-WIDTH/8)
             var randomY = randomBetween(0+HEIGHT/8,HEIGHT-HEIGHT/8-200)
+            distanceTraveledFromBeat = 0;
             createExplosion(WIDTH / 2, HEIGHT / 2);
             // createExplosion(randomX,randomY);
             console.log("beat")

@@ -2,11 +2,11 @@ function Player(x, y, color, size) {
     this.pos = [x, y]
     this.color = color,
     this.size = size,
-    this.gravity = 1.2, // acc, not vel
+    this.gravity = 0.6, // acc, not vel
     this.vel = [0, 0],
     this.acc = [0, 0],
     this.isJumping = false,
-    this.jumpHeight = -13,
+    this.jumpHeight = -9,
     this.floor = HEIGHT - 200 - 30,
     this.draw = function() {
         ctx.shadowBlur = 10;
