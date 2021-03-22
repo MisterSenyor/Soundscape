@@ -16,7 +16,7 @@ var amount = 150, lifetime = 200, particles = [],particle, spawnParticle = 0, to
 // change this to decide how many sectors there are
 var times = 32;
 // beat recognition vars
-var sensitivity = 0.35, frameCountMax = 4, frameAvgs = [], prevSectorVols = [], avgDelta = [], spikeDistance = 0, beatCounter = 0;
+var sensitivity = 0.35, frameCountMax = 4, frameAvgs = [], prevSectorVols = [], avgDelta = [], spikeDistance = 0, beatCounter = 0, lastFrame = false;
 // rocks on route vars
 var rocks = [], toGenerateRock = 0;
 // Physics vars
