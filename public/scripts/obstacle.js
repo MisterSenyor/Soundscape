@@ -36,7 +36,7 @@ function Obstacle(x,y,width,height,color,type){
     ctx.shadowBlur = 0;
     ctx.beginPath();
     ctx.moveTo(this.x,this.y);
-    for(var i = 0; i <= width/20; i++){
+    for(var i = 0; i < this.width/20; i++){
       ctx.lineTo(this.x + i*20,this.y-15);
       ctx.lineTo(this.x + i*20+10,this.y);
     }
