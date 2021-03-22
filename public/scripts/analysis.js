@@ -1,4 +1,4 @@
-function getSpikeReference(sensitivity,prevSectorVols,sectorVols,frameCountMax) {
+function getSpikeReference(prevSectorVols,sectorVols,frameCountMax) {
   // TODO - make the sensitivity alter itself dynamically by the amount of beats recognized per TimeFrame
   var sectorSum = 0;
   if (prevSectorVols.length > 0) {
@@ -26,7 +26,9 @@ function getSpikeReference(sensitivity,prevSectorVols,sectorVols,frameCountMax) 
             beatCounter++;
           }
       }
-
+    // if (sensitivity > 1) {
+    //     sensitivity = sigmoid(sensitivity)
+    // }
   }
 
 }
@@ -49,4 +51,7 @@ function median(arr) {
     else {
         return (arr[Math.floor(arr.length / 2)] + arr[Math.floor(arr.length / 2) + 1]) / 2;
     }
+}
+function sigmoid(t) {
+    return 1/(1+Math.pow(Math.E, -t));
 }

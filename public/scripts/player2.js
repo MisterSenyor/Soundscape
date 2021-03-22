@@ -2,7 +2,7 @@ function Player(x, y, color, size) {
     this.pos = [x, y]
     this.color = color,
     this.size = size,
-    this.gravity = 0.5, // acc, not vel
+    this.gravity = 1.2, // acc, not vel
     this.vel = [0, 0],
     this.acc = [0, 0],
     this.isJumping = false,

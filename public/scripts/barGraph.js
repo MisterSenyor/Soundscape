@@ -24,7 +24,7 @@ var gravity = -9.8;
 // Mouse move vars
 var globalMouseX = 0, globalMouseY = 0;
 // Score
-var score = 0;
+var score = 0, secondCounter = 0;
 // Explosions
 var explosions = [];
 // Diamonds
@@ -51,7 +51,7 @@ function startGame(){
   file.click();
   file.onchange = function () {
     isGameOver = false;
-    hearts = 3;
+    hearts = 1000;
     yoda = true;
     cancelAnimationFrame(mainGameLoop)
     audioa.pause();
@@ -193,9 +193,28 @@ function visualize(source) {
       prevSectorVols = sectorVols;
       sectorVols = [];
       if(showFps >= dinamicFPS){
-        beatCounter = 0;
+        if (beatCounter > 20) {
+          sensitivity = Math.abs(sensitivity - 0.3)
+        } 
+        else if (beatCounter > 10) {
+            sensitivity = Math.abs(sensitivity - 0.2)
+        }
+        else if (beatCounter > 6) {
+            sensitivity = Math.abs(sensitivity - 0.1)
+        }
+        else if (beatCounter > 2) {
+            sensitivity = Math.abs(sensitivity - 0.05)
+        }
+        else if (beatCounter < 2) {
+            sensitivity += 0.1
+        }
+        secondCounter++;
+        if (secondCounter % 3 == 0) {
+          beatCounter = 0;
+        }
         document.querySelector(".fps").innerHTML = Math.floor(fps);
         showFps = 0;
+        
       }else{
         showFps++;
       }
@@ -265,7 +284,7 @@ function getBeats(source) {
       currentAverage/=avgTimes;
       // global avg and su vals
       // console.log("a");
-    getSpikeReference(0.32,prevSectorVolsa,sectorVolsa,4);
+    getSpikeReference(prevSectorVolsa,sectorVolsa,4);
       prevSectorVolsa = sectorVolsa;
       sectorVolsa = [];
     }
