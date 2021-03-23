@@ -226,6 +226,14 @@ function visualize(source) {
       dinamicFPS = fps;
       globalGameSpeed = distanceToMove/(fps*secondsToGetToUser)
       lastTime = nowPerf;
+      if(audio.currentTime >= audio.duration){
+        cancelAnimationFrame(mainGameLoop);
+        playSound("finishedgame.wav",0.2);
+        winGame();
+        audio.pause();
+        delayedAudio.pause();
+        // yaddle();
+      }
     }
     function yaddle() {
       yoda = false;

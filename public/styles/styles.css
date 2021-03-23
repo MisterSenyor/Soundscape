@@ -39,6 +39,7 @@ html, body {
   position: absolute;
   bottom: 30px;
   left:30px;
+  user-select: none;
 }
 @font-face {
   font-family: 'numerals';
