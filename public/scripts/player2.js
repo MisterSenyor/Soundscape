@@ -2,11 +2,11 @@ function Player(x, y, color, size) {
     this.pos = [x, y]
     this.color = color,
     this.size = size,
-    this.gravity = 0.6, // acc, not vel
+    this.gravity = 0.7, // acc, not vel
     this.vel = [0, 0],
     this.acc = [0, 0],
     this.isJumping = false,
-    this.jumpHeight = -9,
+    this.jumpHeight = -105/globalGameSpeed,
     this.floor = HEIGHT - 200 - this.size,
     this.draw = function() {
         ctx.shadowBlur = 0;
@@ -35,6 +35,7 @@ function Player(x, y, color, size) {
         }
     }
     this.update = function() {
+        this.jumpHeight = -110/globalGameSpeed
         this.getKeys(0);
         this.vel[0] += this.acc[0];
         this.vel[1] += this.acc[1];

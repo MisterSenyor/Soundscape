@@ -236,7 +236,7 @@ function visualize(source) {
       var ms = nowPerf-lastTime
       fps = 1000/ms;
       dinamicFPS = fps;
-      globalGameSpeed = distanceToMove/(fps*secondsToGetToUser)
+      globalGameSpeed = distanceToMove/(fps*secondsToGetToUser);
       lastTime = nowPerf;
       if(audio.currentTime >= audio.duration){
         cancelAnimationFrame(mainGameLoop);
