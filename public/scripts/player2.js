@@ -35,7 +35,7 @@ function Player(x, y, color, size) {
         }
     }
     this.update = function() {
-        this.jumpHeight = -1470/globalGameSpeed;
+        this.jumpHeight = -Math.abs(4.9 * (150 / globalGameSpeed) + 150 / (150 / globalGameSpeed));
         this.getKeys(0);
         this.vel[0] += this.acc[0];
         this.vel[1] += this.acc[1];
