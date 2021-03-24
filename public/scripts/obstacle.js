@@ -96,7 +96,7 @@ function updateAllObstacles(){
         obstacles[i] = "empty";
       }
     }
-    if(player.pos[1] == HEIGHT-230 && player.pos[0] > obstacles[i].x && !obstacles[i].used && player.pos[0] < obstacles[i].x + obstacles[i].width){
+    if(player.pos[1] == player.floor && player.pos[0] > obstacles[i].x && !obstacles[i].used && player.pos[0]+player.size/3 < obstacles[i].x + obstacles[i].width){
       hearts--;
       obstacles[i].used = true;
       if(hearts == 0){

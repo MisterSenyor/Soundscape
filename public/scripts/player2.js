@@ -7,15 +7,16 @@ function Player(x, y, color, size) {
     this.acc = [0, 0],
     this.isJumping = false,
     this.jumpHeight = -9,
-    this.floor = HEIGHT - 200 - 30,
+    this.floor = HEIGHT - 200 - this.size,
     this.draw = function() {
-        ctx.shadowBlur = 10;
-        ctx.shadowColor = this.color;
-        ctx.fillStyle = this.color;
-        ctx.beginPath();
-        ctx.arc(this.pos[0],this.pos[1],this.size,0,2*Math.PI);
-        ctx.fill();
-        ctx.closePath();
+        ctx.shadowBlur = 0;
+        // ctx.shadowColor = this.color;
+        // ctx.fillStyle = this.color;
+        // ctx.beginPath();
+        // ctx.arc(this.pos[0],this.pos[1],this.size,0,2*Math.PI);
+        // ctx.fill();
+        // ctx.closePath();
+        ctx.drawImage(imga,imageFrameNumber*416.6,0,416.6,421,this.pos[0],this.pos[1],this.size,this.size)
     },
     this.getKeys = function(e) {
         this.acc = [0, this.gravity];

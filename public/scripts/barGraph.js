@@ -32,7 +32,7 @@ var diamonds = [], diamondColors = ["#8b32a8","#28ad64","#c8de4e","#d61313","#54
 //Create player particles
 var partX = WIDTH/7-10, partY = HEIGHT-200;
 var playerParticles = new ParticleSystem(partX,partY,20,100,50,80,5,1,2,true,5,-1,false,true),
-player = new Player(WIDTH/7,HEIGHT-200-30,"#39ff14",30);
+player = new Player(WIDTH/7,HEIGHT-200-30,"#39ff14",80);
 allParticleSystems.push(playerParticles)
 //Global thingies
 var globalGameSpeed = 2;
@@ -70,6 +70,16 @@ function startGame(){
     menuTexts = []
   };
 }
+var imga = new Image();
+imga.src = './assets/playerAnimation.png';
+var totalNumberOfFrames = 10;
+var imageFrameNumber = 0;
+var widthOfImage = 200;
+var heightOfImage = 200;
+var widthOfSingleImage = widthOfImage / totalNumberOfFrames;
+imga.onload = function() {
+
+}
 function visualize(source) {
     if(!context){
       context = new AudioContext();
@@ -94,6 +104,7 @@ function visualize(source) {
         if(!isGameOver){
           mainGameLoop = requestAnimationFrame(renderFrame);
         }
+
         analyser.smoothingTimeConstant = smooth;
         // TODO - recognize the volume before pplaying. DUCK YOU FUTURE US!
         listen.gain.setValueAtTime(1, context.currentTime);
@@ -182,6 +193,7 @@ function visualize(source) {
         updateScore();
         updateAllParticles();
         updateAllObstacles();
+        drawSprite();
 
         if(isGameOver && yoda){
           cancelAnimationFrame(mainGameLoop);
@@ -241,7 +253,35 @@ function visualize(source) {
       createEnd();
     }
 }
-
+var spriteSpeed = 0;
+function drawSprite() {
+  // console.log("grogu");
+  ctx.shadowBlur = 0;
+  if(!player.isJumping){
+    if(spriteSpeed == 2){
+      imageFrameNumber++; // changes the sprite we look at
+      spriteSpeed = 0;
+    }else{
+      spriteSpeed++;
+    }
+    imageFrameNumber = imageFrameNumber % totalNumberOfFrames;
+  }else{
+    imageFrameNumber = 5;
+  }
+// Change this from 0 to 1 to 2 ... upto 9 and back to 0 again, then 1...
+  // ctx.drawImage(imga,
+  //   imageFrameNumber * widthOfSingleImage, 0, // x and y - where in the sprite
+  //   widthOfSingleImage, heightOfImage, // width and height
+  //   50, 50, // x and y - where on the screen
+  //   widthOfSingleImage, heightOfImage // width and height
+  // );
+  // ctx.drawImage(imga,
+  //    imageFrameNumber * widthOfSingleImage,0, // x and y - where in the sprite
+  //   widthOfSingleImage, heightOfImage, // width and height
+  //   50, 50, // x and y - where on the screen
+  //   widthOfSingleImage, heightOfImage // width and height
+  // );
+}
 var beatLoop;
 var sensitivitya = 0.35, frameCountMaxa = 4, prevSectorVolsa = [], avgDeltaa = [], spikeDistancea = 0, beatCountera = 0,sectorVolsa = [];
 var srcb;
