@@ -9,7 +9,8 @@ var srca;
 var menuTexts = [
   new MenuText(0,0,"START",goToStart,"center",30,true,true),
   new MenuText(0,0,"ABOUT",goToAbout,"center",30,true,true),
-  new MenuText(0,0,"INSTRUCTIONS",goToInstruction,"center",20,true,true)
+  new MenuText(0,0,"INSTRUCTIONS",goToInstruction,"center",20,true,true),
+  new MenuText(0,0,"STORY",goToIntro,"center",20,true,true)
 ]
 // var
 function mainScreen(){
@@ -75,6 +76,9 @@ function goToMain(){
     menuTexts[i].active = true;
   }
 }
+function goToIntro() {
+  menuMode.mode = "intro";
+}
 function wrapTxt(txt, width, x, y){
   var splitTxt = txt.split(" ");
   var currString = "";
@@ -111,6 +115,8 @@ function makeMenu(){
     instructions();
   }else if(menuMode.mode == "about"){
     about();
+  } else if(menuMode.mode == "intro") {
+    drawIntro('intro1');
   }
 }
 function mainMenu() {
