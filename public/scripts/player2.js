@@ -9,6 +9,7 @@ function Player(x, y, color, size) {
     this.startJumpPerf = 0,
     this.isJumping = false,
     this.jumpHeight = -18,
+    this.jumpLength = 0,
     this.floor = HEIGHT - 200 - this.size,
     this.draw = function() {
         ctx.shadowBlur = 0;
@@ -45,9 +46,14 @@ function Player(x, y, color, size) {
           var nowPerfa = performance.now();
           this.startJumpTime+=nowPerfa-this.startJumpPerf;
           this.startJumpPerf = nowPerfa;
+          this.jumpLength+=globalGameSpeed;
           // console.log(this.startJumpPerf + "," + this.startJumpTime);
           this.pos[1] = this.floor+this.jumpHeight*(this.startJumpTime/10) + 0.5*this.acc[1]*(this.startJumpTime/10)**2;
         }else{
+          if(this.jumpLength > 0){
+            console.log(this.jumpLength);
+          }
+          this.jumpLength = 0;
           this.startJumpTime = 0;
           this.startJumpPerf = performance.now();
         }
