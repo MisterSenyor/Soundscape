@@ -16,7 +16,7 @@ function Player(x, y, color, size) {
     this.draw = function() {
         ctx.shadowBlur = 15;
         ctx.shadowColor = "red";
-        ctx.drawImage(imga,imageFrameNumber*416.6,0,416.6,421,this.pos[0],this.pos[1],this.size,this.size)
+        ctx.drawImage(getImage("sprites"),imageFrameNumber*416.6,0,416.6,421,this.pos[0],this.pos[1],this.size,this.size)
     },
     this.getKeys = function(e) {
         this.acc = [0, this.gravity];

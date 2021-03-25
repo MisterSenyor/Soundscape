@@ -70,16 +70,11 @@ function startGame(){
     menuTexts = []
   };
 }
-var imga = new Image();
-imga.src = './assets/playerAnimation.png';
 var totalNumberOfFrames = 10;
 var imageFrameNumber = 0;
 var widthOfImage = 200;
 var heightOfImage = 200;
 var widthOfSingleImage = widthOfImage / totalNumberOfFrames;
-imga.onload = function() {
-
-}
 function visualize(source) {
     if(!context){
       context = new AudioContext();
