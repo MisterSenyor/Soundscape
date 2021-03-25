@@ -11,6 +11,6 @@ app.get("/grogu",function(req,res){
   res.send("grogu")
 })
 
-app.listen(3000, function(){
+app.listen(process.env.PORT || 3000, function(){
   console.log("listening on 3000");
 })
