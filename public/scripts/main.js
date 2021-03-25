@@ -120,7 +120,7 @@ function makeMenu(){
     playAllIntro()
   }
 }
-var introSpeed = 500, introNow = 0, introDisplay = 1, numberOfImages = 8;
+var introSpeed = 500, introNow = 0, introDisplay = 1, numberOfImages = 8,ranIntro = false;
 function playAllIntro(){
   if(introNow == introSpeed){
     introNow = 0;
@@ -129,10 +129,16 @@ function playAllIntro(){
   }else{
     introNow++;
   }
+  if(!ranIntro){
+    startStoryMusic();
+    ranIntro = true;
+  }
   if(introDisplay >= numberOfImages){
     introSpeed = 500, introNow = 0, introDisplay = 1, numberOfImages = 8;
     menuMode.mode = "main"
     audioa.play();
+    ranIntro = false;
+    stopStoryMusic();
   }else{
     drawIntro('intro'+introDisplay);
     ctx.fillStyle = "black";

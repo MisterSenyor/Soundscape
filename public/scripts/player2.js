@@ -14,7 +14,8 @@ function Player(x, y, color, size) {
     this.jumpStartTime = 0,
     this.floor = HEIGHT - 200 - this.size,
     this.draw = function() {
-        ctx.shadowBlur = 0;
+        ctx.shadowBlur = 15;
+        ctx.shadowColor = "red";
         ctx.drawImage(imga,imageFrameNumber*416.6,0,416.6,421,this.pos[0],this.pos[1],this.size,this.size)
     },
     this.getKeys = function(e) {

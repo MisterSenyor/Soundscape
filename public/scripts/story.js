@@ -9,3 +9,12 @@ function resetZoom() {
   counterX = 1;
   counterY = 1;
 }
+var storyAudio = document.querySelector(".storyAudio");
+function startStoryMusic() {
+  storyAudio.currentTime = 0;
+  storyAudio.volume = 0.3;
+  storyAudio.play()
+}
+function stopStoryMusic(){
+  storyAudio.pause();
+}
