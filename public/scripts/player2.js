@@ -6,6 +6,7 @@ function Player(x, y, color, size) {
     this.vel = [0, 0],
     this.acc = [0, 0],
     this.startJumpTime = 0,
+    this.startJumpPerf = 0,
     this.isJumping = false,
     this.jumpHeight = -18,
     this.floor = HEIGHT - 200 - this.size,
@@ -40,11 +41,15 @@ function Player(x, y, color, size) {
         this.pos[0] += this.vel[0] + 0.5 * this.acc[0];
         // this.pos[1] += this.vel[1] + 0.5 * this.acc[1];
         if(this.isJumping){
-          console.log("grogu");
-          this.startJumpTime++;
-          this.pos[1] = this.floor+this.jumpHeight*this.startJumpTime + 0.5*this.acc[1]*this.startJumpTime**2;
+          // console.log("grogu");
+          var nowPerfa = performance.now();
+          this.startJumpTime+=nowPerfa-this.startJumpPerf;
+          this.startJumpPerf = nowPerfa;
+          // console.log(this.startJumpPerf + "," + this.startJumpTime);
+          this.pos[1] = this.floor+this.jumpHeight*(this.startJumpTime/10) + 0.5*this.acc[1]*(this.startJumpTime/10)**2;
         }else{
           this.startJumpTime = 0;
+          this.startJumpPerf = performance.now();
         }
         this.collide();
     }
