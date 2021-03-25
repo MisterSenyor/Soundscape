@@ -5,3 +5,7 @@ function drawIntro(imgName) {
     counterX += 0.0001;
     counterY += 0.0001;
 }
+function resetZoom() {
+  counterX = 1;
+  counterY = 1;
+}

@@ -2,7 +2,7 @@ function Player(x, y, color, size) {
     this.pos = [x, y]
     this.color = color,
     this.size = size,
-    this.gravity = 9.8, // acc, not vel
+    this.gravity = 2, // acc, not vel
     this.vel = [0, 0],
     this.acc = [0, 0],
     this.isJumping = false,
@@ -35,7 +35,10 @@ function Player(x, y, color, size) {
         }
     }
     this.update = function() {
-        this.jumpHeight = -Math.abs(4.9 * (150 / globalGameSpeed) + 150 / (150 / globalGameSpeed));
+        // this.jumpHeight = -Math.abs(4.9 * (150 / globalGameSpeed) + 150 / (150 / globalGameSpeed));
+        // this.jumpHeight = -(Math.sqrt(this.gravity) * 20);
+        this.jumpHeight = -(4+1/3) * globalGameSpeed;
+        // this.jumpHeight = -30;
         this.getKeys(0);
         this.vel[0] += this.acc[0];
         this.vel[1] += this.acc[1];

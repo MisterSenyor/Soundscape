@@ -46,7 +46,8 @@ function backToMain(){
   menuTexts = [
     new MenuText(0,0,"START",goToStart,"center",30,true,true),
     new MenuText(0,0,"ABOUT",goToAbout,"center",30,true,true),
-    new MenuText(0,0,"INSTRUCTIONS",goToInstruction,"center",20,true,true)
+    new MenuText(0,0,"INSTRUCTIONS",goToInstruction,"center",20,true,true),
+    new MenuText(0,0,"STORY",goToIntro,"center",20,true,true)
   ]
 }
 function createEnd(){

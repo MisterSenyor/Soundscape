@@ -2,7 +2,7 @@ var obstacles = [];
 
 function createObstacles(){
   var rand =Math.floor(randomBetween(1,3))
-  var obstacle = new Obstacle(WIDTH,HEIGHT-200,100,30,"black",2);
+  var obstacle = new Obstacle(WIDTH,HEIGHT-200,100,30,"black",rand);
   console.log(rand);
   if(obstacles.includes("empty")){
     obstacles[obstacles.indexOf("empty")] = obstacle;
@@ -96,7 +96,7 @@ function updateAllObstacles(){
         obstacles[i] = "empty";
       }
     }
-    if(player.pos[1] == player.floor && player.pos[0] > obstacles[i].x && !obstacles[i].used && player.pos[0]+player.size/3 < obstacles[i].x + obstacles[i].width){
+    if(player.pos[1] == player.floor && player.pos[0]+player.size/3 > obstacles[i].x && !obstacles[i].used && player.pos[0]+player.size/3 < obstacles[i].x + obstacles[i].width){
       hearts--;
       obstacles[i].used = true;
       if(hearts == 0){

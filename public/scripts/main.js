@@ -3,7 +3,7 @@ var started = false;
 var audioa = document.querySelector(".audioStart")
 var globalClick = {x:0,y:0};
 var menuMode = {width:300,height:HEIGHT/2.5,mode:"main"};
-var gameName = "GROGU";
+var gameName = "SOUNDSCAPE";
 var srca;
 //setBackground
 var menuTexts = [
@@ -15,7 +15,7 @@ var menuTexts = [
 // var
 function mainScreen(){
   ctx.fillStyle = "white"
-  ctx.font = HEIGHT/5+"px pixelated";
+  ctx.font = HEIGHT/10+"px pixelated";
   ctx.textAlign = "center";
   var nameWidth = ctx.measureText(gameName);
   ctx.fillText(gameName, WIDTH/2, HEIGHT/20 + HEIGHT/6)
@@ -116,7 +116,31 @@ function makeMenu(){
   }else if(menuMode.mode == "about"){
     about();
   } else if(menuMode.mode == "intro") {
-    drawIntro('intro1');
+    audioa.pause();
+    playAllIntro()
+  }
+}
+var introSpeed = 500, introNow = 0, introDisplay = 1, numberOfImages = 8;
+function playAllIntro(){
+  if(introNow == introSpeed){
+    introNow = 0;
+    introDisplay++;
+    resetZoom()
+  }else{
+    introNow++;
+  }
+  if(introDisplay >= numberOfImages){
+    introSpeed = 500, introNow = 0, introDisplay = 1, numberOfImages = 8;
+    menuMode.mode = "main"
+    audioa.play();
+  }else{
+    drawIntro('intro'+introDisplay);
+    ctx.fillStyle = "black";
+    ctx.strokeStyle = "white"
+    ctx.font = "30px Arial";
+    ctx.textAlign = "end"
+    ctx.fillText("Click to continue...",WIDTH-20,HEIGHT-30)
+    ctx.strokeText("Click to continue...",WIDTH-20,HEIGHT-30);
   }
 }
 function mainMenu() {

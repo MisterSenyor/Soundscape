@@ -26,29 +26,35 @@ document.querySelector(".canvas").onclick = function(e){
     visualizea(audioa);
     started = true;
   }else{
-    var aLength = activeTexts.length;
-    console.log(aLength + " , " + activeTexts);
-    for(var i = 0; i < menuTexts.length; i++){// && globalMouseX < menuTexts[i].x + menuTexts[i].width && globalMouseY > menuTexts[i].y && globalMouseY < menuTexts[i].y + menuTexts[i].size
-      console.log(menuTexts[i].active);
-      if(e.x > menuTexts[i].x-menuTexts[i].width/2 && e.x < menuTexts[i].x+menuTexts[i].width/2 && e.y < menuTexts[i].y && e.y > menuTexts[i].y - menuTexts[i].size){
-        if(menuTexts[i].active){
-          playSound("onclick.wav",0.2);
-          console.log(menuTexts[i].func+", " +menuTexts[i].active);
-          menuTexts[i].func();
+    if(menuMode.mode == "intro"){
+      introDisplay++;
+      introNow = 0;
+      resetZoom();
+    }else{
+      var aLength = activeTexts.length;
+      console.log(aLength + " , " + activeTexts);
+      for(var i = 0; i < menuTexts.length; i++){// && globalMouseX < menuTexts[i].x + menuTexts[i].width && globalMouseY > menuTexts[i].y && globalMouseY < menuTexts[i].y + menuTexts[i].size
+        console.log(menuTexts[i].active);
+        if(e.x > menuTexts[i].x-menuTexts[i].width/2 && e.x < menuTexts[i].x+menuTexts[i].width/2 && e.y < menuTexts[i].y && e.y > menuTexts[i].y - menuTexts[i].size){
+          if(menuTexts[i].active){
+            playSound("onclick.wav",0.2);
+            console.log(menuTexts[i].func+", " +menuTexts[i].active);
+            menuTexts[i].func();
+          }
         }
       }
-    }
-    for(var i = 0; i < aLength; i++){
-      try{
-        if(e.x > activeTexts[i].x-activeTexts[i].width/2 && e.x < activeTexts[i].x+activeTexts[i].width/2 && e.y < activeTexts[i].y && e.y > activeTexts[i].y - activeTexts[i].size){
-          //menuTexts[i].isFocused = false;
-          playSound("onclick.wav",0.2);
-          activeTexts[i].func();
+      for(var i = 0; i < aLength; i++){
+        try{
+          if(e.x > activeTexts[i].x-activeTexts[i].width/2 && e.x < activeTexts[i].x+activeTexts[i].width/2 && e.y < activeTexts[i].y && e.y > activeTexts[i].y - activeTexts[i].size){
+            //menuTexts[i].isFocused = false;
+            playSound("onclick.wav",0.2);
+            activeTexts[i].func();
+          }
+        }catch(e){
+          console.log(e);
         }
-      }catch(e){
-        console.log(e);
-      }
 
+      }
     }
     globalClick = {x:e.x,y:e.y}
   }
