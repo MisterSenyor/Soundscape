@@ -9,6 +9,10 @@ function getImage(img){
 // Keyboard and mouse stuff
 document.body.onkeypress = function(e){
     player.getKeys(e.keyCode);
+    console.log(e.keyCode);
+    if(e.keyCode == 101){
+      fuckUpFPS();
+    }
 }
 document.querySelector(".canvas").onmousemove = function(e){
   var mouseX = e.x, mouseY = e.y;

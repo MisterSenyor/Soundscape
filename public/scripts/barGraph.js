@@ -342,9 +342,9 @@ function getBeats(source) {
 createObstacles()
 
 function fuckUpFPS(){
-  for(var i = 0; i < 100; i++){
-    var randX = randomBetween(100,WIDTH-100);
-    var randY = randomBetween(50, HEIGHT-50);
+  for(var i = 0; i < 200; i++){
+    var randX = -1000;
+    var randY = -1000;
     var explosionSystem = new ParticleSystem(randX,randY,35,100,0,360,8,3,4,false,-11,10,true);
     allParticleSystems.push(explosionSystem)
   }

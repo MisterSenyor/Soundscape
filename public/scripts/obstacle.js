@@ -102,8 +102,6 @@ function updateAllObstacles(){
       if(hearts == 0){
         isGameOver = true;
         updateHearts();
-        // cancelAnimationFrame(mainGameLoop)
-        // createEnd();
       }
     }
   }
