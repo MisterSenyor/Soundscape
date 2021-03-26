@@ -26,6 +26,7 @@ function restart(){
   console.log("g");
   isGameOver = false;
   hearts = 3;
+  score = 0;
   yoda = true;
   audio.currentTime = 0;
   delayedAudio.currentTime = secondsToGetToUser;
@@ -89,9 +90,11 @@ function updateOverText(){
   ctx.textAlign = "center";
   ctx.font = "80px pixelated";
   ctx.fillText("GAME OVER!", WIDTH / 2, HEIGHT / 2);
+  ctx.font = "30px pixelated";
+  ctx.fillText("You Scored: " + score + " Points", WIDTH/2, HEIGHT/2 + 80)
   for(var i = 1; i <= retryTexts.length; i++){
     retryTexts[i-1].x = WIDTH/2;
-    retryTexts[i-1].y = HEIGHT/2 + 80 + i*60;
+    retryTexts[i-1].y = HEIGHT/2 + 100 + i*60;
     retryTexts[i-1].draw();
   }
 }

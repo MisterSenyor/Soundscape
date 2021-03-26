@@ -45,7 +45,7 @@ function Gem(color,image,x,y,index,width,height){
   this.drawGem = function(){
     ctx.shadowBlur = 10;
     ctx.shadowColor = diamondColors[this.color];
-    console.log(this.image);
+    // console.log(this.image);
     ctx.drawImage(getImage("gem" + this.image),parseInt(this.x).toFixed(),parseInt(this.y).toFixed(),parseInt(this.width).toFixed(),parseInt(this.height).toFixed());
   },
   this.updatePos = function(){

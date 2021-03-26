@@ -2,7 +2,7 @@ var obstacles = [];
 
 function createObstacles(){
   var rand =Math.floor(randomBetween(1,3))
-  var obstacle = new Obstacle(WIDTH,HEIGHT-200,100,30,"black",rand);
+  var obstacle = new Obstacle(WIDTH,HEIGHT-200,80,30,"black",rand);
   if(obstacles.includes("empty")){
     obstacles[obstacles.indexOf("empty")] = obstacle;
   }else{
@@ -21,7 +21,7 @@ function Obstacle(x,y,width,height,color,type){
   this.used = false,
   this.arrowWidth = 70,
   this.type = type,
-  this.x = x+this.arrowWidth+this.arrowWidth/2,
+  this.x = (x+this.arrowWidth+this.arrowWidth/2)-20,
   this.draw = function(){
     if(this.type == 1){
       this.firstType();
@@ -82,6 +82,10 @@ function Obstacle(x,y,width,height,color,type){
   },
   this.updatePos = function(){
     this.x-=globalGameSpeed;
+    if(this.x < player.pos[0]-player.size && !this.used){
+      this.used = true;
+      score++;
+    }
     this.draw();
   }
 }

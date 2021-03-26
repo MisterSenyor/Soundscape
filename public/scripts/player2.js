@@ -56,13 +56,13 @@ function Player(x, y, color, size) {
         }else{
           if(this.jumpLength > 0){
             // console.log(this.jumpLength + ", " + this.jumpHeight + ", " + this.hangTime);
-            console.log(this.hangTime + ", " + this.startJumpTime + ", " + (performance.now()-this.jumpStartTime));
+            // console.log(this.hangTime + ", " + this.startJumpTime + ", " + (performance.now()-this.jumpStartTime));
           }
           this.jumpLength = 0;
           this.startJumpTime = 0;
           this.startJumpPerf = performance.now();
           // this.hangTime = (175/globalGameSpeed);
-          this.hangTime = 33;
+          this.hangTime = 38;
           this.jumpHeight = -(this.gravity*(this.hangTime/2));
         }
         this.collide();

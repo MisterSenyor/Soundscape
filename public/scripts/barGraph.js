@@ -52,6 +52,7 @@ function startGame(){
   file.onchange = function () {
     isGameOver = false;
     hearts = 3;
+    score = 0;
     yoda = true;
     cancelAnimationFrame(mainGameLoop)
     audioa.pause();
