@@ -36,13 +36,10 @@ document.querySelector(".canvas").onclick = function(e){
       resetZoom();
     }else{
       var aLength = activeTexts.length;
-      console.log(aLength + " , " + activeTexts);
       for(var i = 0; i < menuTexts.length; i++){// && globalMouseX < menuTexts[i].x + menuTexts[i].width && globalMouseY > menuTexts[i].y && globalMouseY < menuTexts[i].y + menuTexts[i].size
-        console.log(menuTexts[i].active);
         if(e.x > menuTexts[i].x-menuTexts[i].width/2 && e.x < menuTexts[i].x+menuTexts[i].width/2 && e.y < menuTexts[i].y && e.y > menuTexts[i].y - menuTexts[i].size){
           if(menuTexts[i].active){
             playSound("onclick.wav",0.2);
-            console.log(menuTexts[i].func+", " +menuTexts[i].active);
             menuTexts[i].func();
           }
         }

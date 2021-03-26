@@ -3,7 +3,6 @@ var obstacles = [];
 function createObstacles(){
   var rand =Math.floor(randomBetween(1,3))
   var obstacle = new Obstacle(WIDTH,HEIGHT-200,100,30,"black",rand);
-  console.log(rand);
   if(obstacles.includes("empty")){
     obstacles[obstacles.indexOf("empty")] = obstacle;
   }else{

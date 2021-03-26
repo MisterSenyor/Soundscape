@@ -30,6 +30,10 @@ function updateScore(){
   ctx.shadowColor = "#00ff1a";
   ctx.fillText(txt,WIDTH-txtWidth-minus+10,55);
 }
+var gemImages = [];
+for(var i = 1; i <= 6; i++){
+  gemImages.push(getImage("gem" + i));
+}
 function Gem(color,image,x,y,index,width,height){
   this.color = color,
   this.image = image,
@@ -41,7 +45,8 @@ function Gem(color,image,x,y,index,width,height){
   this.drawGem = function(){
     ctx.shadowBlur = 10;
     ctx.shadowColor = diamondColors[this.color];
-    ctx.drawImage(getImage("gem" + this.image),this.x,this.y,this.width,this.height);
+    console.log(this.image);
+    ctx.drawImage(getImage("gem" + this.image),parseInt(this.x).toFixed(),parseInt(this.y).toFixed(),parseInt(this.width).toFixed(),parseInt(this.height).toFixed());
   },
   this.updatePos = function(){
     this.x-=globalGameSpeed;
