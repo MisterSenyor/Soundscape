@@ -1,6 +1,6 @@
 # Soundscape
 ![test](https://media.discordapp.net/attachments/489873169445027840/824981840691593256/unknown.png?width=1305&height=663)
-Play completely online [here (https://soundscapegame.herokuapp.com)](https://soundscapegame.herokuapp.com/)
+Play completely online [here (https://soundscapegame.herokuapp.com)](https://soundscapegame.herokuapp.com/){:target="_blank"}
 # Instructions
 ![test2](https://media.discordapp.net/attachments/489873169445027840/824982084526538762/unknown.png?width=1327&height=663)
 Help FreD Sharp escape his evil creator's laboratory with his unique ability to see through sound!
