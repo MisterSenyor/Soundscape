@@ -52,6 +52,7 @@ function startGame(filea = null){
     file.accept = "audio/*";
     file.click();
     file.onchange = function () {
+      demAud.pause();
       isGameOver = false;
       hearts = 3;
       score = 0;
@@ -74,6 +75,7 @@ function startGame(filea = null){
       menuTexts = []
     };
   }else{
+    demAud.pause();
     isGameOver = false;
     hearts = 3;
     score = 0;
