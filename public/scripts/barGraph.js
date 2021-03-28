@@ -44,32 +44,58 @@ var secondsToGetToUser = 2, distanceTraveledFromBeat = 0;
 var hearts = 3;
 var yoda = true;
 
-function startGame(){
-  var file = document.createElement("input");
-  file.type = "file";
-  file.accept = "audio/*";
-  file.click();
-  file.onchange = function () {
+function startGame(filea = null){
+  console.log(filea);
+  if(filea == null){
+    var file = document.createElement("input");
+    file.type = "file";
+    file.accept = "audio/*";
+    file.click();
+    file.onchange = function () {
+      isGameOver = false;
+      hearts = 3;
+      score = 0;
+      yoda = true;
+      cancelAnimationFrame(mainGameLoop)
+      audioa.pause();
+      var files = this.files;
+      audio.src = URL.createObjectURL(files[0]);
+      audio.load();
+      audio.volume = 0.3;
+      delayedAudio.src = URL.createObjectURL(files[0])
+      delayedAudio.load();
+      delayedAudio.volume = 0.3;
+      delayedAudio.play();
+      delayedAudio.currentTime = secondsToGetToUser;
+      audio.play();
+      document.querySelector(".musicSelect").style.display = "none";
+      visualize(audio);
+      getBeats(delayedAudio)
+      menuTexts = []
+    };
+  }else{
     isGameOver = false;
     hearts = 3;
     score = 0;
     yoda = true;
     cancelAnimationFrame(mainGameLoop)
     audioa.pause();
-    var files = this.files;
-    audio.src = URL.createObjectURL(files[0]);
+    var musicFile = "assets/music/ourMusic/"+filea;
+    audio.src = musicFile;
     audio.load();
     audio.volume = 0.3;
-    delayedAudio.src = URL.createObjectURL(files[0])
+    delayedAudio.src = musicFile;
     delayedAudio.load();
     delayedAudio.volume = 0.3;
     delayedAudio.play();
     delayedAudio.currentTime = secondsToGetToUser;
     audio.play();
+    document.querySelector(".musicSelect").style.display = "none";
     visualize(audio);
     getBeats(delayedAudio)
     menuTexts = []
-  };
+  }
+
 }
 var totalNumberOfFrames = 10;
 var imageFrameNumber = 0;

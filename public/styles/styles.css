@@ -4,6 +4,7 @@ html, body {
   font-family: Arial;
   margin: 0;
   padding: 0;
+  cursor: url("../assets/cursor.png"),auto;
 }
 * {
   overflow: hidden;
@@ -20,8 +21,66 @@ html, body {
   top:0;
   left: 0;
 }
+.musicSelect{
+  display: none;
+  width:100%;
+  height:100%;
+  /* display:flex; */
+  position:absolute;
+  top:0;
+  left:0;
+  background-color: black;
+}
+.soundImg{
+  filter: invert(1);
+  width:30px;
+  height:30px;
+}
+.choiseCont{
+  width: 100%;
+  justify-content: space-around;
+  display: flex;
+  margin:auto;
+  flex-direction: row;
+}
+.mainSelect{
+  width: 50%;
+  height:80%;
+  margin:auto;
+}
+.centerHor{
+  margin-top:auto;
+  margin-bottom: auto;
+}
+.title{
+  text-align:center;
+  font-size: 50px;
+  width:100%;
+}
+.mainSelect{
+  display: flex;
+  flex-direction: column;
+}
+.white{
+  color:white;
+}
+.choise{
+  width:max-content;
+  color:#cccccc;
+  display: flex;
+  flex-direction: column;
+  width:max-content;
+  text-align: center;
+  /* margin:auto; */
+  user-select: none;
+  size:25px;
+}
+.choise:hover{
+  color:white;
+  size:30px;
+}
+
 .canvas{
-  cursor: url("../assets/cursor.png"),auto;
   position: absolute;
   left: 0;
   height: 0;

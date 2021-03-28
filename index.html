@@ -14,8 +14,44 @@
     <audio class="audio" controls style="display:none;" preload="auto"></audio>
     <audio class="delayedAudio" controls style="display:none;" preload="auto"</audio>
     <audio class="audioStart" controls loop style="display:none;" preload="auto"></audio>
+    <audio class="demoAudio" controls style="display:none;" preload="auto"></audio>
     <audio class="storyAudio" controls loop style="display:none;" preload="auto" src="./assets/music/storyMusic.mp3"></audio>
     <audio class="audioClick" controls style="display:none;" src="./assets/music/hover.wav" preload="auto" volume="0.3"></audio>
+  </div>
+  <div class="musicSelect">
+    <div class="mainSelect">
+      <h1 class="white title">Choose an option to continue</h1>
+      <div class="choiseCont">
+        <h1 class="white choise centerHor" onclick='startGame("funk.mp3")'>Funk</h1>
+        <img src="assets/playSound.png" class="soundImg" onclick="previewSound('funk.mp3',this)"/>
+      </div>
+      <div class="choiseCont">
+        <h1 class="white choise centerHor" onclick='startGame("electronic.mp3")'>Electronic</h1>
+        <img src="assets/playSound.png" class="soundImg" onclick="previewSound('electronic.mp3',this)"/>
+      </div>
+      <div class="choiseCont">
+        <h1 class="white choise centerHor" onclick='startGame("lofi.mp3")'>Lofi</h1>
+        <img src="assets/playSound.png" class="soundImg" onclick="previewSound('lofi.mp3',this)"/>
+      </div>
+      <div class="choiseCont">
+        <h1 class="white choise centerHor" onclick='startGame("motown.mp3")'>Motown</h1>
+        <img src="assets/playSound.png" class="soundImg" onclick="previewSound('motown.mp3',this)"/>
+      </div>
+      <div class="choiseCont">
+        <h1 class="white choise centerHor" onclick='startGame("rock.mp3")'>Rock</h1>
+        <img src="assets/playSound.png" class="soundImg" onclick="previewSound('rock.mp3',this)"/>
+      </div>
+      <div class="choiseCont">
+        <h1 class="white choise centerHor" onclick='startGame("rock2.mp3")'>Rock 2</h1>
+        <img src="assets/playSound.png" class="soundImg" onclick="previewSound('rock2.mp3',this)"/>
+      </div>
+      <div class="choiseCont">
+        <h1 class="white choise" onclick="startGame()">Load a song</h1>
+      </div>
+      <div class="choiseCont">
+        <h1 class="white choise" onclick="backFromMusicPicker()">Back</h1>
+      </div>
+    </div>
   </div>
   <h1 class="fps"></h1>
   <img src="assets/playerAnimation.png" id="sprites" style="display:none;"/>

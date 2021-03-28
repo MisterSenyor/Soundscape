@@ -23,6 +23,24 @@ function mainScreen(){
   //draw menu
   makeMenu()
 }
+var demAud = document.querySelector(".demoAudio");
+function previewSound(song, obj){
+  demAud.currentTime = 0;
+  if(obj.src.includes("pause")){
+    obj.src = "assets/playSound.png";
+    audioa.play();
+    demAud.pause();
+  }else{
+    var plays = document.querySelectorAll(".soundImg");
+    for(var i = 0; i < plays.length; i++){
+      plays[i].src = "assets/playSound.png";
+    }
+    obj.src = "assets/pause.png";
+    demAud.src = "assets/music/ourMusic/"+song;
+    audioa.pause();
+    demAud.play();
+  }
+}
 // const emojies = ["🌑","🌒","🌓","🌔","🌕","🌖","🌗","🌘"];
 // const animateUrl = () => {
 //   window.location.hash = emojies[Math.floor((Date.now() / 100) % emojies.length)];
@@ -61,7 +79,8 @@ function instructions(){
   ctx.fillStyle = "white";
   ctx.font = "25px pixelated";
   ctx.fillText("INSTRUCTIONS", centerX, instY);
-  var instructionsTxt = "Grogu is the best, Grogu is the best, Grogu will eat you up even with a bulletproof vest, Grogu eats you up, grogu throws you up, you are a simple blue cookie trying to make your way across the galaxy";
+  // var instructionsTxt = "Grogu is the best, Grogu is the best, Grogu will eat you up even with a bulletproof vest, Grogu eats you up, grogu throws you up, you are a simple blue cookie trying to make your way across the galaxy";
+  var instructionsTxt = "Help FreD Sharp escape from his evil creator's laboratory using only his musical sight! Jump (SPACE) on time with the selected beats of the song and get FreD Sharp to safety! Try not to miss the beats, because then FreD Sharp loses a heart! P.S: You can pick your own songs or load from our selection!";
   lastY = wrapTxt(instructionsTxt, 600,WIDTH/2,instY + 70);
   backFromInstructions.x = WIDTH/2;
   backFromInstructions.y = instY + 100 + lastY * 40;
@@ -174,7 +193,8 @@ function about(){
   ctx.fillStyle = "white";
   ctx.font = "25px pixelated";
   ctx.fillText("ABOUT", centerX, instY);
-  var instructionsTxt = "My name is Grogu, I eat frogs, I like the forest and hiding and logs. Mando took me in, saved me from IG11, and all that when I was only 57. Met a guy named Quiil, and Moff Gideon too. Got captured twice and had nothing to do. I studied for years under old Luke Skywalker, and left before Ben Solo put the whole place on fire.";
+  // var instructionsTxt = "My name is Grogu, I eat frogs, I like the forest and hiding and logs. Mando took me in, saved me from IG11, and all that when I was only 57. Met a guy named Quiil, and Moff Gideon too. Got captured twice and had nothing to do. I studied for years under old Luke Skywalker, and left before Ben Solo put the whole place on fire.";
+  var instructionsTxt = "This game was made by Nerya (Nehr-yuh) and Ido (Ee-dough) and is our submission to the 4th Timathon. This game was made over the course of 3 weeks, being mainly comprised of JavaScript.";
   lastY = wrapTxt(instructionsTxt, 600,WIDTH/2,instY + 70);
   backFromAbout.x = WIDTH/2;
   backFromAbout.y = instY + 100 + lastY * 40;
@@ -184,12 +204,18 @@ function grogu(){
   alert("grogu")
 }
 function goToStart(){
-  startGame();
+  document.querySelector(".musicSelect").style.display = "flex";
+  // startGame();
 }
 function goToAbout(){
   menuMode.width = 700;
   menuMode.mode = "about";
   activeTexts.push(backFromAbout);
+}
+function backFromMusicPicker(){
+  document.querySelector(".musicSelect").style.display = "none";
+  audioa.play();
+  demAud.pause();
 }
 function goToInstruction(){
   console.log("ggg");
