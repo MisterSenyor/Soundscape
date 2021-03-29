@@ -139,12 +139,14 @@ function makeMenu(){
     playAllIntro()
   }
 }
-var introSpeed = 500, introNow = 0, introDisplay = 1, numberOfImages = 8,ranIntro = false;
+var introSpeed = 500, introNow = 0, introDisplay = 1, numberOfImages = 6,ranIntro = false;
 function playAllIntro(){
   if(introNow == introSpeed){
     introNow = 0;
     introDisplay++;
-    resetZoom()
+    if(document.querySelector("#intro" + introDisplay).getAttribute("cont") == "false"){
+      resetZoom()
+    }
   }else{
     introNow++;
   }
@@ -152,8 +154,8 @@ function playAllIntro(){
     startStoryMusic();
     ranIntro = true;
   }
-  if(introDisplay >= numberOfImages){
-    introSpeed = 500, introNow = 0, introDisplay = 1, numberOfImages = 8;
+  if(introDisplay >= numberOfImages || menuMode.mode != "intro"){
+    introSpeed = 500, introNow = 0, introDisplay = 1, numberOfImages = 6;
     menuMode.mode = "main"
     audioa.play();
     ranIntro = false;
