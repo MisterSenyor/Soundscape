@@ -33,7 +33,7 @@ function playFractionMusic(){
   }else if(introDisplay==5){
     document.querySelector(".storyTell").src = "./assets/music/storySounds/frame4.mp3"
   }else if(introDisplay==6){
-    document.querySelector(".storyTell").volume = "0.1";
+    document.querySelector(".storyTell").volume = "0.05";
     document.querySelector(".storyTell").src = "./assets/music/storySounds/frame5.mp3"
   }
   document.querySelector(".storyTell").play();
