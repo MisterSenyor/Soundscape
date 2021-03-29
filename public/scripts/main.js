@@ -207,6 +207,24 @@ function goToStart(){
   document.querySelector(".musicSelect").style.display = "flex";
   // startGame();
 }
+function hideMute(){
+  document.querySelector(".muteUnmute").style.display = "none";
+}
+function showMute(){
+  document.querySelector(".muteUnmute").style.display = "block";
+}
+var executed = true;
+var toPlayBG = true;
+function muteUnmute(btn) {
+  if(btn.src.includes("playSound")){
+    btn.src = "./assets/soundMuted.png";
+    toPlayBG = false;
+  }else{
+    btn.src = "./assets/playSound.png";
+    toPlayBG = true;
+  }
+  executed = false;
+}
 function goToAbout(){
   menuMode.width = 700;
   menuMode.mode = "about";
@@ -247,40 +265,50 @@ function startWholeGame(){
 }
 
 var smootha = 0.9;
-var contextMenu;
+var contextMenu, analysera, listenb,dataArrayb,bufferLengthb;
 function visualizea(source) {
     console.log(!context);
     if(!contextMenu){
       contextMenu = new AudioContext();
       srca = contextMenu.createMediaElementSource(source);
+
+
+      var delay = contextMenu.createDelay(5.0);
+      delay.delayTime.value = 1.0;
+
+      analysera = contextMenu.createAnalyser();
+      listenb = contextMenu.createGain();
+      srca.connect(listenb);
+      listenb.connect(analysera);
+      analysera.connect(contextMenu.destination);
+      analysera.fftSize = 2 ** 12;
+      var frequencyBins = analysera.fftSize / 2;
+
+      // length of data inside array
+      bufferLengthb = analysera.frequencyBinCount;
+      dataArrayb = new Uint8Array(bufferLengthb);
     }
-
-    var delay = contextMenu.createDelay(5.0);
-    delay.delayTime.value = 1.0;
-
-    var analysera = contextMenu.createAnalyser();
-    var listen = contextMenu.createGain();
-    srca.connect(listen);
-    listen.connect(analysera);
-    analysera.connect(contextMenu.destination);
-    analysera.fftSize = 2 ** 12;
-    var frequencyBins = analysera.fftSize / 2;
-
-    // length of data inside array
-    var bufferLength = analysera.frequencyBinCount;
-    var dataArrayb = new Uint8Array(bufferLength);
     renderFramea();
     function renderFramea() {
         // mandatory shit to set everything up
         mainGameLoop = requestAnimationFrame(renderFramea);
+        if(!executed){
+          if(toPlayBG){
+            analysera.connect(contextMenu.destination);
+          }else{
+            analysera.disconnect(contextMenu.destination);
+          }
+          executed = true;
+        }
+        showMute();
         analysera.smoothingTimeConstant = .9;
         // TODO - recognize the volume before pplaying. DUCK YOU FUTURE US!
-        listen.gain.setValueAtTime(1, contextMenu.currentTime);
+        listenb.gain.setValueAtTime(1, contextMenu.currentTime);
         analysera.getByteFrequencyData(dataArrayb);
         allFreqs.push(dataArray);
         // vars
-        var sliceWidth = WIDTH * 1.0 / bufferLength;
-        var scale = bufferLength/WIDTH;
+        var sliceWidth = WIDTH * 1.0 / bufferLengthb;
+        var scale = bufferLengthb/WIDTH;
         var sectorLength = 0;
         var avgTimes = 0;
         currentAverage = 0;
@@ -290,7 +318,7 @@ function visualizea(source) {
         ctx.fillRect(0, 0, WIDTH, HEIGHT);
         ctx.lineWidth = 1;
         ctx.strokeStyle = "#0f0f0f";
-        for (var i = 0; i < bufferLength; i++) {
+        for (var i = 0; i < bufferLengthb; i++) {
             if (dataArrayb[i] != 0) {
                 allHeights += dataArrayb[i];
                 sectorLength++;

@@ -51,11 +51,26 @@ html, body {
 .centerHor{
   margin-top:auto;
   margin-bottom: auto;
+  font-size: 3vh;
 }
 .title{
   text-align:center;
-  font-size: 50px;
+  font-size: 6vh;
   width:100%;
+}
+.subtitle{
+  text-align:center;
+  font-size: 2vh;
+  width:100%;
+}
+.muteUnmute{
+  position: absolute;
+  width:30px;
+  height: 30px;
+  right:30px;
+  top:30px;
+  display: none;
+  filter: invert(1);
 }
 .mainSelect{
   display: flex;

@@ -74,7 +74,9 @@ function startGame(filea = null){
       getBeats(delayedAudio)
       menuTexts = []
     };
+    hideMute();
   }else{
+    hideMute();
     demAud.pause();
     isGameOver = false;
     hearts = 3;
