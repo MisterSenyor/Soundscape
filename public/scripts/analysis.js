@@ -16,7 +16,7 @@ function getSpikeReference(prevSectorVols,sectorVols,frameCountMax) {
 
       for (var i = 0; i < sectorVols.length; i++){
           if ((sectorVols[i] - prevSectorVols[i]) * sensitivity > median(avgDelta) && distanceTraveledFromBeat > 380) {
-            // createObstacles();
+            createObstacles();
             var randomX = randomBetween(0+WIDTH/8,WIDTH-WIDTH/8)
             var randomY = randomBetween(0+HEIGHT/8,HEIGHT-HEIGHT/8-200)
             distanceTraveledFromBeat = 0;

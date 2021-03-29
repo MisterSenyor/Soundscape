@@ -211,7 +211,7 @@ function visualize(source) {
             }
           }
         }
-        jumpEffect();
+        // jumpEffect();
         generateBackground();
         refreshPlayer();
         generateDiamonds();
