@@ -2,7 +2,8 @@ var obstacles = [];
 
 function createObstacles(){
   var rand =Math.floor(randomBetween(1,3))
-  var obstacle = new Obstacle(WIDTH,HEIGHT-200,WIDTH/15.125,30,"black",rand);
+  var obstWidth = WIDTH > 1400 ? 20 : 15.125;
+  var obstacle = new Obstacle(WIDTH,HEIGHT-200,WIDTH/obstWidth,30,"black",rand);
   if(obstacles.includes("empty")){
     obstacles[obstacles.indexOf("empty")] = obstacle;
   }else{

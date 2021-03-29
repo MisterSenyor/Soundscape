@@ -83,7 +83,7 @@ function instructions(){
   var instructionsTxt = "Help Freddie Sharp escape from his evil creator's laboratory using only his musical sight! Jump (SPACE) on time with the selected beats of the song and get Freddie Sharp to safety! Try not to miss the beats, because then Freddie Sharp loses a heart! P.S: You can pick your own songs or load from our selection!";
   lastY = wrapTxt(instructionsTxt, 600,WIDTH/2,instY + 70);
   backFromInstructions.x = WIDTH/2;
-  backFromInstructions.y = instY + 100 + lastY * 40;
+  backFromInstructions.y = instY + 100 + lastY * (fontsize+10);
   backFromInstructions.draw();
 }
 function goToMain(){
@@ -209,7 +209,7 @@ function about(){
   var instructionsTxt = "This game was made by Nerya (Nehr-yuh) and Ido (Ee-dough) and is our submission to the 4th Timathon. This game was made over the course of 3 weeks, being mainly comprised of JavaScript.";
   lastY = wrapTxt(instructionsTxt, 600,WIDTH/2,instY + 70);
   backFromAbout.x = WIDTH/2;
-  backFromAbout.y = instY + 100 + lastY * 40;
+  backFromAbout.y = instY + 100 + lastY * (fontsize+10);
   backFromAbout.draw();
 }
 function grogu(){

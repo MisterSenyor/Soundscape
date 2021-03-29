@@ -39,7 +39,11 @@ var globalGameSpeed = 2;
 //FPS calculate
 var dinamicFPS = 80;
 var fps = 0,lastTime = 0,showFps = 0, distanceToMove = WIDTH-WIDTH/7;
-var secondsToGetToUser = 2, distanceTraveledFromBeat = 0;
+var distanceTraveledFromBeat = 0;
+var secondsToGetToUser = 2;
+if(WIDTH > 1400){
+  secondsToGetToUser = 3;
+}
 //Hearts
 var hearts = 3;
 var yoda = true;
