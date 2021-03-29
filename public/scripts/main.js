@@ -110,12 +110,12 @@ function wrapTxt(txt, width, x, y){
     currString+=splitTxt[i] + " ";
     if(i < splitTxt.length-1){
       if(ctx.measureText(currString+" " + splitTxt[i+1]).width > width){
-        ctx.fillText(currString,x,y+lines*40)
+        ctx.fillText(currString,x,y+lines*(fontsize+10))
         lines++;
         currString = "";
       }
     }else{
-      ctx.fillText(currString,x,y+lines*40)
+      ctx.fillText(currString,x,y+lines*(fontsize+10))
       lines++;
       currString = "";
     }
