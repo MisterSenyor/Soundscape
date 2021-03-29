@@ -38,7 +38,7 @@ allParticleSystems.push(playerParticles)
 var globalGameSpeed = 2;
 //FPS calculate
 var dinamicFPS = 80;
-var fps = 0,lastTime = 0,showFps = 0, distanceToMove = WIDTH-WIDTH/7;
+var fps = 0,lastTime = 0,showFps = 0, distanceToMove = WIDTH-WIDTH/7 - 5;
 var distanceTraveledFromBeat = 0;
 var secondsToGetToUser = 2;
 if(WIDTH > 1400){
