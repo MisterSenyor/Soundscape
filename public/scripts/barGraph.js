@@ -211,8 +211,8 @@ function visualize(source) {
             }
           }
         }
+        jumpEffect();
         generateBackground();
-        generatePlayArea();
         refreshPlayer();
         generateDiamonds();
         updateHearts();
@@ -307,6 +307,32 @@ function drawSprite() {
   //   50, 50, // x and y - where on the screen
   //   widthOfSingleImage, heightOfImage // width and height
   // );
+}
+function jumpEffect(){
+  if(player.isJumping){
+    if(scaled <= 120){
+      if(toScale == 0){
+        canvas.width-=100;
+        canvas.height-=100;
+        scaled++;
+        toScale = 0;
+      }else{
+        toScale++;
+      }
+    }
+  }else{
+    scaled = 0;
+    // if(scaled >= 0){
+    //   if(toScale == 1){
+    //     canvas.width+=100;
+    //     canvas.height+=100;
+    //     scaled--;
+    //     toScale = 0;
+    //   }else{
+    //     toScale++;
+    //   }
+    // }
+  }
 }
 var beatLoop;
 var sensitivitya = 0.35, frameCountMaxa = 4, prevSectorVolsa = [], avgDeltaa = [], spikeDistancea = 0, beatCountera = 0,sectorVolsa = [];

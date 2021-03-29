@@ -40,6 +40,7 @@ function generatePlayArea(){
   }
 }
 var color;
+var scaled = 0, toScale = 0;
 var avgClr;
 function generateBackground(){
   for(var i = 0; i < (WIDTH/circleWidth)+10; i++){
@@ -65,7 +66,9 @@ function generateBackground(){
       ctx.strokeStyle = "#8D13F8";
       ctx.shadowColor = "#8D13F8";
       var size = (currentAverage + currentAverage/2) * 0.5;
+      // ctx.scale(2, 2)
       ctx.save();
+
       ctx.translate(coors.x,coors.y);
       // var triXY = {x:coors.x,y:-10}
       ctx.rotate(triGrees * Math.PI / 180);
@@ -90,6 +93,7 @@ function generateBackground(){
       triGrees+=rSpeed;
     }
   }
+  generatePlayArea();
 }
 
 function makeJump(){
