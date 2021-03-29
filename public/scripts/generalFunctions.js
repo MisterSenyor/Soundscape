@@ -33,7 +33,26 @@ document.querySelector(".canvas").onclick = function(e){
     if(menuMode.mode == "intro"){
       introDisplay++;
       introNow = 0;
-      resetZoom();
+      document.querySelector(".storyTell").currentTime = 0;
+        document.querySelector(".storyTell").volume = "0.3";
+      if(introDisplay==1){
+        document.querySelector(".storyTell").src = "./assets/music/storySounds/frame1.mp3"
+      }else if(introDisplay==2 || introDisplay==3 || introDisplay==4){
+        document.querySelector(".storyTell").src = "./assets/music/storySounds/frame23.mp3"
+      }else if(introDisplay==5){
+        document.querySelector(".storyTell").src = "./assets/music/storySounds/frame4.mp3"
+      }else if(introDisplay==6){
+        document.querySelector(".storyTell").volume = "0.1";
+        document.querySelector(".storyTell").src = "./assets/music/storySounds/frame5.mp3"
+      }
+      document.querySelector(".storyTell").play();
+      try{
+        if(document.querySelector("#intro" + introDisplay).getAttribute("cont") == "false"){
+          resetZoom()
+        }
+      }catch{
+
+      }
     }else{
       var aLength = activeTexts.length;
       for(var i = 0; i < menuTexts.length; i++){// && globalMouseX < menuTexts[i].x + menuTexts[i].width && globalMouseY > menuTexts[i].y && globalMouseY < menuTexts[i].y + menuTexts[i].size

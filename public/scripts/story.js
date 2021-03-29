@@ -12,7 +12,7 @@ function resetZoom() {
 var storyAudio = document.querySelector(".storyAudio");
 function startStoryMusic() {
   storyAudio.currentTime = 0;
-  storyAudio.volume = 0.3;
+  storyAudio.volume = 0.0;
   storyAudio.play()
 }
 function stopStoryMusic(){

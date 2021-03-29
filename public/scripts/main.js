@@ -142,8 +142,23 @@ function makeMenu(){
 var introSpeed = 500, introNow = 0, introDisplay = 1, numberOfImages = 6,ranIntro = false;
 function playAllIntro(){
   if(introNow == introSpeed){
+    console.log("grogu");
     introNow = 0;
     introDisplay++;
+    console.log(introDisplay + " grogu");
+    document.querySelector(".storyTell").currentTime = 0;
+      document.querySelector(".storyTell").volume = "0.3";
+    if(introDisplay==1){
+      document.querySelector(".storyTell").src = "./assets/music/storySounds/frame1.mp3"
+    }else if(introDisplay==2 || introDisplay==3 || introDisplay==4){
+      document.querySelector(".storyTell").src = "./assets/music/storySounds/frame23.mp3"
+    }else if(introDisplay==5){
+      document.querySelector(".storyTell").src = "./assets/music/storySounds/frame4.mp3"
+    }else if(introDisplay==6){
+      document.querySelector(".storyTell").volume = "0.1";
+      document.querySelector(".storyTell").src = "./assets/music/storySounds/frame5.mp3"
+    }
+    document.querySelector(".storyTell").play();
     if(document.querySelector("#intro" + introDisplay).getAttribute("cont") == "false"){
       resetZoom()
     }
@@ -152,13 +167,28 @@ function playAllIntro(){
   }
   if(!ranIntro){
     startStoryMusic();
+    document.querySelector(".storyTell").currentTime = 0;
+      document.querySelector(".storyTell").volume = "0.3";
+    if(introDisplay==1){
+      document.querySelector(".storyTell").src = "./assets/music/storySounds/frame1.mp3"
+    }else if(introDisplay==2 || introDisplay==3 || introDisplay==4){
+      document.querySelector(".storyTell").src = "./assets/music/storySounds/frame23.mp3"
+    }else if(introDisplay==5){
+      document.querySelector(".storyTell").src = "./assets/music/storySounds/frame4.mp3"
+    }else if(introDisplay==6){
+      document.querySelector(".storyTell").volume = "0.1";
+      document.querySelector(".storyTell").src = "./assets/music/storySounds/frame5.mp3"
+    }
+    document.querySelector(".storyTell").play();
     ranIntro = true;
   }
-  if(introDisplay >= numberOfImages || menuMode.mode != "intro"){
+  if(introDisplay > numberOfImages || menuMode.mode != "intro"){
     introSpeed = 500, introNow = 0, introDisplay = 1, numberOfImages = 6;
     menuMode.mode = "main"
     audioa.play();
     ranIntro = false;
+    document.querySelector(".storyTell").pause();
+    document.querySelector(".storyTell").volume = "0.0";
     stopStoryMusic();
   }else{
     drawIntro('intro'+introDisplay);
