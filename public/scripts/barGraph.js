@@ -391,7 +391,7 @@ function getBeats(source) {
       sectorVolsa = [];
     }
 }
-createObstacles()
+// createObstacles()
 
 function fuckUpFPS(){
   for(var i = 0; i < 200; i++){
