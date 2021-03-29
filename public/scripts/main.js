@@ -129,10 +129,13 @@ function makeMenu(){
   ctx.fillStyle = "rgba(0,0,0,0.8)";
   roundRect(ctx,x,y,width,height,25);
   if(menuMode.mode == "main"){
+    menuMode.height = HEIGHT/2.5;
     mainMenu();
   }else if(menuMode.mode == "instructions"){
+    menuMode.height = HEIGHT/1.9;
     instructions();
   }else if(menuMode.mode == "about"){
+    menuMode.height = HEIGHT/1.9;
     about();
   } else if(menuMode.mode == "intro") {
     audioa.pause();
