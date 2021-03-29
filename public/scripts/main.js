@@ -98,6 +98,7 @@ function goToMain(){
 function goToIntro() {
   menuMode.mode = "intro";
 }
+var fontsize = Math.round(HEIGHT / 38.76);
 function wrapTxt(txt, width, x, y){
   var splitTxt = txt.split(" ");
   var currString = "";
