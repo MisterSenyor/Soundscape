@@ -21,6 +21,23 @@ document.querySelector(".canvas").onmousemove = function(e){
   globalMouseX = mouseX - rect.left;
   globalMouseY = mouseY - rect.top;
 }
+function playFractionMusic(){
+  if(introDisplay!=3 && introDisplay!=4){
+    document.querySelector(".storyTell").currentTime = 0;
+  }
+  document.querySelector(".storyTell").volume = "0.3";
+  if(introDisplay==1){
+    document.querySelector(".storyTell").src = "./assets/music/storySounds/frame1.mp3"
+  }else if(introDisplay==2){
+    document.querySelector(".storyTell").src = "./assets/music/storySounds/frame23.mp3"
+  }else if(introDisplay==5){
+    document.querySelector(".storyTell").src = "./assets/music/storySounds/frame4.mp3"
+  }else if(introDisplay==6){
+    document.querySelector(".storyTell").volume = "0.1";
+    document.querySelector(".storyTell").src = "./assets/music/storySounds/frame5.mp3"
+  }
+  document.querySelector(".storyTell").play();
+}
 document.querySelector(".canvas").onclick = function(e){
   if(!started){
     audioa.src = "assets/music/startMusic.wav";
@@ -33,19 +50,7 @@ document.querySelector(".canvas").onclick = function(e){
     if(menuMode.mode == "intro"){
       introDisplay++;
       introNow = 0;
-      document.querySelector(".storyTell").currentTime = 0;
-        document.querySelector(".storyTell").volume = "0.3";
-      if(introDisplay==1){
-        document.querySelector(".storyTell").src = "./assets/music/storySounds/frame1.mp3"
-      }else if(introDisplay==2 || introDisplay==3 || introDisplay==4){
-        document.querySelector(".storyTell").src = "./assets/music/storySounds/frame23.mp3"
-      }else if(introDisplay==5){
-        document.querySelector(".storyTell").src = "./assets/music/storySounds/frame4.mp3"
-      }else if(introDisplay==6){
-        document.querySelector(".storyTell").volume = "0.1";
-        document.querySelector(".storyTell").src = "./assets/music/storySounds/frame5.mp3"
-      }
-      document.querySelector(".storyTell").play();
+      playFractionMusic();
       try{
         if(document.querySelector("#intro" + introDisplay).getAttribute("cont") == "false"){
           resetZoom()
