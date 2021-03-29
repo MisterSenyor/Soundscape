@@ -71,13 +71,14 @@ function beforeStartScreen(){
 mainScreen();
 beforeStartScreen();
 var lastY;
+var fontsize = Math.round(HEIGHT / 38.76);
 var backFromInstructions = new MenuText(0,0,"BACK",goToMain,"center",30,true,true);
 var backFromAbout = new MenuText(0,0,"BACK",goToMain,"center",30,true,true);
 function instructions(){
   var instY = HEIGHT/3+60;
   var centerX = WIDTH/2;
   ctx.fillStyle = "white";
-  ctx.font = "25px pixelated";
+  ctx.font = fontsize+"px pixelated";
   ctx.fillText("INSTRUCTIONS", centerX, instY);
   // var instructionsTxt = "Grogu is the best, Grogu is the best, Grogu will eat you up even with a bulletproof vest, Grogu eats you up, grogu throws you up, you are a simple blue cookie trying to make your way across the galaxy";
   var instructionsTxt = "Help Freddie Sharp escape from his evil creator's laboratory using only his musical sight! Jump (SPACE) on time with the selected beats of the song and get Freddie Sharp to safety! Try not to miss the beats, because then Freddie Sharp loses a heart! P.S: You can pick your own songs or load from our selection!";
@@ -201,7 +202,7 @@ function about(){
   var instY = HEIGHT/3+60;
   var centerX = WIDTH/2;
   ctx.fillStyle = "white";
-  ctx.font = "25px pixelated";
+  ctx.font = fontsize+"px pixelated";
   ctx.fillText("ABOUT", centerX, instY);
   // var instructionsTxt = "My name is Grogu, I eat frogs, I like the forest and hiding and logs. Mando took me in, saved me from IG11, and all that when I was only 57. Met a guy named Quiil, and Moff Gideon too. Got captured twice and had nothing to do. I studied for years under old Luke Skywalker, and left before Ben Solo put the whole place on fire.";
   var instructionsTxt = "This game was made by Nerya (Nehr-yuh) and Ido (Ee-dough) and is our submission to the 4th Timathon. This game was made over the course of 3 weeks, being mainly comprised of JavaScript.";
