@@ -80,7 +80,7 @@ function instructions(){
   ctx.font = "25px pixelated";
   ctx.fillText("INSTRUCTIONS", centerX, instY);
   // var instructionsTxt = "Grogu is the best, Grogu is the best, Grogu will eat you up even with a bulletproof vest, Grogu eats you up, grogu throws you up, you are a simple blue cookie trying to make your way across the galaxy";
-  var instructionsTxt = "Help Freddie Sharp escape from his evil creator's laboratory using only his musical sight! Jump (SPACE) on time with the selected beats of the song and get Freddie Sharp to safety! Try not to miss the beats, because then Freddie Sharp loses a heart! P.S: You can pick your own songs or load from our selection!";
+  var instructionsTxt = "Help Freddie Sharp escape his evil creator's laboratory using only his musical sight! Jump (SPACE) on time with the selected beats of the song and get Freddie Sharp to safety! Try not to miss the beats, because then Freddie Sharp loses a heart! P.S: You can pick your own songs or load from our selection!";
   lastY = wrapTxt(instructionsTxt, 600,WIDTH/2,instY + 70);
   backFromInstructions.x = WIDTH/2;
   backFromInstructions.y = instY + 100 + lastY * (fontsize+10);
