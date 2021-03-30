@@ -10,7 +10,7 @@ Help Fredie Sharp escape his evil creator's laboratory with his unique ability t
 - P.S: You can pick your own songs or load from our selection!
 # Story
 ![test3](https://media.discordapp.net/attachments/489873169445027840/824981934701936660/unknown.png?width=1112&height=663)
-Freddie Sharp was created by Ludwig Vanderdyke, but when Freddie saw that his creator was using a **light-themed IDE**, his eyes were shattered. Despite the shattered eyes, Fredie still knew that he had to get as far away from Ludwig as possible, so he tried to escape, with his only operational sense his sense of sound.
+Freddie Sharp was created by Ludwig Vanderdyke, but when Freddie saw that his creator was using a **light-themed IDE**, his eyes were shattered. Despite the shattered eyes, Fredie still knew that he had to get as far away from Ludwig as possible, so he tried to escape, with his only operational sense being his sense of sound.
 # About
 This game was made by Nerya and Ido (Nehr-yuh and Ee-dough for easy pronunciation) and is our submission to the 4th Timathon.
 This game was made over the course of 3 weeks, being mainly comprised of JavaScript.
