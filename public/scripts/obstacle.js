@@ -90,7 +90,7 @@ function Obstacle(x,y,width,height,color,type){
     this.draw();
   }
 }
-
+var hitAudio = document.querySelector(".hitAudio");
 function updateAllObstacles(){
   updateHearts();
   for(var i = 0; i < obstacles.length; i++){
@@ -101,7 +101,12 @@ function updateAllObstacles(){
       }
     }
     if(player.pos[1] == player.floor && player.pos[0]+player.size-player.size*(1/5) > obstacles[i].x && !obstacles[i].used && player.pos[0]+player.size/3 < obstacles[i].x + obstacles[i].width){
+      hitAudio.currentTime = 0;
+      hitAudio.volume = 0.3;
+      hitAudio.play();
       hearts--;
+      lowLag.play("hit");
+      playSounda
       obstacles[i].used = true;
       if(hearts == 0){
         isGameOver = true;
