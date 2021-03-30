@@ -14,3 +14,4 @@ FreD Sharp was created by Ludwig Vanderdyke, but when FreD saw that his creator 
 # About
 This game was made by Nerya and Ido (Nehr-yuh and Ee-dough for easy pronunciation) and is our submission to the 4th Timathon.
 This game was made over the course of 3 weeks, being mainly comprised of JavaScript.
+Using our special and original beat detection algorithm, we managed to recognize the beats in almost every song!
