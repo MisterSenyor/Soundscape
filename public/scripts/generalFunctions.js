@@ -11,7 +11,7 @@ document.body.onkeypress = function(e){
     player.getKeys(e.keyCode);
     // console.log(e.keyCode);
     if(e.keyCode == 101){
-      fuckUpFPS();
+      // fuckUpFPS();
     }
 }
 document.querySelector(".canvas").onmousemove = function(e){
